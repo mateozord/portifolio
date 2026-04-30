@@ -1,0 +1,22 @@
+<svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="720" fill="#080E24"/>
+  <rect x="36" y="32" width="1208" height="656" rx="24" fill="#0F1530" stroke="#2E3A67"/>
+  <rect x="72" y="72" width="420" height="34" rx="10" fill="#1D2A52"/>
+  <rect x="72" y="132" width="280" height="18" rx="9" fill="#5B6EA6"/>
+  <rect x="72" y="170" width="180" height="18" rx="9" fill="#5B6EA6"/>
+  <rect x="72" y="228" width="260" height="180" rx="18" fill="#161F42"/>
+  <rect x="352" y="228" width="260" height="180" rx="18" fill="#161F42"/>
+  <rect x="632" y="228" width="260" height="180" rx="18" fill="#161F42"/>
+  <rect x="912" y="228" width="296" height="180" rx="18" fill="#161F42"/>
+  <rect x="72" y="432" width="740" height="208" rx="18" fill="#161F42"/>
+  <rect x="832" y="432" width="376" height="208" rx="18" fill="#161F42"/>
+  <path d="M108 560C174 522 244 500 320 514C388 526 448 566 518 562C584 558 634 510 702 498C742 491 774 498 798 510" stroke="#A78BFA" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="320" cy="514" r="8" fill="#A78BFA"/>
+  <circle cx="518" cy="562" r="8" fill="#A78BFA"/>
+  <circle cx="702" cy="498" r="8" fill="#A78BFA"/>
+  <rect x="868" y="470" width="304" height="24" rx="12" fill="#283966"/>
+  <rect x="868" y="510" width="248" height="24" rx="12" fill="#283966"/>
+  <rect x="868" y="550" width="284" height="24" rx="12" fill="#283966"/>
+  <text x="82" y="97" fill="#E2E8F0" font-size="26" font-family="Arial, sans-serif" font-weight="700">Dashboard de Performance Operacional</text>
+  <text x="72" y="198" fill="#A78BFA" font-size="20" font-family="Arial, sans-serif">Preview do projeto com dados reais</text>
+</svg>
