@@ -1,11 +1,20 @@
 export type Locale = "pt" | "en";
 
+export type ProjectCategory = "design" | "database" | "web" | "automation";
+
 export type Project = {
   title: string;
+  tagline: string;
   description: string;
+  categories: ProjectCategory[];
   stack: string[];
   link?: string;
   image?: string;
+};
+
+export type SkillItem = {
+  name: string;
+  level: string;
 };
 
 export type PortfolioDictionary = {
@@ -15,31 +24,40 @@ export type PortfolioDictionary = {
     skills: string;
     education: string;
     courses: string;
-    goals: string;
     contact: string;
   };
   hero: {
-    greeting: string;
+    greetingPrefix: string;
     role: string;
     summary: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    scrollHint: string;
+    code: string[];
   };
   about: {
+    eyebrow: string;
     title: string;
     body: string;
+    stats: { label: string; value: string }[];
+    statusLines: string[];
   };
   projects: {
+    eyebrow: string;
     title: string;
     subtitle: string;
+    ctaLabel: string;
+    categoryLabels: Record<ProjectCategory, string>;
     items: Project[];
   };
   skills: {
+    eyebrow: string;
     title: string;
     subtitle: string;
-    groups: { label: string; items: string[] }[];
+    groups: { label: string; items: SkillItem[] }[];
   };
   education: {
+    eyebrow: string;
     title: string;
     degree: string;
     school: string;
@@ -47,18 +65,34 @@ export type PortfolioDictionary = {
     status: string;
   };
   courses: {
+    eyebrow: string;
     title: string;
     subtitle: string;
     items: string[];
   };
-  goals: {
-    title: string;
-    body: string;
-  };
   contact: {
+    eyebrow: string;
     title: string;
     body: string;
-    emailLabel: string;
+    talkToMe: string;
+    formTitle: string;
+    methods: {
+      emailLabel: string;
+      whatsappLabel: string;
+      linkedinLabel: string;
+      ctaLabel: string;
+    };
+    form: {
+      name: string;
+      namePlaceholder: string;
+      email: string;
+      emailPlaceholder: string;
+      subject: string;
+      subjectPlaceholder: string;
+      message: string;
+      messagePlaceholder: string;
+      submit: string;
+    };
   };
   footer: string;
 };
@@ -71,65 +105,143 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       skills: "Stack",
       education: "Faculdade",
       courses: "Cursos",
-      goals: "Objetivo",
       contact: "Contato",
     },
     hero: {
-      greeting: "Oi, eu sou Mateus Fantin",
-      role: "Analista de Negociação Produto Jr. | CVC Corp",
+      greetingPrefix: "Olá, me chamo",
+      role: "Design, Banco de Dados, Web & Automação",
       summary:
-        "Atuo com negociação e gestão de produtos aéreos para grupos, com foco em cotações, prazos, disponibilidade e suporte às filiais para garantir operações mais fluidas. Meu próximo passo de carreira está direcionado para análise de dados aplicada ao negócio.",
-      ctaPrimary: "Falar comigo",
+        "Curto transformar ideias em produtos completos: interfaces com identidade visual própria, estrutura de dados sólida por trás, sites que funcionam de verdade no ar, e automações que economizam tempo no dia a dia. Uso cada projeto como desculpa para unir essas quatro frentes.",
+      ctaPrimary: "Sobre mim",
       ctaSecondary: "Ver LinkedIn",
+      scrollHint: "Descer para ver mais",
+      code: [
+        'const mateus = {',
+        '  foco: [',
+        '    "design",',
+        '    "banco de dados",',
+        '    "web",',
+        '    "automação",',
+        '  ],',
+        '  projetos: 3,',
+        '  origem: "turismo",',
+        '  status: "construindo",',
+        '};',
+      ],
     },
     about: {
-      title: "Resumo profissional",
-      body: "Atuo no turismo com foco em operações aéreas e negociação de produtos para grupos, com experiência em atendimento, pós-venda, back office e fretamento. Hoje trabalho com cotação de tarifas, controle de prazos e disponibilidade de lugares, além de suporte às filiais em todo o Brasil. Tenho vivência em processos críticos, como alterações de voos, termos de aceite e ajustes de reservas, sempre com foco em clareza, agilidade e eficiência operacional. Ao longo da minha trajetória, desenvolvi comunicação, organização e tomada de decisão sob pressão, com domínio de sistemas GDS como Sabre, Amadeus, Latam e Gol. Em paralelo, venho fortalecendo meu foco em análise de dados para transformar indicadores operacionais em decisões mais estratégicas.",
+      eyebrow: "Minha introdução",
+      title: "Sobre mim",
+      body: "Sou apaixonado por transformar ideias em produtos digitais completos: cuido da identidade visual de um projeto, estruturo o banco de dados que sustenta tudo por trás, construo o site ou sistema que coloca isso no ar, e automatizo tarefas repetitivas para que as coisas simplesmente funcionem. Venho do turismo, onde lidei com operações e prazos sob pressão — uma base que hoje aplico para entender problemas reais antes de sair codando. Atualmente me dedico a projetos de design, desenvolvimento web, modelagem de dados e automação, sempre buscando unir essas quatro frentes em cada entrega.",
+      stats: [
+        { label: "Projetos no ar", value: "3" },
+        { label: "Foco", value: "Design + Dev + Dados" },
+        { label: "Localização", value: "São Paulo, BR" },
+      ],
+      statusLines: [
+        "mantendo Fog Roulette, Porão Gráfico e Vistamed no ar",
+        "formado em Análise e Desenvolvimento de Sistemas",
+        "vindo do turismo, migrando de vez pra tecnologia",
+        "aprofundando banco de dados e automação",
+      ],
     },
     projects: {
+      eyebrow: "Meu portfólio",
       title: "Projetos em destaque",
-      subtitle: "Projetos que mostram minha visão entre operação, análise de dados e tecnologia.",
+      subtitle: "Três projetos reais que mostram como uno design, dados, desenvolvimento web e automação em cada entrega.",
+      ctaLabel: "Ver projeto",
+      categoryLabels: {
+        design: "Design",
+        database: "Banco de Dados",
+        web: "Web",
+        automation: "Automação",
+      },
       items: [
         {
-          title: "Dashboard de Performance Operacional",
+          title: "Fog Roulette",
+          tagline: "Deixe a névoa escolher.",
           description:
-            "Dashboard com dados reais do meu setor anterior para monitorar produtividade, metas e distribuição por tipo de protocolo. Apenas dois meses não possuem dados por indisponibilidade da base.",
-          stack: ["HTML", "CSS", "JavaScript", "Análise de Processos"],
-          link: "https://dashboardmateus.netlify.app",
-          image: "/projects/dashboard-operacional.svg",
+            "Um sorteador visual com conta de usuário: o resultado emerge de uma névoa animada que se dissipa aos poucos, criando suspense até revelar a escolha. Construído em Next.js, com Supabase cuidando da autenticação e do histórico de partidas privado de cada jogador. Pensado para quem trava na hora de decidir entre opções, unindo autenticação, persistência de dados e uma interface construída em torno do efeito de revelação.",
+          categories: ["web", "database", "automation"],
+          stack: ["Next.js", "React", "Supabase", "Autenticação"],
+          link: "https://fogroulette.netlify.app",
+          image: "/projects/fog-roulette.png",
+        },
+        {
+          title: "Porão Gráfico",
+          tagline: "Identidade visual sombria, sob encomenda.",
+          description:
+            "Plataforma de encomenda de serviços de design gráfico: pôsteres de shows, capas de single/álbum, pacotes promocionais e identidade visual com pegada dark. O cliente filtra por faixa de orçamento e prazo, e escolhe entre Pix, link de cartão ou pagamento na entrega — um fluxo direto para fechar negócio sem fricção.",
+          categories: ["design", "web"],
+          stack: ["React", "Vite", "Identidade Visual"],
+          link: "https://porao-grafico.netlify.app",
+          image: "/projects/porao-grafico.png",
+        },
+        {
+          title: "Vistamed",
+          tagline: "Proposta de redesign para uma clínica de olhos com 33 anos de história.",
+          description:
+            "Proposta de redesign conceitual para o Hospital de Olhos Vistamed, criada para uma apresentação interna (não é o site oficial em produção). Reorganiza mais de 30 procedimentos diagnósticos e cirúrgicos por categoria, propõe agendamento direto via WhatsApp sem intermediários burocráticos, e detalha os convênios aceitos nas duas unidades da Grande São Paulo. Design limpo, com listas expansíveis pensadas para leitura rápida em qualquer dispositivo.",
+          categories: ["web", "automation"],
+          stack: ["HTML", "CSS", "JavaScript", "Integração WhatsApp"],
+          link: "https://vistamednovo.netlify.app",
+          image: "/projects/vistamed.png",
         },
       ],
     },
     skills: {
-      title: "Sistemas e tecnologias",
-      subtitle: "Competências do meu dia a dia em operação e ferramentas que estou desenvolvendo com foco em análise de dados.",
+      eyebrow: "Minhas habilidades",
+      title: "Minha experiência",
+      subtitle: "Quatro frentes que costumo unir em cada projeto: da interface ao banco de dados, passando pelo código e pela automação.",
       groups: [
         {
-          label: "Sistemas e experiências",
+          label: "Design",
           items: [
-            "Sabre - Básico",
-            "Amadeus - Básico",
-            "Latam - Intermediário",
-            "Gol - Intermediário",
-            "HTML - Intermediário",
-            "CSS - Intermediário",
-            "JavaScript - Básico",
+            { name: "Identidade Visual", level: "Intermediário" },
+            { name: "UI Design", level: "Intermediário" },
+            { name: "Tipografia", level: "Básico" },
+            { name: "Prototipação", level: "Básico" },
           ],
         },
-        { label: "Ferramentas (em desenvolvimento)", items: ["Excel - Intermediário", "Power BI - Básico", "SQL - Básico"] },
-        { label: "Processos", items: ["Negociação", "Gestão de prazos", "Pós-venda", "Atendimento estratégico"] },
+        {
+          label: "Banco de Dados",
+          items: [
+            { name: "SQL", level: "Intermediário" },
+            { name: "Supabase", level: "Intermediário" },
+            { name: "Modelagem de Dados", level: "Básico" },
+          ],
+        },
+        {
+          label: "Web",
+          items: [
+            { name: "HTML", level: "Avançado" },
+            { name: "CSS", level: "Avançado" },
+            { name: "JavaScript", level: "Intermediário" },
+            { name: "React / Next.js", level: "Intermediário" },
+          ],
+        },
+        {
+          label: "Automação",
+          items: [
+            { name: "Automação de Processos", level: "Intermediário" },
+            { name: "Integrações via WhatsApp", level: "Intermediário" },
+            { name: "Scripts & Bots", level: "Básico" },
+          ],
+        },
       ],
     },
     education: {
+      eyebrow: "Formação",
       title: "Formação acadêmica",
       degree: "Análise e Desenvolvimento de Sistemas",
       school: "Impacta Tecnologia",
       period: "fev/2024 - jun/2026",
-      status: "Cursando",
+      status: "Concluído",
     },
     courses: {
+      eyebrow: "Certificados",
       title: "Cursos e certificações",
-      subtitle: "Formações relevantes para análise de dados e melhoria operacional.",
+      subtitle: "Formações que sustentam minha base técnica em dados, sistemas e automação.",
       items: [
         "Excel: Domine o Editor de Planilhas - Alura (2024)",
         "Power BI Desktop: construindo meu primeiro dashboard - Alura (2024)",
@@ -137,14 +249,29 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "Análise e Desenvolvimento de Sistemas - Impacta Tecnologia (fev/2024 - jun/2026)",
       ],
     },
-    goals: {
-      title: "Objetivo profissional",
-      body: "Crescer na area de negociacao e operacoes no turismo, contribuindo para processos mais eficientes, melhor atendimento e melhores resultados para o negocio.",
-    },
     contact: {
+      eyebrow: "Entrar em contato",
       title: "Vamos conversar?",
-      body: "Gostou do meu portfólio e quer algo parecido para você ou para sua empresa? Entre em contato comigo para montarmos essa ideia juntos, do visual ao conteúdo.",
-      emailLabel: "Enviar email",
+      body: "Gostou do meu portfólio e quer algo parecido — um site, uma identidade visual ou uma automação — para você ou sua empresa? Entre em contato comigo para montarmos essa ideia juntos, do conceito à entrega.",
+      talkToMe: "Fale comigo",
+      formTitle: "Para mais informações",
+      methods: {
+        emailLabel: "Email",
+        whatsappLabel: "WhatsApp",
+        linkedinLabel: "LinkedIn",
+        ctaLabel: "Contato ->",
+      },
+      form: {
+        name: "Nome",
+        namePlaceholder: "Insira seu nome",
+        email: "Email",
+        emailPlaceholder: "Insira seu email",
+        subject: "Assunto",
+        subjectPlaceholder: "Escreva seu assunto",
+        message: "Mensagem",
+        messagePlaceholder: "Escreva seu recado",
+        submit: "Enviar",
+      },
     },
     footer: "Feito por Mateus Fantin.",
   },
@@ -155,65 +282,143 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       skills: "Stack",
       education: "College",
       courses: "Courses",
-      goals: "Goals",
       contact: "Contact",
     },
     hero: {
-      greeting: "Hi, I am Mateus Fantin",
-      role: "Junior Product Negotiation Analyst | CVC Corp",
+      greetingPrefix: "Hi, my name is",
+      role: "Design, Databases, Web & Automation",
       summary:
-        "I work with airline product negotiation and group operations, focused on quotations, deadlines, seat availability, and branch support to keep operations running smoothly. My next career step is strongly focused on business-oriented data analysis.",
-      ctaPrimary: "Get in touch",
+        "I like turning ideas into complete products: interfaces with their own visual identity, a solid data structure behind them, sites that actually work in production, and automations that save time day to day. I use every project as an excuse to bring these four pieces together.",
+      ctaPrimary: "About me",
       ctaSecondary: "View LinkedIn",
+      scrollHint: "Scroll down",
+      code: [
+        'const mateus = {',
+        '  focus: [',
+        '    "design",',
+        '    "database",',
+        '    "web",',
+        '    "automation",',
+        '  ],',
+        '  projects: 3,',
+        '  background: "tourism",',
+        '  status: "building",',
+        '};',
+      ],
     },
     about: {
-      title: "Professional summary",
-      body: "I work in tourism with a focus on air operations and product management, with experience across customer service, post-sales, back office, and group charter operations. I currently manage fare quotes, deadlines, and seat availability while supporting branches across Brazil. I also handle critical workflows such as flight changes, agreement terms, and reservation adjustments, always prioritizing clarity, speed, and operational efficiency. Along this path, I have built strong communication, organization, and decision-making skills under pressure, with hands-on experience in GDS systems such as Sabre, Amadeus, Latam, and Gol. In parallel, I am strengthening my focus on data analysis to turn operational indicators into more strategic decisions.",
+      eyebrow: "My introduction",
+      title: "About me",
+      body: "I'm passionate about turning ideas into complete digital products: shaping a project's visual identity, structuring the database behind it, building the site or system that puts it live, and automating repetitive tasks so things just work. I come from a tourism background, handling operations and deadlines under pressure — a foundation I now apply to understand real problems before writing a line of code. Today I focus on design, web development, data modeling, and automation projects, always looking to bring these four pieces together in every delivery.",
+      stats: [
+        { label: "Live projects", value: "3" },
+        { label: "Focus", value: "Design + Dev + Data" },
+        { label: "Location", value: "São Paulo, BR" },
+      ],
+      statusLines: [
+        "keeping Fog Roulette, Porão Gráfico, and Vistamed live",
+        "graduated in Systems Analysis and Development",
+        "coming from tourism, moving fully into tech",
+        "going deeper into databases and automation",
+      ],
     },
     projects: {
+      eyebrow: "My portfolio",
       title: "Featured projects",
-      subtitle: "Projects that reflect my approach to operations, data analysis, and technology.",
+      subtitle: "Three real projects showing how I bring design, data, web development, and automation together in every delivery.",
+      ctaLabel: "View project",
+      categoryLabels: {
+        design: "Design",
+        database: "Database",
+        web: "Web",
+        automation: "Automation",
+      },
       items: [
         {
-          title: "Operational Performance Dashboard",
+          title: "Fog Roulette",
+          tagline: "Let the fog choose.",
           description:
-            "Dashboard built with real data from my previous sector to monitor productivity, targets, and protocol distribution. Two months are missing due to source data unavailability.",
-          stack: ["HTML", "CSS", "JavaScript", "Process Analysis"],
-          link: "https://dashboardmateus.netlify.app",
-          image: "/projects/dashboard-operacional.svg",
+            "A visual randomizer with user accounts: the result emerges from an animated fog that slowly clears, building suspense before revealing the pick. Built with Next.js, with Supabase handling authentication and each player's private match history. Built for anyone stuck choosing between options, combining authentication, data persistence, and an interface designed around the reveal effect itself.",
+          categories: ["web", "database", "automation"],
+          stack: ["Next.js", "React", "Supabase", "Authentication"],
+          link: "https://fogroulette.netlify.app",
+          image: "/projects/fog-roulette.png",
+        },
+        {
+          title: "Porão Gráfico",
+          tagline: "Dark visual identity, made to order.",
+          description:
+            "A graphic-design commission platform: show posters, single/album covers, promo packages, and dark-themed visual identity work. Clients filter by budget tier and timeline, then choose between Pix, a card link, or in-person payment — a direct flow to close a job with no friction.",
+          categories: ["design", "web"],
+          stack: ["React", "Vite", "Visual Identity"],
+          link: "https://porao-grafico.netlify.app",
+          image: "/projects/porao-grafico.png",
+        },
+        {
+          title: "Vistamed",
+          tagline: "A redesign proposal for an eye clinic with 33 years of history.",
+          description:
+            "A conceptual redesign proposal for Vistamed Eye Hospital, built for an internal pitch (not the official production site). It reorganizes 30+ diagnostic and surgical procedures by category, proposes direct WhatsApp scheduling with no bureaucratic middleman, and details the insurance plans accepted across its two São Paulo-metro locations. Clean design with expandable lists built for quick reading on any device.",
+          categories: ["web", "automation"],
+          stack: ["HTML", "CSS", "JavaScript", "WhatsApp Integration"],
+          link: "https://vistamednovo.netlify.app",
+          image: "/projects/vistamed.png",
         },
       ],
     },
     skills: {
-      title: "Systems and technologies",
-      subtitle: "Operational strengths and tools I am currently developing with a data-analysis focus.",
+      eyebrow: "My skills",
+      title: "My experience",
+      subtitle: "Four areas I usually combine on every project: from the interface to the database, through code and automation.",
       groups: [
         {
-          label: "Systems and experience",
+          label: "Design",
           items: [
-            "Sabre - Basic",
-            "Amadeus - Basic",
-            "Latam - Intermediate",
-            "Gol - Intermediate",
-            "HTML - Intermediate",
-            "CSS - Intermediate",
-            "JavaScript - Basic",
+            { name: "Visual Identity", level: "Intermediate" },
+            { name: "UI Design", level: "Intermediate" },
+            { name: "Typography", level: "Basic" },
+            { name: "Prototyping", level: "Basic" },
           ],
         },
-        { label: "Tools (learning path)", items: ["Excel - Intermediate", "Power BI - Basic", "SQL - Basic"] },
-        { label: "Processes", items: ["Negotiation", "Deadline management", "Post-sales", "Strategic support"] },
+        {
+          label: "Database",
+          items: [
+            { name: "SQL", level: "Intermediate" },
+            { name: "Supabase", level: "Intermediate" },
+            { name: "Data Modeling", level: "Basic" },
+          ],
+        },
+        {
+          label: "Web",
+          items: [
+            { name: "HTML", level: "Advanced" },
+            { name: "CSS", level: "Advanced" },
+            { name: "JavaScript", level: "Intermediate" },
+            { name: "React / Next.js", level: "Intermediate" },
+          ],
+        },
+        {
+          label: "Automation",
+          items: [
+            { name: "Process Automation", level: "Intermediate" },
+            { name: "WhatsApp Integrations", level: "Intermediate" },
+            { name: "Scripts & Bots", level: "Basic" },
+          ],
+        },
       ],
     },
     education: {
+      eyebrow: "Education",
       title: "Academic background",
       degree: "Systems Analysis and Development",
       school: "Impacta Tecnologia",
       period: "Feb/2024 - Jun/2026",
-      status: "In progress",
+      status: "Completed",
     },
     courses: {
+      eyebrow: "Certificates",
       title: "Courses and certifications",
-      subtitle: "Key learning focused on data analysis and operational improvement.",
+      subtitle: "Learning that supports my technical foundation in data, systems, and automation.",
       items: [
         "Excel: Master the Spreadsheet Editor - Alura (2024)",
         "Power BI Desktop: building my first dashboard - Alura (2024)",
@@ -221,14 +426,29 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "Systems Analysis and Development - Impacta Tecnologia (Feb/2024 - Jun/2026)",
       ],
     },
-    goals: {
-      title: "Professional goal",
-      body: "To grow in negotiation and tourism operations, helping deliver more efficient processes, better customer service, and stronger business outcomes.",
-    },
     contact: {
+      eyebrow: "Get in touch",
       title: "Let's connect",
-      body: "Did you like my portfolio and want something similar for you or your company? Reach out and we can build this idea together, from visual direction to content.",
-      emailLabel: "Send email",
+      body: "Did you like my portfolio and want something similar — a site, a visual identity, or an automation — for you or your company? Reach out and we can build this idea together, from concept to delivery.",
+      talkToMe: "Talk to me",
+      formTitle: "For more information",
+      methods: {
+        emailLabel: "Email",
+        whatsappLabel: "WhatsApp",
+        linkedinLabel: "LinkedIn",
+        ctaLabel: "Contact ->",
+      },
+      form: {
+        name: "Name",
+        namePlaceholder: "Enter your name",
+        email: "Email",
+        emailPlaceholder: "Enter your email",
+        subject: "Subject",
+        subjectPlaceholder: "Write your subject",
+        message: "Message",
+        messagePlaceholder: "Write your message",
+        submit: "Send",
+      },
     },
     footer: "Built by Mateus Fantin.",
   },

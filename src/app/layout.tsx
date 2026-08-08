@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cinzel, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,15 +12,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "900"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://mateus-fantin-portfolio.vercel.app"),
   title: "Mateus Fantin | Portfólio",
   description:
-    "Portfólio profissional de Mateus Fantin com resumo, projetos e competências.",
+    "Design, banco de dados, criação de sites e automações — portfólio de Mateus Fantin.",
   openGraph: {
     title: "Mateus Fantin | Portfólio",
     description:
-      "Conheça o trabalho de Mateus Fantin: projetos, experiência e trajetória profissional.",
+      "Conheça o trabalho de Mateus Fantin: design, banco de dados, sites e automações.",
     url: "https://mateus-fantin-portfolio.vercel.app",
     siteName: "Mateus Fantin Portfolio",
     locale: "pt_BR",
@@ -42,7 +48,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang="pt-BR"
+      className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
