@@ -123,7 +123,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         '    "web",',
         '    "automação",',
         '  ],',
-        '  projetos: 3,',
+        '  projetos: 4,',
         '  origem: "turismo",',
         '  status: "construindo",',
         '};',
@@ -134,12 +134,12 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       title: "Sobre mim",
       body: "Sou apaixonado por transformar ideias em produtos digitais completos: cuido da identidade visual de um projeto, estruturo o banco de dados que sustenta tudo por trás, construo o site ou sistema que coloca isso no ar, e automatizo tarefas repetitivas para que as coisas simplesmente funcionem. Venho do turismo, onde lidei com operações e prazos sob pressão — uma base que hoje aplico para entender problemas reais antes de sair codando. Atualmente me dedico a projetos de design, desenvolvimento web, modelagem de dados e automação, sempre buscando unir essas quatro frentes em cada entrega.",
       stats: [
-        { label: "Projetos no ar", value: "3" },
+        { label: "Projetos no ar", value: "4" },
         { label: "Foco", value: "Design + Dev + Dados" },
         { label: "Localização", value: "São Paulo, BR" },
       ],
       statusLines: [
-        "mantendo Fog Roulette, Porão Gráfico e Vistamed no ar",
+        "mantendo Fog Roulette, Porão Gráfico, Vistamed e AeroPulse no ar",
         "formado em Análise e Desenvolvimento de Sistemas",
         "vindo do turismo, migrando de vez pra tecnologia",
         "aprofundando banco de dados e automação",
@@ -148,7 +148,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     projects: {
       eyebrow: "Meu portfólio",
       title: "Projetos em destaque",
-      subtitle: "Três projetos reais que mostram como uno design, dados, desenvolvimento web e automação em cada entrega.",
+      subtitle: "Quatro projetos reais que mostram como uno design, dados, desenvolvimento web e automação em cada entrega.",
       ctaLabel: "Ver projeto",
       categoryLabels: {
         design: "Design",
@@ -186,6 +186,15 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
           stack: ["HTML", "CSS", "JavaScript", "Integração WhatsApp"],
           link: "https://vistamednovo.netlify.app",
           image: "/projects/vistamed.png",
+        },
+        {
+          title: "AeroPulse",
+          tagline: "Inteligência experimental em aviação.",
+          description:
+            "Plataforma experimental de inteligência em aviação que cruza dados meteorológicos, tráfego aéreo observado e histórico para gerar sinais de atenção e scores explicáveis por aeroporto. Construída em Next.js e TypeScript, com Supabase armazenando o histórico e MapLibre GL renderizando o monitoramento visual dos aeroportos brasileiros em tempo real.",
+          categories: ["web", "database", "automation"],
+          stack: ["Next.js", "TypeScript", "Supabase", "MapLibre GL"],
+          link: "https://aeropulse-eight.vercel.app",
         },
       ],
     },
@@ -300,7 +309,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         '    "web",',
         '    "automation",',
         '  ],',
-        '  projects: 3,',
+        '  projects: 4,',
         '  background: "tourism",',
         '  status: "building",',
         '};',
@@ -311,12 +320,12 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       title: "About me",
       body: "I'm passionate about turning ideas into complete digital products: shaping a project's visual identity, structuring the database behind it, building the site or system that puts it live, and automating repetitive tasks so things just work. I come from a tourism background, handling operations and deadlines under pressure — a foundation I now apply to understand real problems before writing a line of code. Today I focus on design, web development, data modeling, and automation projects, always looking to bring these four pieces together in every delivery.",
       stats: [
-        { label: "Live projects", value: "3" },
+        { label: "Live projects", value: "4" },
         { label: "Focus", value: "Design + Dev + Data" },
         { label: "Location", value: "São Paulo, BR" },
       ],
       statusLines: [
-        "keeping Fog Roulette, Porão Gráfico, and Vistamed live",
+        "keeping Fog Roulette, Porão Gráfico, Vistamed, and AeroPulse live",
         "graduated in Systems Analysis and Development",
         "coming from tourism, moving fully into tech",
         "going deeper into databases and automation",
@@ -325,7 +334,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     projects: {
       eyebrow: "My portfolio",
       title: "Featured projects",
-      subtitle: "Three real projects showing how I bring design, data, web development, and automation together in every delivery.",
+      subtitle: "Four real projects showing how I bring design, data, web development, and automation together in every delivery.",
       ctaLabel: "View project",
       categoryLabels: {
         design: "Design",
@@ -363,6 +372,15 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
           stack: ["HTML", "CSS", "JavaScript", "WhatsApp Integration"],
           link: "https://vistamednovo.netlify.app",
           image: "/projects/vistamed.png",
+        },
+        {
+          title: "AeroPulse",
+          tagline: "Experimental intelligence for aviation.",
+          description:
+            "An experimental aviation-intelligence platform that cross-references weather data, observed air traffic, and historical records to generate attention signals and explainable scores for Brazilian airports. Built with Next.js and TypeScript, with Supabase storing the historical data and MapLibre GL powering the real-time visual monitoring.",
+          categories: ["web", "database", "automation"],
+          stack: ["Next.js", "TypeScript", "Supabase", "MapLibre GL"],
+          link: "https://aeropulse-eight.vercel.app",
         },
       ],
     },
