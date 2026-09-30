@@ -1,0 +1,10 @@
+/* Só vale enquanto o hero das ondas está na página: fundo escuro na janela
+   inteira, inclusive na faixa reservada para a barra de rolagem. */
+html:has(.jp-waves) {
+  background: #08070c;
+  color-scheme: dark;
+}
+
+html:has(.jp-waves) body {
+  background: #08070c;
+}

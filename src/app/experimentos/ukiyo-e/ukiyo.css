@@ -1,0 +1,378 @@
+/* =====================================================================
+   Tema ukiyo-e — só vale dentro de .ukiyo (este experimento).
+   Dia: papel washi, azul-da-prússia do Hokusai e vermelhão.
+   Noite: índigo profundo, lua e espuma prateada.
+   ===================================================================== */
+.ukiyo {
+  --u-bg: #f5f0e6;
+  --u-bg-2: #ede5d3;
+  --u-card: #fbf8f1;
+  --u-ink: #19203a;
+  --u-ink-soft: #3a4058;
+  --u-muted: #6b6659;
+  --u-line: rgb(25 32 58 / 0.13);
+  --u-line-strong: rgb(25 32 58 / 0.3);
+  --u-indigo: #1e3a8a;
+  --u-accent: #1e3a8a;
+  --u-footer: #1e3a8a;
+  --u-red: #c23b2a;
+  --u-red-ink: #fff6ea;
+  --u-gold: #a8792c;
+
+  --u-sky-top: #eee3cc;
+  --u-sky-bottom: #f5f0e6;
+  --u-orb: #cf412d;
+  --u-orb-glow: rgb(207 65 45 / 0.18);
+  --u-cloud: #ece2cd;
+  --u-cloud-line: rgb(25 32 58 / 0.28);
+  --u-fuji: #5b70ad;
+  --u-fuji-snow: #fbf8f0;
+  --u-star: transparent;
+
+  /* A Grande Onda */
+  --wv-back: #c3cfe6;
+  --wv-mid: #1d4ed8;
+  --wv-deep: #1e3a8a;
+  --wv-inner: #2a49a8;
+  --wv-foam: #fbf7ee;
+  --wv-outline: #101f55;
+
+  /* Lago dos koi */
+  --pond-top: #8fb6c8;
+  --pond-bottom: #4f7f9c;
+
+  --u-grain-opacity: 0.4;
+  --u-shadow: 0 1px 0 rgb(255 255 255 / 0.5) inset, 0 18px 40px -24px rgb(30 58 138 / 0.4);
+  --u-mizu-line: rgb(30 58 138 / 0.032);
+  --glare: rgb(255 255 255 / 0.45);
+  /* A borda animada e o reflexo da versão clássica, nas cores da gravura */
+  --brand-1: #1e3a8a;
+  --brand-2: #c23b2a;
+  --brand-3: #a8792c;
+  --brand-4: #1d4ed8;
+
+  background: var(--u-bg);
+  color: var(--u-ink);
+}
+
+.dark .ukiyo {
+  --u-bg: #0c1328;
+  --u-bg-2: #111b36;
+  --u-card: #142042;
+  --u-ink: #efe6d2;
+  --u-ink-soft: #d4cab4;
+  --u-muted: #a39c8b;
+  --u-line: rgb(239 230 210 / 0.12);
+  --u-line-strong: rgb(239 230 210 / 0.26);
+  --u-accent: #a9c4e6;
+  --u-footer: #070c1b;
+  --u-red: #e2553f;
+  --u-red-ink: #1b0f0c;
+  --u-gold: #d9b25f;
+
+  --u-sky-top: #060b1a;
+  --u-sky-bottom: #17264b;
+  --u-orb: #f2e3b8;
+  --u-orb-glow: rgb(242 227 184 / 0.22);
+  --u-cloud: #1c2b52;
+  --u-cloud-line: rgb(239 230 210 / 0.18);
+  --u-fuji: #22365f;
+  --u-fuji-snow: #cdd8e6;
+  --u-star: #f2e8cc;
+
+  --wv-back: #4b6795;
+  --wv-mid: #284a85;
+  --wv-deep: #0b1937;
+  --wv-inner: #1c3a72;
+  --wv-foam: #e2ebf3;
+  --wv-outline: #050b1c;
+
+  --pond-top: #10263d;
+  --pond-bottom: #06131f;
+
+  --u-grain-opacity: 0.14;
+  --u-shadow: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 18px 40px -24px rgb(0 0 0 / 0.8);
+  --u-mizu-line: rgb(169 196 230 / 0.035);
+  --glare: rgb(255 255 255 / 0.08);
+  --brand-1: #a9c4e6;
+  --brand-2: #e2553f;
+  --brand-3: #d9b25f;
+  --brand-4: #4b6fd6;
+}
+
+/* Fundo da janela inteira enquanto este experimento está aberto */
+html:has(.ukiyo) {
+  background: #f5f0e6;
+}
+
+html.dark:has(.ukiyo) {
+  background: #0c1328;
+  color-scheme: dark;
+}
+
+html:has(.ukiyo) body {
+  background: transparent;
+}
+
+.u-mincho {
+  font-family: var(--font-mincho), "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Noto Serif JP",
+    "Noto Serif CJK JP", serif;
+}
+
+/* Textura de papel sobre a página toda */
+.u-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: var(--u-grain-opacity);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.18 0 0 0 0.28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.dark .u-grain {
+  mix-blend-mode: screen;
+}
+
+/* Cartão de papel com moldura dupla, como a borda de uma gravura */
+.u-print {
+  position: relative;
+  background: var(--u-card);
+  border: 1px solid var(--u-line-strong);
+  box-shadow: var(--u-shadow);
+}
+
+.u-print::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--u-line);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* ---------- Animações da Grande Onda ---------- */
+.u-wave-sway {
+  transform-box: view-box;
+  animation: u-wave-sway 9s ease-in-out infinite alternate;
+}
+
+@keyframes u-wave-sway {
+  from {
+    transform: rotate(-0.8deg) scale(1);
+  }
+  to {
+    transform: rotate(1deg) scale(1.012);
+  }
+}
+
+.u-swell {
+  animation: u-swell-bob 7s ease-in-out infinite alternate;
+}
+
+@keyframes u-swell-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(5px);
+  }
+}
+
+.u-claw {
+  transform-box: view-box;
+  animation: u-claw-sway 3.4s ease-in-out infinite alternate;
+}
+
+@keyframes u-claw-sway {
+  from {
+    transform: rotate(-5deg);
+  }
+  to {
+    transform: rotate(6deg);
+  }
+}
+
+.u-streak {
+  animation: u-streak-flow linear infinite;
+}
+
+@keyframes u-streak-flow {
+  to {
+    stroke-dashoffset: -420;
+  }
+}
+
+.u-spray {
+  animation: u-spray 3.2s ease-in-out infinite;
+}
+
+@keyframes u-spray {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(2px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+.u-drift {
+  animation: u-drift linear infinite alternate;
+}
+
+@keyframes u-drift {
+  from {
+    transform: translateX(-3%);
+  }
+  to {
+    transform: translateX(3%);
+  }
+}
+
+.u-twinkle {
+  animation: u-twinkle 3s ease-in-out infinite;
+}
+
+@keyframes u-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.u-marquee {
+  animation: u-marquee 42s linear infinite;
+}
+
+.u-marquee-wrap:hover .u-marquee {
+  animation-play-state: paused;
+}
+
+@keyframes u-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .u-wave-sway,
+  .u-swell,
+  .u-claw,
+  .u-streak,
+  .u-spray,
+  .u-drift,
+  .u-twinkle,
+  .u-marquee {
+    animation: none;
+  }
+}
+
+/* ---------- Botão de tinta: a cor se espalha a partir do cursor ---------- */
+.u-ink-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color 0.35s ease, border-color 0.35s ease;
+}
+
+.u-ink-btn::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: var(--ink-x, 50%);
+  top: var(--ink-y, 50%);
+  width: 260%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ink-fill, var(--u-ink));
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.u-ink-btn:hover::before,
+.u-ink-btn:focus-visible::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .u-ink-btn::before {
+    transition: none;
+  }
+}
+
+/* ---------- Mar vetorial animado do hero ---------- */
+.u-sea-drift {
+  animation: u-sea-drift linear infinite;
+  will-change: transform;
+}
+
+@keyframes u-sea-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-1 * var(--period)), 0, 0);
+  }
+}
+
+.u-sea-bob {
+  animation: u-sea-bob ease-in-out infinite alternate;
+}
+
+@keyframes u-sea-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(var(--bob));
+  }
+}
+
+.u-foam-bob {
+  animation: u-foam-bob 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes u-foam-bob {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+.u-sea-drop {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: u-sea-drop ease-out infinite;
+}
+
+@keyframes u-sea-drop {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-14px, var(--rise)) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .u-sea-drift,
+  .u-sea-bob,
+  .u-foam-bob,
+  .u-sea-drop {
+    animation: none;
+  }
+}

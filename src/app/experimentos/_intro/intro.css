@@ -1,0 +1,5 @@
+/* Kanji da intro: a mincho carregada pela página (a da intro ou a do ukiyo-e),
+   com as mincho do sistema de reserva */
+.u-mincho-intro {
+  font-family: var(--font-mincho-intro, var(--font-mincho)), "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
+}
