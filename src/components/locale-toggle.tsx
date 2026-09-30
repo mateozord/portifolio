@@ -1,37 +1,39 @@
 "use client";
 
+import { motion } from "framer-motion";
 import type { Locale } from "@/content/portfolio-content";
+import { setLocale } from "@/lib/locale-store";
+import { cn } from "@/lib/cn";
 
-type LocaleToggleProps = {
-  locale: Locale;
-  onChange: (locale: Locale) => void;
-};
+const LOCALES: Locale[] = ["pt", "en"];
 
-export function LocaleToggle({ locale, onChange }: LocaleToggleProps) {
+export function LocaleToggle({ locale }: { locale: Locale }) {
   return (
-    <div className="ml-auto flex items-center gap-2 text-sm">
-      <button
-        type="button"
-        onClick={() => onChange("pt")}
-        className={`rounded-full px-3 py-1 transition ${
-          locale === "pt"
-            ? "bg-violet-400 text-[#0b1126]"
-            : "border border-white/20 bg-white/5 text-slate-200 hover:bg-white/10"
-        }`}
-      >
-        PT
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("en")}
-        className={`rounded-full px-3 py-1 transition ${
-          locale === "en"
-            ? "bg-violet-400 text-[#0b1126]"
-            : "border border-white/20 bg-white/5 text-slate-200 hover:bg-white/10"
-        }`}
-      >
-        EN
-      </button>
+    <div className="border-line bg-surface flex rounded-full border p-0.5 font-mono text-[11px] font-semibold uppercase">
+      {LOCALES.map((code) => {
+        const active = locale === code;
+        return (
+          <button
+            key={code}
+            type="button"
+            onClick={() => setLocale(code)}
+            aria-pressed={active}
+            lang={code === "pt" ? "pt-BR" : "en"}
+            className="focus-ring relative rounded-full px-2.5 py-1.5"
+          >
+            {active && (
+              <motion.span
+                layoutId="locale-pill"
+                className="bg-ink absolute inset-0 rounded-full"
+                transition={{ type: "spring", stiffness: 420, damping: 32 }}
+              />
+            )}
+            <span className={cn("relative z-10 transition-colors", active ? "text-bg" : "text-muted hover:text-ink")}>
+              {code}
+            </span>
+          </button>
+        );
+      })}
     </div>
   );
 }

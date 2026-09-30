@@ -1,88 +1,120 @@
 export type Locale = "pt" | "en";
 
-export type ProjectCategory = "design" | "database" | "web" | "automation";
+export type ProjectCategory = "web" | "database" | "automation" | "design";
 
-export type Project = {
+/** Dados de um projeto que não mudam com o idioma. */
+type ProjectBase = {
+  slug: string;
   title: string;
-  tagline: string;
-  description: string;
   categories: ProjectCategory[];
   stack: string[];
+  /** A primeira imagem é a capa do card. */
+  images: string[];
   link?: string;
-  image?: string;
+  repo?: string;
+  featured?: boolean;
 };
 
-export type SkillItem = {
-  name: string;
-  level: string;
+/** Textos de um projeto, por idioma. `captions` segue a ordem de `images`. */
+type ProjectCopy = {
+  tagline: string;
+  summary: string;
+  description: string;
+  highlights: string[];
+  captions: string[];
+  note?: string;
 };
+
+export type Project = ProjectBase & ProjectCopy;
 
 export type PortfolioDictionary = {
   nav: {
-    about: string;
+    services: string;
     projects: string;
-    skills: string;
-    education: string;
-    courses: string;
+    about: string;
+    process: string;
     contact: string;
+    cta: string;
+    openMenu: string;
+    closeMenu: string;
   };
+  theme: { toLight: string; toDark: string };
   hero: {
-    greetingPrefix: string;
-    role: string;
-    summary: string;
+    availability: string;
+    /** Trechos entre *asteriscos* ganham destaque. */
+    title: string;
+    intro: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    scrollHint: string;
-    code: string[];
+    proof: string[];
+    floatingLive: string;
+    floatingMasterpiece: string;
+    floatingStack: string;
   };
-  about: {
+  marqueeLabel: string;
+  services: {
     eyebrow: string;
     title: string;
-    body: string;
-    stats: { label: string; value: string }[];
-    statusLines: string[];
+    subtitle: string;
+    items: { title: string; description: string; tags: string[] }[];
   };
   projects: {
     eyebrow: string;
     title: string;
     subtitle: string;
-    ctaLabel: string;
-    categoryLabels: Record<ProjectCategory, string>;
+    filters: Record<"all" | ProjectCategory, string>;
+    featuredBadge: string;
+    liveBadge: string;
+    openCase: string;
+    live: string;
+    code: string;
+    similar: string;
+    highlightsTitle: string;
+    stackTitle: string;
+    close: string;
+    previous: string;
+    next: string;
     items: Project[];
   };
-  skills: {
+  about: {
     eyebrow: string;
     title: string;
-    subtitle: string;
-    groups: { label: string; items: SkillItem[] }[];
-  };
-  education: {
-    eyebrow: string;
-    title: string;
+    paragraphs: string[];
+    photoAlt: string;
+    location: string;
+    stats: { value: number; suffix?: string; label: string }[];
+    journey: { title: string; detail: string }[];
+    stackTitle: string;
+    stack: { label: string; items: string[] }[];
+    educationTitle: string;
     degree: string;
     school: string;
     period: string;
     status: string;
+    coursesTitle: string;
+    courses: string[];
   };
-  courses: {
+  process: {
     eyebrow: string;
     title: string;
     subtitle: string;
-    items: string[];
+    steps: { title: string; description: string }[];
   };
   contact: {
     eyebrow: string;
     title: string;
     body: string;
-    talkToMe: string;
-    formTitle: string;
-    methods: {
-      emailLabel: string;
-      whatsappLabel: string;
-      linkedinLabel: string;
-      ctaLabel: string;
-    };
+    whatsappLabel: string;
+    whatsappHint: string;
+    emailLabel: string;
+    linkedinLabel: string;
+    githubLabel: string;
+    copy: string;
+    copied: string;
+    /** `{project}` é trocado pelo nome do projeto. */
+    similarSubject: string;
     form: {
+      title: string;
       name: string;
       namePlaceholder: string;
       email: string;
@@ -91,385 +123,678 @@ export type PortfolioDictionary = {
       subjectPlaceholder: string;
       message: string;
       messagePlaceholder: string;
-      submit: string;
+      submitEmail: string;
+      submitWhatsapp: string;
+      hint: string;
     };
   };
-  footer: string;
+  footer: { tagline: string; builtWith: string; backToTop: string };
 };
+
+export const profile = {
+  name: "Mateus Fantin",
+  email: "matfp3@hotmail.com",
+  whatsappDisplay: "11 98015-7119",
+  whatsappLink: "https://wa.me/5511980157119",
+  linkedin: "https://www.linkedin.com/in/mateus-fantin/",
+  github: "https://github.com/mateozord",
+};
+
+export const techStack = [
+  "Next.js",
+  "React",
+  "TypeScript",
+  "JavaScript",
+  "Tailwind CSS",
+  "Framer Motion",
+  "Vite",
+  "Supabase",
+  "PostgreSQL",
+  "SQL",
+  "Python",
+  "FastAPI",
+  "Recharts",
+  "MapLibre GL",
+  "Power BI",
+  "Excel",
+  "Git",
+  "Vercel",
+  "Netlify",
+];
+
+const projectBase: ProjectBase[] = [
+  {
+    slug: "cozylog",
+    title: "CozyLog",
+    categories: ["web", "database", "design"],
+    stack: ["React", "Vite", "Tailwind CSS v4", "Framer Motion", "Supabase", "RAWG API", "Steam Web API"],
+    images: [
+      "/projects/cozylog/cover.webp",
+      "/projects/cozylog/diary.webp",
+      "/projects/cozylog/rainbow-cards.webp",
+      "/projects/cozylog/game-page.webp",
+      "/projects/cozylog/community-feed.webp",
+      "/projects/cozylog/responsive.webp",
+    ],
+    link: "https://cozylog.vercel.app",
+    featured: true,
+  },
+  {
+    slug: "aeropulse",
+    title: "AeroPulse",
+    categories: ["web", "database", "automation"],
+    stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "MapLibre GL", "Recharts", "Supabase", "GitHub Actions"],
+    images: [
+      "/projects/aeropulse/home.webp",
+      "/projects/aeropulse/war-room.webp",
+      "/projects/aeropulse/airport-detail.webp",
+      "/projects/aeropulse/airports.webp",
+    ],
+    link: "https://aeropulse-eight.vercel.app",
+    repo: "https://github.com/mateozord/aeropulse",
+  },
+  {
+    slug: "pulso",
+    title: "PULSO",
+    categories: ["web", "database", "design"],
+    stack: ["React", "Vite", "React Router", "Supabase", "Ticketmaster API", "Netlify Functions"],
+    images: ["/projects/pulso/home.webp", "/projects/pulso/explore.webp", "/projects/pulso/event.webp"],
+    repo: "https://github.com/mateozord/pulso",
+  },
+  {
+    slug: "porao-grafico",
+    title: "Porão Gráfico",
+    categories: ["design", "web"],
+    stack: ["React", "Vite", "Tailwind CSS", "Context API", "Netlify Forms"],
+    images: [
+      "/projects/porao-grafico/cover.webp",
+      "/projects/porao-grafico/lightbox.webp",
+      "/projects/porao-grafico/checkout.webp",
+      "/projects/porao-grafico/mobile.webp",
+      "/projects/porao-grafico/bilingual.webp",
+      "/projects/porao-grafico/landing.webp",
+      "/projects/porao-grafico/poster-shinnoi.webp",
+      "/projects/porao-grafico/poster-wolf-altar.webp",
+      "/projects/porao-grafico/poster-furia-ancestral.webp",
+      "/projects/porao-grafico/poster-grave-riot.webp",
+      "/projects/porao-grafico/poster-black-claw-ritual.webp",
+    ],
+    link: "https://porao-grafico.netlify.app",
+    repo: "https://github.com/mateozord/porao-grafico",
+  },
+  {
+    slug: "vistamed",
+    title: "Vistamed",
+    categories: ["web", "design"],
+    stack: ["HTML", "CSS", "JavaScript", "WhatsApp"],
+    images: ["/projects/vistamed/home.webp"],
+    link: "https://vistamednovo.netlify.app",
+    repo: "https://github.com/mateozord/vistamed",
+  },
+];
+
+const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
+  pt: {
+    cozylog: {
+      tagline: "Um diário de jogos aconchegante — e social.",
+      summary:
+        "Rede social para registrar, avaliar e compartilhar jogos, com perfis, conquistas, feed da comunidade e cards de review prontos para postar.",
+      description:
+        "O CozyLog nasceu como um diário pessoal de jogos e virou uma rede social completa: perfis públicos com conquistas automáticas, feed da comunidade com curtidas, reações e comentários, listas temáticas, página de cada jogo com estatísticas da comunidade e busca em todo o catálogo da RAWG. Tudo embrulhado numa interface quente e cheia de microinterações, em que cada clique tem resposta.",
+      highlights: [
+        "Cards com inclinação 3D que segue o cursor, borda em gradiente girando e partículas: o selo Rainbow Masterpiece",
+        "Supabase com Postgres, login e RLS por usuário, triggers e uma Edge Function que protege a chave da Steam",
+        "Status “Jogando agora” ao vivo, direto da Steam Web API",
+        "Cards de review em 1080×1350 gerados no navegador, prontos para compartilhar",
+        "Bilíngue (PT/EN), tema claro e escuro e termos de uso e privacidade alinhados à LGPD",
+      ],
+      captions: [
+        "Visão geral do CozyLog",
+        "Diário com o que está sendo jogado agora",
+        "Cards Rainbow Masterpiece animados",
+        "Página do jogo com estatísticas da comunidade",
+        "Feed da comunidade",
+        "Versão mobile, clara e escura",
+      ],
+    },
+    aeropulse: {
+      tagline: "Inteligência experimental em aviação.",
+      summary:
+        "Cruza clima, tráfego aéreo e histórico para gerar um score explicável de 0 a 100 para 10 grandes aeroportos brasileiros.",
+      description:
+        "Painéis de aviação costumam mostrar um mar de números que ninguém fora do setor entende, ou previsões confiantes sem raciocínio visível. O AeroPulse cruza fontes reais e independentes (clima, tráfego aéreo observado e tendência histórica) em um score de 0 a 100 por aeroporto e sempre mostra o porquê do número. Ele deixa claro o que é ao vivo, o que é um retrato de 30 minutos e o que não está disponível: uma leitura indisponível nunca aparece como zero.",
+      highlights: [
+        "Mapa ao vivo com MapLibre GL e sala de operações com os aeroportos que pedem atenção",
+        "Score explicável: cada número vem com os fatores que o formaram",
+        "Histórico guardado no Supabase e atualizado automaticamente com GitHub Actions",
+        "Explicação em linguagem natural gerada por IA (experimental)",
+        "Honesto por design: não prevê atrasos nem cancelamentos, e diz isso com todas as letras",
+      ],
+      captions: [
+        "Visão geral com o mapa do Brasil",
+        "Sala de operações",
+        "Detalhe de um aeroporto com score e tendência",
+        "Lista de aeroportos monitorados",
+      ],
+    },
+    pulso: {
+      tagline: "A cidade toca aqui.",
+      summary:
+        "Descoberta de shows, artistas e casas de show com dados reais da Ticketmaster, filtros compartilháveis e favoritos por usuário.",
+      description:
+        "“O que está tocando na minha cidade essa semana?” é uma pergunta surpreendentemente difícil de responder. Sites de ingresso são feitos para vender, redes sociais são ruído. O PULSO fica no meio do caminho: uma curadoria de shows reais organizada por cidade, período, gênero e artista, com identidade visual urbana e editorial, e nenhum dado inventado.",
+      highlights: [
+        "Eventos reais em tempo real pela Ticketmaster Discovery API",
+        "Proxy serverless que mantém a chave da API fora do navegador",
+        "Busca geográfica para contornar cidades vazias nos dados brasileiros da API",
+        "Filtros guardados na URL: qualquer busca vira um link compartilhável",
+        "Favoritos por usuário com Supabase Auth e Row Level Security",
+      ],
+      captions: ["Página inicial", "Explorar com filtros", "Página de um evento"],
+    },
+    "porao-grafico": {
+      tagline: "Arte para banda, evento ou lançamento.",
+      summary:
+        "Loja de serviços de design gráfico, com pôsteres, capas e identidade visual, do catálogo ao checkout, sem negociação manual no WhatsApp.",
+      description:
+        "Loja e portfólio bilíngue para um artista underground: pôsteres de show, capas de single e álbum, pacotes de divulgação e identidade visual com cara de xerox colada na parede. O cliente navega pelo catálogo, abre cada arte em tela cheia, monta o carrinho e fecha o pedido escolhendo Pix, link de cartão ou pagamento na entrega. Para trabalhos sob medida, um formulário de orçamento já pergunta tipo de arte, prazo e investimento.",
+      highlights: [
+        "Catálogo com lightbox em tela cheia, navegável pelas setas do teclado",
+        "Carrinho com Context API que sobrevive ao recarregar a página, com limite por item e subtotal ao vivo",
+        "Pedidos e orçamentos chegam pelo Netlify Forms, sem precisar de servidor",
+        "Bilíngue (PT/EN), com idioma detectado pelo navegador e compartilhável por link",
+        "Identidade visual própria: textura de papel, rachaduras e molduras feitas só com CSS",
+      ],
+      captions: [
+        "Visão geral do Porão Gráfico",
+        "Catálogo com lightbox em tela cheia",
+        "Carrinho e checkout",
+        "Versão mobile",
+        "Bilíngue: português e inglês",
+        "Landing page completa, do hero ao orçamento",
+        "Pôster SHINNOI, do catálogo",
+        "Pôster WOLF ALTAR, do catálogo",
+        "Pôster FÚRIA ANCESTRAL, do catálogo",
+        "Pôster GRAVE RIOT, do catálogo",
+        "Pôster BLACK CLAW RITUAL, do catálogo",
+      ],
+    },
+    vistamed: {
+      tagline: "Redesign para um hospital de olhos com 33 anos de história.",
+      summary:
+        "Proposta de redesign que reorganiza mais de 30 procedimentos e leva o agendamento direto para o WhatsApp.",
+      description:
+        "Proposta de redesign para o Hospital de Olhos Vistamed. Reorganiza mais de 30 procedimentos de diagnóstico e cirurgia por categoria, propõe agendamento direto pelo WhatsApp, sem intermediários, e detalha os convênios aceitos nas duas unidades da Grande São Paulo. Design limpo, com listas expansíveis pensadas para leitura rápida em qualquer aparelho.",
+      highlights: [
+        "Mais de 30 procedimentos organizados em listas expansíveis",
+        "Agendamento direto pelo WhatsApp",
+        "Convênios e unidades detalhados, com leitura rápida no celular",
+        "Tema claro e escuro",
+      ],
+      captions: ["Página inicial"],
+      note: "Proposta conceitual criada para uma apresentação interna, não é o site oficial.",
+    },
+  },
+  en: {
+    cozylog: {
+      tagline: "A cozy game diary, and a social one.",
+      summary:
+        "A social network to log, rate and share games, with profiles, achievements, a community feed and review cards ready to post.",
+      description:
+        "CozyLog started as a personal game diary and grew into a full social network: public profiles with automatic achievements, a community feed with likes, reactions and comments, themed lists, a page for every game with community stats, and search across the whole RAWG catalog. It's all wrapped in a warm interface full of micro-interactions, where every click gets a response.",
+      highlights: [
+        "Cards with a 3D tilt that follows the cursor, a rotating gradient border and sparkles: the Rainbow Masterpiece badge",
+        "Supabase with Postgres, auth and per-user RLS, triggers, and an Edge Function that keeps the Steam key safe",
+        "Live “Now playing” status straight from the Steam Web API",
+        "1080×1350 review cards generated in the browser, ready to share",
+        "Bilingual (PT/EN), light and dark themes, and LGPD-aligned terms and privacy pages",
+      ],
+      captions: [
+        "CozyLog overview",
+        "Diary with what's being played right now",
+        "Animated Rainbow Masterpiece cards",
+        "Game page with community stats",
+        "Community feed",
+        "Mobile version, light and dark",
+      ],
+    },
+    aeropulse: {
+      tagline: "Experimental intelligence for aviation.",
+      summary:
+        "Cross-references weather, air traffic and history into an explainable 0–100 score for 10 major Brazilian airports.",
+      description:
+        "Aviation dashboards usually show a wall of numbers nobody outside the industry can read, or confident predictions with no visible reasoning. AeroPulse cross-references real, independent sources (weather, observed air traffic and historical trend) into a 0–100 score per airport, and always shows why the number is what it is. It's explicit about what's live, what's a 30-minute snapshot and what's unavailable: a missing reading is never shown as zero.",
+      highlights: [
+        "Live map built with MapLibre GL and an operations room for airports that need attention",
+        "Explainable score: every number comes with the factors behind it",
+        "History stored in Supabase and refreshed automatically with GitHub Actions",
+        "Plain-language explanation generated by AI (experimental)",
+        "Honest by design: it doesn't predict delays or cancellations, and says so",
+      ],
+      captions: [
+        "Overview with the map of Brazil",
+        "Operations room",
+        "Airport detail with score and trend",
+        "Monitored airports",
+      ],
+    },
+    pulso: {
+      tagline: "The city plays here.",
+      summary:
+        "Discover shows, artists and venues with real Ticketmaster data, shareable filters and per-user favorites.",
+      description:
+        "“What's playing in my city this week?” is a surprisingly hard question to answer well. Ticketing sites are built to sell, social media is noise. PULSO sits in between: a curated view of real shows organized by city, date, genre and artist, with an urban, editorial visual identity and zero made-up data.",
+      highlights: [
+        "Real events in real time from the Ticketmaster Discovery API",
+        "Serverless proxy that keeps the API key out of the browser",
+        "Geographic search to work around empty city fields in Brazilian API data",
+        "Filters live in the URL, so every search is a shareable link",
+        "Per-user favorites with Supabase Auth and Row Level Security",
+      ],
+      captions: ["Home page", "Explore with filters", "Event page"],
+    },
+    "porao-grafico": {
+      tagline: "Art for bands, events and releases.",
+      summary:
+        "A graphic design store for posters, covers and visual identity, from catalog to checkout, with no back-and-forth over WhatsApp.",
+      description:
+        "A bilingual shop and portfolio for an underground artist: gig posters, single and album covers, promo packs and visual identity that looks like a photocopy glued to a wall. Clients browse the catalog, open each piece full screen, fill a cart and check out with Pix, a card payment link or pay on delivery. For custom work, a quote form already asks for the type of art, deadline and budget.",
+      highlights: [
+        "Catalog with a full-screen lightbox you can browse with the arrow keys",
+        "Cart built on the Context API that survives page reloads, with per-item limits and a live subtotal",
+        "Orders and quotes delivered through Netlify Forms, no server needed",
+        "Bilingual (PT/EN), with browser language detection and shareable language links",
+        "Original visual identity: paper texture, wall cracks and poster frames made purely in CSS",
+      ],
+      captions: [
+        "Porão Gráfico overview",
+        "Catalog with a full-screen lightbox",
+        "Cart and checkout",
+        "Mobile version",
+        "Bilingual: Portuguese and English",
+        "Full landing page, from hero to quote form",
+        "SHINNOI poster, from the catalog",
+        "WOLF ALTAR poster, from the catalog",
+        "FÚRIA ANCESTRAL poster, from the catalog",
+        "GRAVE RIOT poster, from the catalog",
+        "BLACK CLAW RITUAL poster, from the catalog",
+      ],
+    },
+    vistamed: {
+      tagline: "A redesign for an eye hospital with 33 years of history.",
+      summary:
+        "A redesign proposal that reorganizes 30+ procedures and moves scheduling straight to WhatsApp.",
+      description:
+        "A redesign proposal for Vistamed Eye Hospital. It reorganizes 30+ diagnostic and surgical procedures by category, proposes direct WhatsApp scheduling with no middleman, and details the insurance plans accepted at both São Paulo-area locations. A clean design with expandable lists built for quick reading on any device.",
+      highlights: [
+        "30+ procedures organized in expandable lists",
+        "Direct scheduling through WhatsApp",
+        "Insurance plans and locations laid out for quick mobile reading",
+        "Light and dark themes",
+      ],
+      captions: ["Home page"],
+      note: "A concept proposal made for an internal pitch, not the official website.",
+    },
+  },
+};
+
+function buildProjects(locale: Locale): Project[] {
+  return projectBase.map((base) => ({ ...base, ...projectCopy[locale][base.slug] }));
+}
 
 export const portfolioContent: Record<Locale, PortfolioDictionary> = {
   pt: {
     nav: {
-      about: "Resumo",
+      services: "Serviços",
       projects: "Projetos",
-      skills: "Stack",
-      education: "Faculdade",
-      courses: "Cursos",
+      about: "Sobre",
+      process: "Processo",
       contact: "Contato",
+      cta: "Vamos conversar",
+      openMenu: "Abrir menu",
+      closeMenu: "Fechar menu",
     },
+    theme: { toLight: "Mudar para o tema claro", toDark: "Mudar para o tema escuro" },
     hero: {
-      greetingPrefix: "Olá, me chamo",
-      role: "Design, Banco de Dados, Web & Automação",
-      summary:
-        "Curto transformar ideias em produtos completos: interfaces com identidade visual própria, estrutura de dados sólida por trás, sites que funcionam de verdade no ar, e automações que economizam tempo no dia a dia. Uso cada projeto como desculpa para unir essas quatro frentes.",
-      ctaPrimary: "Sobre mim",
-      ctaSecondary: "Ver LinkedIn",
-      scrollHint: "Descer para ver mais",
-      code: [
-        'const mateus = {',
-        '  foco: [',
-        '    "design",',
-        '    "banco de dados",',
-        '    "web",',
-        '    "automação",',
-        '  ],',
-        '  projetos: 4,',
-        '  origem: "turismo",',
-        '  status: "construindo",',
-        '};',
-      ],
+      availability: "Disponível para novos projetos",
+      title: "Sites, sistemas e automações que *fazem seu negócio andar.*",
+      intro:
+        "Sou Mateus Fantin, desenvolvedor em São Paulo. Uno design, banco de dados, código e automação para entregar produtos completos: do primeiro rascunho ao site no ar.",
+      ctaPrimary: "Ver projetos",
+      ctaSecondary: "Falar no WhatsApp",
+      proof: ["5 projetos construídos", "Design + código + dados", "São Paulo, BR"],
+      floatingLive: "Dados ao vivo",
+      floatingMasterpiece: "Rainbow Masterpiece",
+      floatingStack: "Supabase · RLS",
     },
-    about: {
-      eyebrow: "Minha introdução",
-      title: "Sobre mim",
-      body: "Sou apaixonado por transformar ideias em produtos digitais completos: cuido da identidade visual de um projeto, estruturo o banco de dados que sustenta tudo por trás, construo o site ou sistema que coloca isso no ar, e automatizo tarefas repetitivas para que as coisas simplesmente funcionem. Venho do turismo, onde lidei com operações e prazos sob pressão — uma base que hoje aplico para entender problemas reais antes de sair codando. Atualmente me dedico a projetos de design, desenvolvimento web, modelagem de dados e automação, sempre buscando unir essas quatro frentes em cada entrega.",
-      stats: [
-        { label: "Projetos no ar", value: "4" },
-        { label: "Foco", value: "Design + Dev + Dados" },
-        { label: "Localização", value: "São Paulo, BR" },
-      ],
-      statusLines: [
-        "mantendo Fog Roulette, Porão Gráfico, Vistamed e AeroPulse no ar",
-        "formado em Análise e Desenvolvimento de Sistemas",
-        "vindo do turismo, migrando de vez pra tecnologia",
-        "aprofundando banco de dados e automação",
+    marqueeLabel: "Ferramentas que uso no dia a dia",
+    services: {
+      eyebrow: "Serviços",
+      title: "O que posso *fazer por você*",
+      subtitle:
+        "Da página que apresenta sua marca ao sistema que organiza sua operação. Você fala com uma pessoa só, do começo ao fim.",
+      items: [
+        {
+          title: "Sites e landing pages",
+          description:
+            "Sites institucionais, portfólios e páginas de venda rápidos, responsivos e com identidade própria, feitos para transformar visitantes em clientes.",
+          tags: ["Next.js", "React", "SEO"],
+        },
+        {
+          title: "Sistemas e painéis",
+          description:
+            "Aplicações web com login, banco de dados e dashboards que transformam planilhas e dados soltos em decisões claras.",
+          tags: ["Supabase", "PostgreSQL", "Dashboards"],
+        },
+        {
+          title: "Automação de processos",
+          description:
+            "Robôs e integrações que tiram tarefas repetitivas do seu caminho: relatórios, planilhas, prazos, WhatsApp e rotinas do dia a dia.",
+          tags: ["Python", "FastAPI", "Integrações"],
+        },
+        {
+          title: "Design e identidade",
+          description:
+            "Interfaces bonitas e fáceis de usar, identidade visual e animações que fazem sua marca parecer tão boa quanto ela é.",
+          tags: ["UI", "Identidade visual", "Motion"],
+        },
       ],
     },
     projects: {
-      eyebrow: "Meu portfólio",
-      title: "Projetos em destaque",
-      subtitle: "Quatro projetos reais que mostram como uno design, dados, desenvolvimento web e automação em cada entrega.",
-      ctaLabel: "Ver projeto",
-      categoryLabels: {
-        design: "Design",
-        database: "Banco de Dados",
+      eyebrow: "Portfólio",
+      title: "Projetos que *falam por mim*",
+      subtitle:
+        "Produtos reais, com problema real por trás. Clique em qualquer projeto para ver os detalhes, as telas e o que tem por baixo do capô.",
+      filters: {
+        all: "Todos",
         web: "Web",
+        database: "Dados",
         automation: "Automação",
+        design: "Design",
       },
-      items: [
-        {
-          title: "Fog Roulette",
-          tagline: "Deixe a névoa escolher.",
-          description:
-            "Um sorteador visual com conta de usuário: o resultado emerge de uma névoa animada que se dissipa aos poucos, criando suspense até revelar a escolha. Construído em Next.js, com Supabase cuidando da autenticação e do histórico de partidas privado de cada jogador. Pensado para quem trava na hora de decidir entre opções, unindo autenticação, persistência de dados e uma interface construída em torno do efeito de revelação.",
-          categories: ["web", "database", "automation"],
-          stack: ["Next.js", "React", "Supabase", "Autenticação"],
-          link: "https://fogroulette.netlify.app",
-          image: "/projects/fog-roulette.png",
-        },
-        {
-          title: "Porão Gráfico",
-          tagline: "Identidade visual sombria, sob encomenda.",
-          description:
-            "Plataforma de encomenda de serviços de design gráfico: pôsteres de shows, capas de single/álbum, pacotes promocionais e identidade visual com pegada dark. O cliente filtra por faixa de orçamento e prazo, e escolhe entre Pix, link de cartão ou pagamento na entrega — um fluxo direto para fechar negócio sem fricção.",
-          categories: ["design", "web"],
-          stack: ["React", "Vite", "Identidade Visual"],
-          link: "https://porao-grafico.netlify.app",
-          image: "/projects/porao-grafico.png",
-        },
-        {
-          title: "Vistamed",
-          tagline: "Proposta de redesign para uma clínica de olhos com 33 anos de história.",
-          description:
-            "Proposta de redesign conceitual para o Hospital de Olhos Vistamed, criada para uma apresentação interna (não é o site oficial em produção). Reorganiza mais de 30 procedimentos diagnósticos e cirúrgicos por categoria, propõe agendamento direto via WhatsApp sem intermediários burocráticos, e detalha os convênios aceitos nas duas unidades da Grande São Paulo. Design limpo, com listas expansíveis pensadas para leitura rápida em qualquer dispositivo.",
-          categories: ["web", "automation"],
-          stack: ["HTML", "CSS", "JavaScript", "Integração WhatsApp"],
-          link: "https://vistamednovo.netlify.app",
-          image: "/projects/vistamed.png",
-        },
-        {
-          title: "AeroPulse",
-          tagline: "Inteligência experimental em aviação.",
-          description:
-            "Plataforma experimental de inteligência em aviação que cruza dados meteorológicos, tráfego aéreo observado e histórico para gerar sinais de atenção e scores explicáveis por aeroporto. Construída em Next.js e TypeScript, com Supabase armazenando o histórico e MapLibre GL renderizando o monitoramento visual dos aeroportos brasileiros em tempo real.",
-          categories: ["web", "database", "automation"],
-          stack: ["Next.js", "TypeScript", "Supabase", "MapLibre GL"],
-          link: "https://aeropulse-eight.vercel.app",
-          image: "/projects/aeropulse.png",
-        },
-      ],
+      featuredBadge: "Mais recente",
+      liveBadge: "No ar",
+      openCase: "Ver detalhes",
+      live: "Ver ao vivo",
+      code: "Código",
+      similar: "Quero um projeto assim",
+      highlightsTitle: "Destaques",
+      stackTitle: "Tecnologias",
+      close: "Fechar",
+      previous: "Imagem anterior",
+      next: "Próxima imagem",
+      items: buildProjects("pt"),
     },
-    skills: {
-      eyebrow: "Minhas habilidades",
-      title: "Minha experiência",
-      subtitle: "Quatro frentes que costumo unir em cada projeto: da interface ao banco de dados, passando pelo código e pela automação.",
-      groups: [
-        {
-          label: "Design",
-          items: [
-            { name: "Identidade Visual", level: "Intermediário" },
-            { name: "UI Design", level: "Intermediário" },
-            { name: "Tipografia", level: "Básico" },
-            { name: "Prototipação", level: "Básico" },
-          ],
-        },
-        {
-          label: "Banco de Dados",
-          items: [
-            { name: "SQL", level: "Intermediário" },
-            { name: "Supabase", level: "Intermediário" },
-            { name: "Modelagem de Dados", level: "Básico" },
-          ],
-        },
-        {
-          label: "Web",
-          items: [
-            { name: "HTML", level: "Avançado" },
-            { name: "CSS", level: "Avançado" },
-            { name: "JavaScript", level: "Intermediário" },
-            { name: "React / Next.js", level: "Intermediário" },
-          ],
-        },
-        {
-          label: "Automação",
-          items: [
-            { name: "Automação de Processos", level: "Intermediário" },
-            { name: "Integrações via WhatsApp", level: "Intermediário" },
-            { name: "Scripts & Bots", level: "Básico" },
-          ],
-        },
+    about: {
+      eyebrow: "Sobre mim",
+      title: "Do balcão do turismo *ao código*",
+      paragraphs: [
+        "Comecei no turismo, na CVC Corp, negociando produtos aéreos e resolvendo problemas de clientes com prazo apertado. Foi ali que aprendi a lidar com sistemas, processos e pressão real de negócio, bem antes de escrever a primeira linha de código.",
+        "Hoje sou formado em Análise e Desenvolvimento de Sistemas e uno quatro frentes em cada entrega: design, banco de dados, desenvolvimento web e automação. Por isso entendo o problema do seu negócio antes de propor a solução, e entrego o produto inteiro, não só uma parte dele.",
       ],
-    },
-    education: {
-      eyebrow: "Formação",
-      title: "Formação acadêmica",
+      photoAlt: "Foto de Mateus Fantin",
+      location: "São Paulo, BR",
+      stats: [
+        { value: 5, label: "projetos construídos" },
+        { value: 4, label: "frentes em cada entrega" },
+        { value: 15, suffix: "+", label: "tecnologias no dia a dia" },
+      ],
+      journey: [
+        { title: "Turismo e operações", detail: "CVC Corp · produtos aéreos" },
+        { title: "Análise e Desenvolvimento de Sistemas", detail: "Impacta · 2024–2026" },
+        { title: "Desenvolvimento web", detail: "Sites, sistemas e dashboards" },
+        { title: "Automação e dados", detail: "Hoje" },
+      ],
+      stackTitle: "Stack",
+      stack: [
+        { label: "Front-end", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
+        { label: "Dados", items: ["SQL", "Supabase", "PostgreSQL", "Power BI", "Excel"] },
+        { label: "Automação", items: ["Python", "FastAPI", "Integrações com WhatsApp", "Scripts e bots"] },
+        { label: "Design", items: ["UI Design", "Identidade visual", "Prototipação", "Motion"] },
+      ],
+      educationTitle: "Formação",
       degree: "Análise e Desenvolvimento de Sistemas",
       school: "Impacta Tecnologia",
-      period: "fev/2024 - jun/2026",
+      period: "fev/2024 – jun/2026",
       status: "Concluído",
+      coursesTitle: "Cursos",
+      courses: [
+        "Excel: Domine o Editor de Planilhas · Alura (2024)",
+        "Power BI Desktop: construindo meu primeiro dashboard · Alura (2024)",
+        "SQLite online: conhecendo instruções SQL · Alura (2024)",
+      ],
     },
-    courses: {
-      eyebrow: "Certificados",
-      title: "Cursos e certificações",
-      subtitle: "Formações que sustentam minha base técnica em dados, sistemas e automação.",
-      items: [
-        "Excel: Domine o Editor de Planilhas - Alura (2024)",
-        "Power BI Desktop: construindo meu primeiro dashboard - Alura (2024)",
-        "SQLite online: conhecendo instruções SQL - Alura (2024)",
-        "Análise e Desenvolvimento de Sistemas - Impacta Tecnologia (fev/2024 - jun/2026)",
+    process: {
+      eyebrow: "Como trabalho",
+      title: "Um processo *simples e transparente*",
+      subtitle: "Você sabe o que está acontecendo em cada etapa, sem surpresas no meio do caminho.",
+      steps: [
+        {
+          title: "Conversa",
+          description: "Entendo seu negócio, seu público e o problema real, antes de escrever uma linha de código.",
+        },
+        {
+          title: "Proposta",
+          description: "Escopo, prazo e investimento definidos com clareza, sem letras miúdas.",
+        },
+        {
+          title: "Construção",
+          description: "Design e desenvolvimento com prévias frequentes, para você acompanhar tudo de perto.",
+        },
+        {
+          title: "Entrega",
+          description: "Projeto no ar, testado no celular e no computador, e eu continuo por perto para ajustes.",
+        },
       ],
     },
     contact: {
-      eyebrow: "Entrar em contato",
-      title: "Vamos conversar?",
-      body: "Gostou do meu portfólio e quer algo parecido — um site, uma identidade visual ou uma automação — para você ou sua empresa? Entre em contato comigo para montarmos essa ideia juntos, do conceito à entrega.",
-      talkToMe: "Fale comigo",
-      formTitle: "Para mais informações",
-      methods: {
-        emailLabel: "Email",
-        whatsappLabel: "WhatsApp",
-        linkedinLabel: "LinkedIn",
-        ctaLabel: "Contato ->",
-      },
+      eyebrow: "Contato",
+      title: "Tem um projeto em mente? *Vamos tirar do papel.*",
+      body: "Me conte sua ideia: um site, um sistema, uma automação ou uma identidade visual. Eu respondo com um caminho claro, sem compromisso.",
+      whatsappLabel: "WhatsApp",
+      whatsappHint: "O jeito mais rápido de falar comigo",
+      emailLabel: "E-mail",
+      linkedinLabel: "LinkedIn",
+      githubLabel: "GitHub",
+      copy: "Copiar e-mail",
+      copied: "Copiado!",
+      similarSubject: "Quero um projeto parecido com o {project}",
       form: {
+        title: "Ou me mande uma mensagem",
         name: "Nome",
-        namePlaceholder: "Insira seu nome",
-        email: "Email",
-        emailPlaceholder: "Insira seu email",
+        namePlaceholder: "Como posso te chamar?",
+        email: "E-mail",
+        emailPlaceholder: "voce@empresa.com",
         subject: "Assunto",
-        subjectPlaceholder: "Escreva seu assunto",
+        subjectPlaceholder: "Ex.: site para minha clínica",
         message: "Mensagem",
-        messagePlaceholder: "Escreva seu recado",
-        submit: "Enviar",
+        messagePlaceholder: "Conte um pouco sobre a ideia, o prazo e o que você espera do projeto.",
+        submitEmail: "Enviar por e-mail",
+        submitWhatsapp: "Enviar pelo WhatsApp",
+        hint: "Os botões abrem seu e-mail ou WhatsApp com a mensagem pronta.",
       },
     },
-    footer: "Feito por Mateus Fantin.",
+    footer: {
+      tagline: "Sites, sistemas e automações com design próprio.",
+      builtWith: "Feito com Next.js, Tailwind CSS e Framer Motion.",
+      backToTop: "Voltar ao topo",
+    },
   },
   en: {
     nav: {
-      about: "Summary",
+      services: "Services",
       projects: "Projects",
-      skills: "Stack",
-      education: "College",
-      courses: "Courses",
+      about: "About",
+      process: "Process",
       contact: "Contact",
+      cta: "Let's talk",
+      openMenu: "Open menu",
+      closeMenu: "Close menu",
     },
+    theme: { toLight: "Switch to light theme", toDark: "Switch to dark theme" },
     hero: {
-      greetingPrefix: "Hi, my name is",
-      role: "Design, Databases, Web & Automation",
-      summary:
-        "I like turning ideas into complete products: interfaces with their own visual identity, a solid data structure behind them, sites that actually work in production, and automations that save time day to day. I use every project as an excuse to bring these four pieces together.",
-      ctaPrimary: "About me",
-      ctaSecondary: "View LinkedIn",
-      scrollHint: "Scroll down",
-      code: [
-        'const mateus = {',
-        '  focus: [',
-        '    "design",',
-        '    "database",',
-        '    "web",',
-        '    "automation",',
-        '  ],',
-        '  projects: 4,',
-        '  background: "tourism",',
-        '  status: "building",',
-        '};',
-      ],
+      availability: "Available for new projects",
+      title: "Websites, systems and automations that *move your business forward.*",
+      intro:
+        "I'm Mateus Fantin, a developer based in São Paulo. I bring design, databases, code and automation together to ship complete products: from the first sketch to a live site.",
+      ctaPrimary: "See projects",
+      ctaSecondary: "Message me on WhatsApp",
+      proof: ["5 projects built", "Design + code + data", "São Paulo, Brazil"],
+      floatingLive: "Live data",
+      floatingMasterpiece: "Rainbow Masterpiece",
+      floatingStack: "Supabase · RLS",
     },
-    about: {
-      eyebrow: "My introduction",
-      title: "About me",
-      body: "I'm passionate about turning ideas into complete digital products: shaping a project's visual identity, structuring the database behind it, building the site or system that puts it live, and automating repetitive tasks so things just work. I come from a tourism background, handling operations and deadlines under pressure — a foundation I now apply to understand real problems before writing a line of code. Today I focus on design, web development, data modeling, and automation projects, always looking to bring these four pieces together in every delivery.",
-      stats: [
-        { label: "Live projects", value: "4" },
-        { label: "Focus", value: "Design + Dev + Data" },
-        { label: "Location", value: "São Paulo, BR" },
-      ],
-      statusLines: [
-        "keeping Fog Roulette, Porão Gráfico, Vistamed, and AeroPulse live",
-        "graduated in Systems Analysis and Development",
-        "coming from tourism, moving fully into tech",
-        "going deeper into databases and automation",
+    marqueeLabel: "Tools I use every day",
+    services: {
+      eyebrow: "Services",
+      title: "What I can *do for you*",
+      subtitle:
+        "From the page that introduces your brand to the system that runs your operation. You deal with one person, from start to finish.",
+      items: [
+        {
+          title: "Websites and landing pages",
+          description:
+            "Company sites, portfolios and sales pages that are fast, responsive and truly yours, built to turn visitors into clients.",
+          tags: ["Next.js", "React", "SEO"],
+        },
+        {
+          title: "Systems and dashboards",
+          description:
+            "Web apps with login, a database and dashboards that turn spreadsheets and scattered data into clear decisions.",
+          tags: ["Supabase", "PostgreSQL", "Dashboards"],
+        },
+        {
+          title: "Process automation",
+          description:
+            "Bots and integrations that take repetitive work off your plate: reports, spreadsheets, deadlines, WhatsApp and daily routines.",
+          tags: ["Python", "FastAPI", "Integrations"],
+        },
+        {
+          title: "Design and identity",
+          description:
+            "Beautiful, easy-to-use interfaces, visual identity and motion that make your brand look as good as it is.",
+          tags: ["UI", "Visual identity", "Motion"],
+        },
       ],
     },
     projects: {
-      eyebrow: "My portfolio",
-      title: "Featured projects",
-      subtitle: "Four real projects showing how I bring design, data, web development, and automation together in every delivery.",
-      ctaLabel: "View project",
-      categoryLabels: {
-        design: "Design",
-        database: "Database",
+      eyebrow: "Portfolio",
+      title: "Projects that *speak for me*",
+      subtitle:
+        "Real products with a real problem behind them. Click any project to see the details, the screens and what's under the hood.",
+      filters: {
+        all: "All",
         web: "Web",
+        database: "Data",
         automation: "Automation",
+        design: "Design",
       },
-      items: [
-        {
-          title: "Fog Roulette",
-          tagline: "Let the fog choose.",
-          description:
-            "A visual randomizer with user accounts: the result emerges from an animated fog that slowly clears, building suspense before revealing the pick. Built with Next.js, with Supabase handling authentication and each player's private match history. Built for anyone stuck choosing between options, combining authentication, data persistence, and an interface designed around the reveal effect itself.",
-          categories: ["web", "database", "automation"],
-          stack: ["Next.js", "React", "Supabase", "Authentication"],
-          link: "https://fogroulette.netlify.app",
-          image: "/projects/fog-roulette.png",
-        },
-        {
-          title: "Porão Gráfico",
-          tagline: "Dark visual identity, made to order.",
-          description:
-            "A graphic-design commission platform: show posters, single/album covers, promo packages, and dark-themed visual identity work. Clients filter by budget tier and timeline, then choose between Pix, a card link, or in-person payment — a direct flow to close a job with no friction.",
-          categories: ["design", "web"],
-          stack: ["React", "Vite", "Visual Identity"],
-          link: "https://porao-grafico.netlify.app",
-          image: "/projects/porao-grafico.png",
-        },
-        {
-          title: "Vistamed",
-          tagline: "A redesign proposal for an eye clinic with 33 years of history.",
-          description:
-            "A conceptual redesign proposal for Vistamed Eye Hospital, built for an internal pitch (not the official production site). It reorganizes 30+ diagnostic and surgical procedures by category, proposes direct WhatsApp scheduling with no bureaucratic middleman, and details the insurance plans accepted across its two São Paulo-metro locations. Clean design with expandable lists built for quick reading on any device.",
-          categories: ["web", "automation"],
-          stack: ["HTML", "CSS", "JavaScript", "WhatsApp Integration"],
-          link: "https://vistamednovo.netlify.app",
-          image: "/projects/vistamed.png",
-        },
-        {
-          title: "AeroPulse",
-          tagline: "Experimental intelligence for aviation.",
-          description:
-            "An experimental aviation-intelligence platform that cross-references weather data, observed air traffic, and historical records to generate attention signals and explainable scores for Brazilian airports. Built with Next.js and TypeScript, with Supabase storing the historical data and MapLibre GL powering the real-time visual monitoring.",
-          categories: ["web", "database", "automation"],
-          stack: ["Next.js", "TypeScript", "Supabase", "MapLibre GL"],
-          link: "https://aeropulse-eight.vercel.app",
-          image: "/projects/aeropulse.png",
-        },
-      ],
+      featuredBadge: "Latest",
+      liveBadge: "Live",
+      openCase: "See details",
+      live: "View live",
+      code: "Code",
+      similar: "I want a project like this",
+      highlightsTitle: "Highlights",
+      stackTitle: "Tech stack",
+      close: "Close",
+      previous: "Previous image",
+      next: "Next image",
+      items: buildProjects("en"),
     },
-    skills: {
-      eyebrow: "My skills",
-      title: "My experience",
-      subtitle: "Four areas I usually combine on every project: from the interface to the database, through code and automation.",
-      groups: [
-        {
-          label: "Design",
-          items: [
-            { name: "Visual Identity", level: "Intermediate" },
-            { name: "UI Design", level: "Intermediate" },
-            { name: "Typography", level: "Basic" },
-            { name: "Prototyping", level: "Basic" },
-          ],
-        },
-        {
-          label: "Database",
-          items: [
-            { name: "SQL", level: "Intermediate" },
-            { name: "Supabase", level: "Intermediate" },
-            { name: "Data Modeling", level: "Basic" },
-          ],
-        },
-        {
-          label: "Web",
-          items: [
-            { name: "HTML", level: "Advanced" },
-            { name: "CSS", level: "Advanced" },
-            { name: "JavaScript", level: "Intermediate" },
-            { name: "React / Next.js", level: "Intermediate" },
-          ],
-        },
-        {
-          label: "Automation",
-          items: [
-            { name: "Process Automation", level: "Intermediate" },
-            { name: "WhatsApp Integrations", level: "Intermediate" },
-            { name: "Scripts & Bots", level: "Basic" },
-          ],
-        },
+    about: {
+      eyebrow: "About me",
+      title: "From the travel desk *to code*",
+      paragraphs: [
+        "I started out in tourism at CVC Corp, negotiating airline products and solving customer problems on tight deadlines. That's where I learned to deal with systems, processes and real business pressure, long before I wrote my first line of code.",
+        "Today I hold a degree in Systems Analysis and Development and bring four areas together in every delivery: design, databases, web development and automation. That's why I understand your business problem before proposing a solution, and deliver the whole product, not just a piece of it.",
       ],
-    },
-    education: {
-      eyebrow: "Education",
-      title: "Academic background",
+      photoAlt: "Photo of Mateus Fantin",
+      location: "São Paulo, Brazil",
+      stats: [
+        { value: 5, label: "projects built" },
+        { value: 4, label: "areas in every delivery" },
+        { value: 15, suffix: "+", label: "tools used daily" },
+      ],
+      journey: [
+        { title: "Travel operations", detail: "CVC Corp · airline products" },
+        { title: "Systems Analysis and Development", detail: "Impacta · 2024–2026" },
+        { title: "Web development", detail: "Sites, systems and dashboards" },
+        { title: "Automation and data", detail: "Today" },
+      ],
+      stackTitle: "Stack",
+      stack: [
+        { label: "Front-end", items: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"] },
+        { label: "Data", items: ["SQL", "Supabase", "PostgreSQL", "Power BI", "Excel"] },
+        { label: "Automation", items: ["Python", "FastAPI", "WhatsApp integrations", "Scripts and bots"] },
+        { label: "Design", items: ["UI design", "Visual identity", "Prototyping", "Motion"] },
+      ],
+      educationTitle: "Education",
       degree: "Systems Analysis and Development",
       school: "Impacta Tecnologia",
-      period: "Feb/2024 - Jun/2026",
+      period: "Feb 2024 – Jun 2026",
       status: "Completed",
+      coursesTitle: "Courses",
+      courses: [
+        "Excel: Master the Spreadsheet Editor · Alura (2024)",
+        "Power BI Desktop: building my first dashboard · Alura (2024)",
+        "SQLite online: learning SQL statements · Alura (2024)",
+      ],
     },
-    courses: {
-      eyebrow: "Certificates",
-      title: "Courses and certifications",
-      subtitle: "Learning that supports my technical foundation in data, systems, and automation.",
-      items: [
-        "Excel: Master the Spreadsheet Editor - Alura (2024)",
-        "Power BI Desktop: building my first dashboard - Alura (2024)",
-        "SQLite online: learning SQL statements - Alura (2024)",
-        "Systems Analysis and Development - Impacta Tecnologia (Feb/2024 - Jun/2026)",
+    process: {
+      eyebrow: "How I work",
+      title: "A *simple, transparent* process",
+      subtitle: "You know what's happening at every step, with no surprises along the way.",
+      steps: [
+        {
+          title: "Conversation",
+          description: "I learn about your business, your audience and the real problem before writing a line of code.",
+        },
+        {
+          title: "Proposal",
+          description: "Scope, timeline and budget laid out clearly, with no fine print.",
+        },
+        {
+          title: "Build",
+          description: "Design and development with frequent previews, so you can follow along closely.",
+        },
+        {
+          title: "Launch",
+          description: "Your project goes live, tested on phone and desktop, and I stay around for adjustments.",
+        },
       ],
     },
     contact: {
-      eyebrow: "Get in touch",
-      title: "Let's connect",
-      body: "Did you like my portfolio and want something similar — a site, a visual identity, or an automation — for you or your company? Reach out and we can build this idea together, from concept to delivery.",
-      talkToMe: "Talk to me",
-      formTitle: "For more information",
-      methods: {
-        emailLabel: "Email",
-        whatsappLabel: "WhatsApp",
-        linkedinLabel: "LinkedIn",
-        ctaLabel: "Contact ->",
-      },
+      eyebrow: "Contact",
+      title: "Have a project in mind? *Let's make it real.*",
+      body: "Tell me your idea: a website, a system, an automation or a visual identity. I'll reply with a clear path forward, no strings attached.",
+      whatsappLabel: "WhatsApp",
+      whatsappHint: "The fastest way to reach me",
+      emailLabel: "Email",
+      linkedinLabel: "LinkedIn",
+      githubLabel: "GitHub",
+      copy: "Copy email",
+      copied: "Copied!",
+      similarSubject: "I want a project like {project}",
       form: {
+        title: "Or send me a message",
         name: "Name",
-        namePlaceholder: "Enter your name",
+        namePlaceholder: "What should I call you?",
         email: "Email",
-        emailPlaceholder: "Enter your email",
+        emailPlaceholder: "you@company.com",
         subject: "Subject",
-        subjectPlaceholder: "Write your subject",
+        subjectPlaceholder: "e.g. a website for my clinic",
         message: "Message",
-        messagePlaceholder: "Write your message",
-        submit: "Send",
+        messagePlaceholder: "Tell me a bit about the idea, the timeline and what you expect from the project.",
+        submitEmail: "Send by email",
+        submitWhatsapp: "Send on WhatsApp",
+        hint: "Both buttons open your email or WhatsApp with the message ready to go.",
       },
     },
-    footer: "Built by Mateus Fantin.",
+    footer: {
+      tagline: "Websites, systems and automations with original design.",
+      builtWith: "Built with Next.js, Tailwind CSS and Framer Motion.",
+      backToTop: "Back to top",
+    },
   },
 };

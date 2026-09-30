@@ -1,182 +1,391 @@
 @import "tailwindcss";
 
+/* Dark mode por classe (.dark no <html>), controlado pelo ThemeToggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =====================================================================
+   Tokens — claro (padrão) e escuro
+   ===================================================================== */
 :root {
-  --background: #0a0518;
-  --foreground: #ede9fe;
+  --bg: #f7f5f0;
+  --surface: rgb(255 255 255 / 0.72);
+  --surface-strong: #ffffff;
+  --ink: #16141c;
+  --ink-soft: #423d4c;
+  --muted: #6c6776;
+  --line: rgb(22 20 28 / 0.08);
+  --line-strong: rgb(22 20 28 / 0.16);
+  --accent: #5b3df5;
+  --accent-soft: rgb(91 61 245 / 0.09);
 
-  --color-arcane-950: #0a0518;
-  --color-arcane-900: #150a2e;
-  --color-arcane-700: #3b1f6b;
-  --color-arcane-500: #7c3aed;
-  --color-arcane-400: #a78bfa;
-  --color-arcane-300: #c4b5fd;
+  --brand-1: #5b3df5;
+  --brand-2: #c026d3;
+  --brand-3: #f97316;
+  --brand-4: #f59e0b;
 
-  --color-gold: #d4af37;
-  --color-gold-soft: #f3d98c;
+  --blob-1: rgb(251 191 36 / 0.28);
+  --blob-2: rgb(244 114 182 / 0.2);
+  --blob-3: rgb(124 92 255 / 0.2);
+  --grid: rgb(22 20 28 / 0.05);
+  --glare: rgb(91 61 245 / 0.09);
 
-  --color-cyan-glow: #67e8f9;
+  --shadow-card: 0 1px 2px rgb(22 20 28 / 0.04), 0 18px 48px -22px rgb(60 40 120 / 0.28);
+  --shadow-lift: 0 34px 80px -30px rgb(60 40 120 / 0.5);
+}
 
-  --glow-violet: 0 0 40px rgba(124, 58, 237, 0.35);
-  --glow-violet-strong: 0 0 56px rgba(124, 58, 237, 0.5);
-  --glow-gold: 0 0 24px rgba(212, 175, 55, 0.25);
+.dark {
+  --bg: #0b0a10;
+  --surface: rgb(24 22 32 / 0.62);
+  --surface-strong: #15141c;
+  --ink: #f5f3f8;
+  --ink-soft: #d5d0de;
+  --muted: #9b95a8;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.16);
+  --accent: #a393ff;
+  --accent-soft: rgb(155 135 255 / 0.13);
+
+  --brand-1: #8b73ff;
+  --brand-2: #e879f9;
+  --brand-3: #fb923c;
+  --brand-4: #fbbf24;
+
+  --blob-1: rgb(124 58 237 / 0.22);
+  --blob-2: rgb(192 38 211 / 0.13);
+  --blob-3: rgb(79 70 229 / 0.2);
+  --grid: rgb(255 255 255 / 0.035);
+  --glare: rgb(255 255 255 / 0.1);
+
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 18px 48px -22px rgb(0 0 0 / 0.8);
+  --shadow-lift: 0 34px 80px -30px rgb(0 0 0 / 0.95);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-arcane-950: var(--color-arcane-950);
-  --color-arcane-900: var(--color-arcane-900);
-  --color-arcane-700: var(--color-arcane-700);
-  --color-arcane-500: var(--color-arcane-500);
-  --color-arcane-400: var(--color-arcane-400);
-  --color-arcane-300: var(--color-arcane-300);
-  --color-gold: var(--color-gold);
-  --color-gold-soft: var(--color-gold-soft);
-  --color-cyan-glow: var(--color-cyan-glow);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-cinzel);
+  --font-serif: var(--font-instrument-serif);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-  background-image:
-    radial-gradient(circle at 15% 10%, rgba(124, 58, 237, 0.28), transparent 32%),
-    radial-gradient(circle at 85% 15%, rgba(103, 232, 249, 0.1), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgba(212, 175, 55, 0.05), transparent 40%),
-    linear-gradient(180deg, #0a0518 0%, #0d0722 50%, #0a0518 100%);
-  background-attachment: fixed;
+/* =====================================================================
+   Base
+   ===================================================================== */
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    /* Evita o "pulo" do layout quando o modal trava a rolagem. */
+    scrollbar-gutter: stable;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  ::selection {
+    background: rgb(91 61 245 / 0.18);
+  }
+
+  .dark ::selection {
+    background: rgb(155 135 255 / 0.3);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
+/* =====================================================================
+   Componentes
+   ===================================================================== */
+@layer components {
+  /* Superfície translúcida base dos cards. */
+  .card {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 9999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    padding: 0.25rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
+  .eyebrow {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
 }
 
-.font-display {
-  font-family: var(--font-display), serif;
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
 }
 
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+@utility font-serif-italic {
+  font-family: var(--font-instrument-serif), ui-serif, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
 }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+@utility no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-.section-shell {
-  width: 100%;
-  max-width: 72rem;
-  margin-inline: auto;
+/* =====================================================================
+   Gradiente da marca
+   ===================================================================== */
+.bg-brand {
+  background: linear-gradient(110deg, var(--brand-1), var(--brand-2) 45%, var(--brand-3) 80%, var(--brand-4));
 }
 
-.surface-card {
-  border: 1px solid rgba(196, 181, 253, 0.14);
-  background: linear-gradient(180deg, rgba(21, 10, 46, 0.95), rgba(10, 5, 24, 0.95));
-  box-shadow: 0 14px 44px rgba(4, 2, 15, 0.5);
-}
-
-.interactive-lift {
-  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-}
-
-.interactive-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--glow-violet);
-  border-color: rgba(196, 181, 253, 0.55);
-}
-
-.glow-text {
-  background: linear-gradient(120deg, var(--color-arcane-300), var(--color-gold-soft) 55%, var(--color-cyan-glow));
-  background-clip: text;
+/* Texto com gradiente que "respira" devagar. */
+.text-brand {
+  background: linear-gradient(
+    100deg,
+    var(--brand-1),
+    var(--brand-2),
+    var(--brand-3),
+    var(--brand-4),
+    var(--brand-2),
+    var(--brand-1)
+  );
+  background-size: 220% auto;
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
-  text-shadow: 0 0 30px rgba(124, 58, 237, 0.25);
+  animation: brand-shift 9s ease-in-out infinite;
+  /* Evita cortar a ponta do itálico. */
+  padding-right: 0.08em;
+  margin-right: -0.08em;
 }
 
-.rune-border {
+@keyframes brand-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* =====================================================================
+   Borda em gradiente cônico girando (herdada do Rainbow Masterpiece do
+   CozyLog). O ::before desenha um anel de 1.5px com um conic-gradient
+   cujo ângulo é animado via @property. Aparece no hover do .group ou
+   sempre, com .is-on.
+   ===================================================================== */
+@property --spin-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.spin-border {
   position: relative;
-  border: 1px solid transparent;
-  background:
-    linear-gradient(var(--color-arcane-900), var(--color-arcane-900)) padding-box,
-    linear-gradient(135deg, var(--color-gold) 0%, var(--color-arcane-500) 45%, var(--color-cyan-glow) 100%) border-box;
 }
 
-.arcane-glow {
-  box-shadow: var(--glow-violet);
-  transition: box-shadow 260ms ease;
-}
-
-.arcane-glow:hover {
-  box-shadow: var(--glow-violet-strong);
-}
-
-.particle-field {
+.spin-border::before {
+  content: "";
   position: absolute;
   inset: 0;
-  overflow: hidden;
+  z-index: 30;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--spin-angle),
+    var(--brand-1),
+    var(--brand-2),
+    var(--brand-3),
+    var(--brand-4),
+    var(--brand-2),
+    var(--brand-1)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 400ms ease;
+  animation: spin-angle 3.2s linear infinite;
   pointer-events: none;
 }
 
-.particle {
+.group:hover > .spin-border::before,
+.spin-border:hover::before,
+.spin-border.is-on::before {
+  opacity: 1;
+}
+
+@keyframes spin-angle {
+  to {
+    --spin-angle: 360deg;
+  }
+}
+
+/* Reflexo que atravessa a imagem de tempos em tempos. */
+.shine {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgb(255 255 255 / 0.28) 48%,
+    rgb(255 255 255 / 0.04) 55%,
+    transparent 65%
+  );
+  background-size: 250% 100%;
+  animation: shine-sweep 6s ease-in-out infinite;
+  mix-blend-mode: soft-light;
+}
+
+@keyframes shine-sweep {
+  0%,
+  60% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+/* =====================================================================
+   Fundo ambiente
+   ===================================================================== */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 75%);
+}
+
+.blob {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(1px);
-  background: radial-gradient(circle, rgba(196, 181, 253, 0.9), rgba(124, 58, 237, 0));
-  animation: float-particle 18s ease-in-out infinite;
+  filter: blur(80px);
+  animation: blob-drift 22s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
-@keyframes float-particle {
+@keyframes blob-drift {
   0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.15;
+    transform: translate3d(0, 0, 0) scale(1);
   }
   50% {
-    transform: translate(var(--drift-x, 12px), var(--drift-y, -30px)) scale(1.3);
-    opacity: 0.55;
+    transform: translate3d(6%, -4%, 0) scale(1.08);
   }
   100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.15;
+    transform: translate3d(-4%, 5%, 0) scale(0.96);
   }
 }
 
-@keyframes shimmer {
+/* Faixa infinita de tecnologias. */
+.marquee-track {
+  animation: marquee 38s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Ponto "ao vivo" pulsando. */
+.pulse-dot {
+  position: relative;
+}
+
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+  animation: pulse-ring 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes pulse-ring {
   0% {
-    background-position: -200% 0;
+    transform: scale(1);
+    opacity: 0.7;
   }
   100% {
-    background-position: 200% 0;
-  }
-}
-
-@keyframes blink-cursor {
-  0%,
-  49% {
-    opacity: 1;
-  }
-  50%,
-  100% {
+    transform: scale(2.8);
     opacity: 0;
   }
 }
 
-.cursor-blink {
-  animation: blink-cursor 1s steps(1) infinite;
+/* =====================================================================
+   Troca de tema com View Transitions (círculo que se expande a partir do
+   botão). O ThemeToggle anima ::view-transition-new(root) via JS.
+   ===================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
 }
 
-.shimmer-border {
-  background: linear-gradient(
-    90deg,
-    rgba(212, 175, 55, 0.15) 0%,
-    rgba(212, 175, 55, 0.55) 50%,
-    rgba(212, 175, 55, 0.15) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 3.5s linear infinite;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .text-brand,
+  .spin-border::before,
+  .shine,
+  .blob,
+  .marquee-track,
+  .pulse-dot::after {
+    animation: none;
+  }
 }

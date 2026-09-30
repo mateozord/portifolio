@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Cinzel, Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,35 +12,46 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "900"],
+  weight: "400",
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mateus-fantin-portfolio.vercel.app"),
-  title: "Mateus Fantin | Portfólio",
+  title: "Mateus Fantin | Sites, sistemas e automações",
   description:
-    "Design, banco de dados, criação de sites e automações — portfólio de Mateus Fantin.",
+    "Mateus Fantin, desenvolvedor em São Paulo: sites, sistemas web, dashboards, automações e design — do primeiro rascunho ao produto no ar.",
   openGraph: {
-    title: "Mateus Fantin | Portfólio",
+    title: "Mateus Fantin | Sites, sistemas e automações",
     description:
-      "Conheça o trabalho de Mateus Fantin: design, banco de dados, sites e automações.",
+      "Sites, sistemas web, dashboards e automações com design próprio. Conheça os projetos de Mateus Fantin.",
     url: "https://mateus-fantin-portfolio.vercel.app",
-    siteName: "Mateus Fantin Portfolio",
+    siteName: "Mateus Fantin",
     locale: "pt_BR",
     type: "website",
     images: [
       {
-        url: "/profile.jpg",
-        width: 600,
-        height: 600,
-        alt: "Foto de perfil de Mateus Fantin",
+        url: "/projects/cozylog/cover.webp",
+        width: 1600,
+        height: 1200,
+        alt: "CozyLog, um dos projetos de Mateus Fantin",
       },
     ],
   },
 };
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f7f5f0" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0a10" },
+  ],
+};
+
+// Aplica o tema salvo (ou o do sistema) antes da primeira pintura, sem "flash".
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");var d=t?t==="dark":window.matchMedia("(prefers-color-scheme: dark)").matches;if(d)document.documentElement.classList.add("dark")}catch(e){}})()`;
 
 export default function RootLayout({
   children,
@@ -50,9 +61,13 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }
