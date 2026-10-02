@@ -1,11 +1,14 @@
 "use client";
 
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion } from "framer-motion";
-import { Bike, Clock, CreditCard, MapPin, Minus, Plus, ShoppingBasket, Truck } from "lucide-react";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
+import { Bike, ChevronDown, Clock, CreditCard, MapPin, Minus, Plus, Search, ShoppingBasket, Star, Truck } from "lucide-react";
+import type { Locale } from "@/content/portfolio-content";
 import { useLocale } from "@/lib/locale-store";
 import { DemoBar } from "../_components/demo-bar";
+import { hm, OpenBadge, useNow, type WeekShifts } from "../_components/open-status";
 import { WhatsappPreview } from "../_components/whatsapp-preview";
 
 /*
@@ -13,12 +16,17 @@ import { WhatsappPreview } from "../_components/whatsapp-preview";
  * em pt e en. Além do básico (horários, entrega, mapa), mostra o recurso que
  * mais vende para mercado: o cliente monta a lista com as ofertas da semana e
  * o pedido sai pronto pelo WhatsApp (aqui, só uma prévia da mensagem).
+ * Fotos reais (Pexels, licença livre) em public/demos/mercado.
  */
 
 const GREEN = "#1e4d2b";
 const TOMATO = "#e4572e";
 const YELLOW = "#ffd23f";
 const CREAM = "#fbf6ec";
+const photo = (id: string) => `/demos/mercado/${id}.webp`;
+// Seg a sáb 7h–21h, domingo e feriados 7h–13h
+const WEEKDAY: [number, number][] = [[hm(7), hm(21)]];
+const SHIFTS: WeekShifts = [[[hm(7), hm(13)]], WEEKDAY, WEEKDAY, WEEKDAY, WEEKDAY, WEEKDAY, WEEKDAY];
 const FREE_DELIVERY = 120;
 const DELIVERY_FEE = 7.9;
 
@@ -32,19 +40,19 @@ const CATEGORY_TINT: Record<Category, string> = {
   bebidas: "#ffe3c2",
 };
 
-const PRODUCTS: { id: string; emoji: string; category: Category; was: number; price: number }[] = [
-  { id: "tomate", emoji: "🍅", category: "hortifruti", was: 6.99, price: 4.99 },
-  { id: "banana", emoji: "🍌", category: "hortifruti", was: 5.49, price: 3.99 },
-  { id: "abacate", emoji: "🥑", category: "hortifruti", was: 3.5, price: 2.49 },
-  { id: "alface", emoji: "🥬", category: "hortifruti", was: 3.29, price: 2.49 },
-  { id: "pao", emoji: "🥖", category: "padaria", was: 16.9, price: 13.9 },
-  { id: "bolo", emoji: "🍰", category: "padaria", was: 18, price: 14.9 },
-  { id: "patinho", emoji: "🥩", category: "acougue", was: 44.9, price: 36.9 },
-  { id: "frango", emoji: "🍗", category: "acougue", was: 14.9, price: 11.9 },
-  { id: "queijo", emoji: "🧀", category: "frios", was: 54.9, price: 44.9 },
-  { id: "cafe", emoji: "☕", category: "mercearia", was: 24.9, price: 19.9 },
-  { id: "arroz", emoji: "🍚", category: "mercearia", was: 29.9, price: 24.9 },
-  { id: "suco", emoji: "🧃", category: "bebidas", was: 12.9, price: 9.9 },
+const PRODUCTS: { id: string; category: Category; was: number; price: number }[] = [
+  { id: "tomate", category: "hortifruti", was: 6.99, price: 4.99 },
+  { id: "banana", category: "hortifruti", was: 5.49, price: 3.99 },
+  { id: "abacate", category: "hortifruti", was: 3.5, price: 2.49 },
+  { id: "alface", category: "hortifruti", was: 3.29, price: 2.49 },
+  { id: "pao", category: "padaria", was: 16.9, price: 13.9 },
+  { id: "bolo", category: "padaria", was: 18, price: 14.9 },
+  { id: "patinho", category: "acougue", was: 44.9, price: 36.9 },
+  { id: "frango", category: "acougue", was: 14.9, price: 11.9 },
+  { id: "queijo", category: "frios", was: 54.9, price: 44.9 },
+  { id: "cafe", category: "mercearia", was: 24.9, price: 19.9 },
+  { id: "arroz", category: "mercearia", was: 29.9, price: 24.9 },
+  { id: "suco", category: "bebidas", was: 12.9, price: 9.9 },
 ];
 
 const COPY = {
@@ -65,7 +73,15 @@ const COPY = {
       flyer: "Ofertas da semana",
       flyerNote: "Válido até domingo",
     },
-    offers: { kicker: "Ofertas da semana", title: "Monte sua lista", text: "Toque em + para adicionar. O pedido sai pronto pelo WhatsApp.", all: "Tudo", add: "Adicionar" },
+    offers: {
+      kicker: "Ofertas da semana",
+      title: "Monte sua lista",
+      text: "Toque em + para adicionar. O pedido sai pronto pelo WhatsApp.",
+      all: "Tudo",
+      add: "Adicionar",
+      search: "Buscar produto...",
+      empty: "Nenhum produto encontrado nas ofertas desta semana.",
+    },
     categories: { hortifruti: "Hortifrúti", padaria: "Padaria", acougue: "Açougue", frios: "Frios", mercearia: "Mercearia", bebidas: "Bebidas" },
     products: {
       tomate: ["Tomate italiano", "kg"],
@@ -118,7 +134,30 @@ const COPY = {
       address: "Rua Exemplo, 456 · Vila Exemplo · São Paulo",
       map: "Mapa da localização",
     },
+    band: { title: "Entrega em até 2 horas", text: "Separamos seu pedido com cuidado, como se fosse para a nossa casa." },
+    reviews: {
+      kicker: "Avaliações",
+      title: "A vizinhança aprova",
+      note: "Avaliações ilustrativas · negócio fictício",
+      summary: "média no Google, com mais de 500 avaliações",
+      items: [
+        ["Dona Cida", "Faço a lista pelo site no domingo à noite e na segunda cedo já está tudo em casa. Frutas sempre boas."],
+        ["Paulo H.", "Preço de feira e o pão francês sai quentinho às 7h. Entrega rápida e o pessoal é muito educado."],
+        ["Bruna T.", "Gosto de ver as ofertas antes de sair de casa. O açougue é ótimo e aceitam vale-alimentação."],
+      ],
+    },
+    faq: {
+      kicker: "Dúvidas",
+      title: "Perguntas frequentes",
+      items: [
+        ["Aceitam vale-alimentação?", "Sim: vale-alimentação, Pix, cartões de débito e crédito e dinheiro."],
+        ["Posso agendar a entrega?", "Pode. Na mensagem do pedido, diga o melhor dia e horário e a gente combina."],
+        ["E se um produto vier com problema?", "Trocamos na hora ou devolvemos o valor. É só mandar uma foto pelo WhatsApp."],
+        ["Qual é o pedido mínimo?", "R$ 40. Acima de R$ 120 a entrega é grátis no bairro."],
+      ],
+    },
     footer: "Site demonstrativo por",
+    photos: "Fotos: Pexels",
   },
   en: {
     tagline: "neighborhood market",
@@ -137,7 +176,15 @@ const COPY = {
       flyer: "This week's deals",
       flyerNote: "Valid until Sunday",
     },
-    offers: { kicker: "This week's deals", title: "Build your list", text: "Tap + to add. Your order goes out ready via WhatsApp.", all: "All", add: "Add" },
+    offers: {
+      kicker: "This week's deals",
+      title: "Build your list",
+      text: "Tap + to add. Your order goes out ready via WhatsApp.",
+      all: "All",
+      add: "Add",
+      search: "Search products...",
+      empty: "No products found in this week's deals.",
+    },
     categories: { hortifruti: "Produce", padaria: "Bakery", acougue: "Butcher", frios: "Deli", mercearia: "Pantry", bebidas: "Drinks" },
     products: {
       tomate: ["Roma tomatoes", "kg"],
@@ -190,7 +237,30 @@ const COPY = {
       address: "456 Example Street · Vila Exemplo · São Paulo",
       map: "Location map",
     },
+    band: { title: "Delivered in up to 2 hours", text: "We pick your order with care, as if it were for our own home." },
+    reviews: {
+      kicker: "Reviews",
+      title: "The neighborhood approves",
+      note: "Illustrative reviews · fictional business",
+      summary: "average on Google, from over 500 reviews",
+      items: [
+        ["Cida", "I build my list on the site on Sunday night and everything's home early Monday. Fruit is always great."],
+        ["Paulo H.", "Farmers-market prices and the bread rolls come out warm at 7am. Fast delivery, very polite staff."],
+        ["Bruna T.", "I like checking the deals before leaving home. Great butcher, and they take meal vouchers."],
+      ],
+    },
+    faq: {
+      kicker: "Questions",
+      title: "Frequently asked",
+      items: [
+        ["Do you take meal vouchers?", "Yes: meal vouchers, Pix, debit and credit cards, and cash."],
+        ["Can I schedule delivery?", "Sure. Tell us the best day and time in your order message and we'll arrange it."],
+        ["What if a product has a problem?", "We exchange it right away or refund you. Just send a photo on WhatsApp."],
+        ["What's the minimum order?", "R$ 40. Over R$ 120, delivery in the area is free."],
+      ],
+    },
     footer: "Demo website by",
+    photos: "Photos: Pexels",
   },
 };
 type Copy = (typeof COPY)["pt"];
@@ -205,6 +275,7 @@ const fadeUp = {
 export function MarketDemo() {
   const locale = useLocale();
   const t = COPY[locale];
+  const now = useNow();
   const money = new Intl.NumberFormat(locale === "pt" ? "pt-BR" : "en-US", { style: "currency", currency: "BRL" });
   const [cart, setCart] = useState<Record<string, number>>({});
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -240,10 +311,13 @@ export function MarketDemo() {
       <DemoBar kind="mercado" />
       <Header t={t} />
       <main>
-        <Hero t={t} money={money} />
+        <Hero t={t} money={money} now={now} locale={locale} />
         <Offers t={t} money={money} cart={cart} change={change} />
+        <Band t={t} />
         <Delivery t={t} />
-        <Hours t={t} />
+        <Reviews t={t} />
+        <Faq t={t} />
+        <Hours t={t} now={now} locale={locale} />
       </main>
       <Footer t={t} />
 
@@ -331,17 +405,20 @@ function Header({ t }: { t: Copy }) {
   );
 }
 
-function Hero({ t, money }: { t: Copy; money: Intl.NumberFormat }) {
+function Hero({ t, money, now, locale }: { t: Copy; money: Intl.NumberFormat; now: Date | null; locale: Locale }) {
   const hero = t.hero;
   const featured = PRODUCTS.filter((p) => ["tomate", "pao", "cafe", "frango"].includes(p.id));
   return (
     <section id="inicio" className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pt-12 pb-20 sm:px-6 md:grid-cols-[1.1fr_0.9fr] md:pt-20 md:pb-28">
+      <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pt-12 pb-20 sm:px-6 md:grid-cols-2 md:pt-20 md:pb-28">
         <div>
-          <motion.p {...fadeUp} className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold" style={{ background: "#e3f1d8", color: GREEN }}>
-            <Truck className="h-3.5 w-3.5" />
-            {hero.badge}
-          </motion.p>
+          <motion.div {...fadeUp} className="flex flex-wrap items-center gap-2">
+            <OpenBadge now={now} shifts={SHIFTS} locale={locale} className="bg-white shadow-sm" />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1.5 text-xs font-semibold shadow-sm sm:text-sm">
+              <Star className="h-3.5 w-3.5 fill-[#f5b301] text-[#f5b301]" />
+              4,8 Google
+            </span>
+          </motion.div>
           <motion.h1 {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.05 }} className="mt-6 text-5xl leading-[1.02] font-semibold tracking-tight sm:text-6xl lg:text-7xl">
             <Serif>
               {hero.title[0]} <em style={{ color: TOMATO }}>{hero.title[1]}</em> {hero.title[2]}
@@ -358,42 +435,60 @@ function Hero({ t, money }: { t: Copy; money: Intl.NumberFormat }) {
               {hero.secondary}
             </a>
           </motion.div>
+          <motion.p
+            {...fadeUp}
+            transition={{ ...fadeUp.transition, delay: 0.2 }}
+            className="mt-8 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold"
+            style={{ background: "#e3f1d8", color: GREEN }}
+          >
+            <Truck className="h-3.5 w-3.5" />
+            {hero.badge}
+          </motion.p>
         </div>
 
-        {/* Encarte de ofertas: a "foto" do hero */}
-        <motion.div
-          initial={{ opacity: 0, rotate: 0, y: 30 }}
-          animate={{ opacity: 1, rotate: 2.5, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="relative mx-auto w-full max-w-sm"
-        >
-          <div className="overflow-hidden rounded-[1.75rem] bg-white shadow-[0_30px_60px_-25px_rgb(30_77_43/0.45)]">
-            <div className="px-6 py-5" style={{ background: YELLOW }}>
-              <Serif className="block text-3xl leading-none font-black uppercase">{hero.flyer}</Serif>
-              <p className="mt-1 text-xs font-semibold tracking-wide uppercase opacity-70">{hero.flyerNote}</p>
+        {/* Foto da feira com o encarte de ofertas por cima */}
+        <div className="relative mx-auto w-full max-w-md pb-16 md:pb-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="relative aspect-[4/5] overflow-hidden rounded-[2rem] shadow-[0_30px_60px_-25px_rgb(30_77_43/0.5)]"
+          >
+            <Image src={photo("hero")} alt="" fill preload sizes="(min-width: 768px) 28rem, 90vw" className="object-cover" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, rotate: 0, y: 30 }}
+            animate={{ opacity: 1, rotate: -3, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute bottom-0 -left-2 w-[80%] overflow-hidden rounded-[1.5rem] bg-white shadow-[0_30px_60px_-25px_rgb(30_77_43/0.55)] sm:-left-10"
+          >
+            <div className="px-5 py-3.5" style={{ background: YELLOW }}>
+              <Serif className="block text-2xl leading-none font-black uppercase">{hero.flyer}</Serif>
+              <p className="mt-0.5 text-[11px] font-semibold tracking-wide uppercase opacity-70">{hero.flyerNote}</p>
             </div>
-            <ul className="grid grid-cols-2 gap-3 p-4">
+            <ul className="grid grid-cols-2 gap-2 p-3">
               {featured.map((p, i) => (
                 <motion.li
                   key={p.id}
-                  animate={{ y: [0, -4, 0] }}
+                  animate={{ y: [0, -3, 0] }}
                   transition={{ duration: 3.2, repeat: Infinity, delay: i * 0.4, ease: "easeInOut" }}
-                  className="relative rounded-2xl p-3"
+                  className="flex items-center gap-2 rounded-xl p-1.5 pr-2"
                   style={{ background: CATEGORY_TINT[p.category] }}
                 >
-                  <span className="block text-4xl">{p.emoji}</span>
-                  <p className="mt-2 text-sm leading-tight font-semibold">{t.products[p.id][0]}</p>
-                  <span
-                    className="absolute -top-2 -right-2 rotate-6 rounded-lg px-2 py-1 text-sm font-black text-white shadow"
-                    style={{ background: TOMATO }}
-                  >
-                    {money.format(p.price)}
+                  <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg">
+                    <Image src={photo(p.id)} alt="" fill sizes="40px" className="object-cover" />
+                  </span>
+                  <span className="min-w-0 leading-tight">
+                    <span className="block truncate text-xs font-semibold">{t.products[p.id][0]}</span>
+                    <span className="text-sm font-black" style={{ color: TOMATO }}>
+                      {money.format(p.price)}
+                    </span>
                   </span>
                 </motion.li>
               ))}
             </ul>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -411,14 +506,30 @@ function Offers({
   change: (id: string, delta: number) => void;
 }) {
   const [filter, setFilter] = useState<Category | "all">("all");
+  const [query, setQuery] = useState("");
   const categories = Object.keys(CATEGORY_TINT) as Category[];
-  const visible = filter === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.category === filter);
+  // Busca sem acento e sem maiúsculas ("pao" acha "Pão")
+  const plain = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const visible = PRODUCTS.filter(
+    (p) => (filter === "all" || p.category === filter) && plain(t.products[p.id][0]).includes(plain(query.trim())),
+  );
 
   return (
     <section id="ofertas" className="scroll-mt-20 bg-white py-20 md:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionTitle kicker={t.offers.kicker} title={t.offers.title} text={t.offers.text} />
-        <div className="no-scrollbar -mx-4 mt-8 flex gap-2 overflow-x-auto px-4 pb-1">
+        <label className="mt-8 flex max-w-md items-center gap-3 rounded-full border border-black/10 px-5 py-3 focus-within:border-[#1e4d2b]" style={{ background: CREAM }}>
+          <Search className="h-4 w-4 opacity-50" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t.offers.search}
+            aria-label={t.offers.search}
+            className="w-full bg-transparent outline-none placeholder:text-black/40"
+          />
+        </label>
+        <div className="no-scrollbar -mx-4 mt-4 flex gap-2 overflow-x-auto px-4 pb-1">
           {(["all", ...categories] as const).map((value) => (
             <button
               key={value}
@@ -448,8 +559,8 @@ function Offers({
                   className="flex flex-col rounded-2xl border border-black/[0.06] p-3 sm:p-4"
                   style={{ background: CREAM }}
                 >
-                  <div className="relative grid aspect-[4/3] place-items-center rounded-xl text-5xl sm:text-6xl" style={{ background: CATEGORY_TINT[p.category] }}>
-                    {p.emoji}
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-xl" style={{ background: CATEGORY_TINT[p.category] }}>
+                    <Image src={photo(p.id)} alt={name} fill sizes="(min-width: 1024px) 15rem, (min-width: 768px) 30vw, 45vw" className="object-cover" />
                     <span className="absolute top-2 left-2 rounded-md px-1.5 py-0.5 text-[11px] font-black text-white" style={{ background: TOMATO }}>
                       −{Math.round((1 - p.price / p.was) * 100)}%
                     </span>
@@ -497,6 +608,7 @@ function Offers({
             })}
           </AnimatePresence>
         </motion.ul>
+        {visible.length === 0 && <p className="mt-8 text-center opacity-60">{t.offers.empty}</p>}
       </div>
     </section>
   );
@@ -552,14 +664,17 @@ function Delivery({ t }: { t: Copy }) {
   );
 }
 
-function Hours({ t }: { t: Copy }) {
+function Hours({ t, now, locale }: { t: Copy; now: Date | null; locale: Locale }) {
   const h = t.hours;
   return (
     <section id="horarios" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-28 sm:px-6">
       <div className="grid overflow-hidden rounded-[1.75rem] bg-white shadow-[0_20px_50px_-30px_rgb(30_77_43/0.45)] lg:grid-cols-2">
         <div className="p-7 sm:p-10">
           <SectionTitle kicker={h.kicker} title={h.title} />
-          <ul className="mt-8 space-y-3">
+          <div className="mt-6">
+            <OpenBadge now={now} shifts={SHIFTS} locale={locale} className="bg-[#e3f1d8] text-[#1e4d2b]" />
+          </div>
+          <ul className="mt-6 space-y-3">
             {h.list.map(([label, time]) => (
               <li key={label} className="flex items-center justify-between rounded-xl px-4 py-3.5" style={{ background: CREAM }}>
                 <span className="flex items-center gap-2.5">
@@ -590,15 +705,132 @@ function Hours({ t }: { t: Copy }) {
 function Footer({ t }: { t: Copy }) {
   return (
     <footer className="border-t border-black/10">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-10 text-sm sm:px-6 md:flex-row md:items-center md:justify-between">
+      {/* pb maior: a barra do pedido fica fixa embaixo e não pode cobrir o rodapé */}
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 pt-10 pb-32 text-sm sm:px-6 md:flex-row md:items-center md:justify-between">
         <Logo t={t} />
         <p className="opacity-70">
           {t.footer}{" "}
           <Link href="/" className="font-semibold underline-offset-2 hover:underline">
             Mateus Fantin
-          </Link>
+          </Link>{" "}
+          · {t.photos}
         </p>
       </div>
     </footer>
+  );
+}
+
+/** Faixa da entrega: foto em tela cheia andando mais devagar que a página. */
+function Band({ t }: { t: Copy }) {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], ["-12%", "12%"]);
+  return (
+    <section ref={ref} className="relative flex min-h-[60svh] items-end overflow-hidden">
+      <motion.div className="absolute -inset-y-[14%] inset-x-0" style={{ y }}>
+        <Image src={photo("entrega")} alt="" fill sizes="100vw" className="object-cover" />
+      </motion.div>
+      <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(30_77_43/0.92),rgb(30_77_43/0.35)_55%,transparent)]" />
+      <motion.div {...fadeUp} className="relative mx-auto w-full max-w-6xl px-4 pt-32 pb-14 text-white sm:px-6">
+        <h2 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-6xl">
+          <Serif>{t.band.title}</Serif>
+        </h2>
+        <p className="mt-4 max-w-lg text-lg text-white/85">{t.band.text}</p>
+      </motion.div>
+    </section>
+  );
+}
+
+function Stars() {
+  return (
+    <span className="flex gap-0.5" aria-hidden>
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star key={i} className="h-4 w-4 fill-[#f5b301] text-[#f5b301]" />
+      ))}
+    </span>
+  );
+}
+
+function Reviews({ t }: { t: Copy }) {
+  const r = t.reviews;
+  return (
+    <section className="bg-white py-20 md:py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
+          <SectionTitle kicker={r.kicker} title={r.title} />
+          <motion.div {...fadeUp} className="flex items-center gap-4">
+            <Serif className="text-6xl font-semibold">
+              <span style={{ color: GREEN }}>4,8</span>
+            </Serif>
+            <div>
+              <Stars />
+              <p className="mt-1 max-w-[14rem] text-sm opacity-65">{r.summary}</p>
+            </div>
+          </motion.div>
+        </div>
+        <ul className="mt-12 grid gap-4 md:grid-cols-3">
+          {r.items.map(([name, text], i) => (
+            <motion.li
+              key={name}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+              className="flex flex-col rounded-2xl p-6"
+              style={{ background: CREAM }}
+            >
+              <Stars />
+              <p className="mt-4 flex-1 leading-relaxed opacity-85">“{text}”</p>
+              <p className="mt-5 flex items-center gap-3 text-sm font-semibold">
+                <span className="grid h-9 w-9 place-items-center rounded-full text-white" style={{ background: GREEN }}>
+                  {name[0]}
+                </span>
+                {name}
+              </p>
+            </motion.li>
+          ))}
+        </ul>
+        <p className="mt-4 text-center text-xs opacity-45">{r.note}</p>
+      </div>
+    </section>
+  );
+}
+
+function Faq({ t }: { t: Copy }) {
+  const [open, setOpen] = useState<number | null>(0);
+  const faq = t.faq;
+  return (
+    <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6 md:py-24">
+      <SectionTitle kicker={faq.kicker} title={faq.title} />
+      <ul className="mt-10 divide-y divide-black/10 border-y border-black/10">
+        {faq.items.map(([question, answer], i) => {
+          const isOpen = open === i;
+          return (
+            <li key={question}>
+              <button
+                type="button"
+                onClick={() => setOpen(isOpen ? null : i)}
+                aria-expanded={isOpen}
+                className="flex w-full items-center justify-between gap-4 py-5 text-left text-lg font-semibold"
+              >
+                {question}
+                <ChevronDown className={`h-5 w-5 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} style={{ color: TOMATO }} />
+              </button>
+              <AnimatePresence initial={false}>
+                {isOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="overflow-hidden"
+                  >
+                    <p className="pb-5 leading-relaxed opacity-70">{answer}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
