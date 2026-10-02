@@ -5,7 +5,6 @@ import {
   useEffect,
   useRef,
   useState,
-  useSyncExternalStore,
   type CSSProperties,
   type FormEvent,
   type ReactNode,
@@ -17,6 +16,7 @@ import { CalendarDays, ChevronDown, Clock, Flame, Leaf, MapPin, Minus, Plus, Sta
 import type { Locale } from "@/content/portfolio-content";
 import { useLocale } from "@/lib/locale-store";
 import { DemoBar } from "../_components/demo-bar";
+import { hm, OpenBadge, useNow, type Shift, type WeekShifts } from "../_components/open-status";
 import { WhatsappPreview } from "../_components/whatsapp-preview";
 
 /*
@@ -39,10 +39,10 @@ const photo = (id: string) => `/demos/restaurante/${id}.webp`;
 type Tag = "veg" | "spicy";
 type Dish = { id: string; name: string; text: string; price: number; tags?: Tag[] };
 
-// Turnos por dia da semana (0 = domingo), em minutos desde a meia-noite
-const LUNCH: [number, number] = [11 * 60 + 30, 15 * 60];
-const DINNER: [number, number] = [19 * 60, 23 * 60];
-const SHIFTS: [number, number][][] = [[LUNCH], [], [LUNCH, DINNER], [LUNCH, DINNER], [LUNCH, DINNER], [LUNCH, DINNER], [LUNCH, DINNER]];
+// Turnos por dia da semana (0 = domingo): almoço de terça a domingo, jantar de terça a sábado
+const LUNCH: Shift = [hm(11, 30), hm(15)];
+const DINNER: Shift = [hm(19), hm(23)];
+const SHIFTS: WeekShifts = [[LUNCH], [], [LUNCH, DINNER], [LUNCH, DINNER], [LUNCH, DINNER], [LUNCH, DINNER], [LUNCH, DINNER]];
 
 // Foto do prato do dia, na mesma ordem dos dias (segunda fechado)
 const DAILY_PHOTOS = ["costela", null, "risoto", "picanha", "lasanha", "peixe", "feijoada"];
@@ -63,14 +63,6 @@ const COPY = {
       text: "Carnes na brasa, massas feitas na casa e uma carta de vinhos curta e honesta. Almoço e jantar no coração do bairro.",
       secondary: "Ver cardápio",
       rating: "no Google",
-    },
-    status: {
-      open: (at: string) => `Aberto agora · fecha às ${at}`,
-      today: (at: string) => `Fechado · abre hoje às ${at}`,
-      tomorrow: (at: string) => `Fechado · abre amanhã às ${at}`,
-      later: (day: string, at: string) => `Fechado · abre ${day} às ${at}`,
-      time: (min: number) => `${Math.floor(min / 60)}h${min % 60 ? String(min % 60).padStart(2, "0") : ""}`,
-      weekdays: ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"],
     },
     intro: {
       kicker: "Nossa casa",
@@ -228,18 +220,6 @@ const COPY = {
       secondary: "See the menu",
       rating: "on Google",
     },
-    status: {
-      open: (at: string) => `Open now · closes at ${at}`,
-      today: (at: string) => `Closed · opens today at ${at}`,
-      tomorrow: (at: string) => `Closed · opens tomorrow at ${at}`,
-      later: (day: string, at: string) => `Closed · opens ${day} at ${at}`,
-      time: (min: number) => {
-        const h = Math.floor(min / 60);
-        const m = min % 60;
-        return `${h % 12 || 12}${m ? `:${String(m).padStart(2, "0")}` : ""}${h < 12 ? "am" : "pm"}`;
-      },
-      weekdays: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    },
     intro: {
       kicker: "Our place",
       title: "Low fire, the right time",
@@ -393,36 +373,6 @@ const fadeUp = {
   transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
 };
 
-// Relógio do visitante, atualizado a cada 30 s. No servidor é null (o selo
-// de aberto/fechado e o "hoje" só aparecem depois da hidratação).
-function subscribeClock(onChange: () => void) {
-  const id = window.setInterval(onChange, 30_000);
-  return () => window.clearInterval(id);
-}
-const minuteNow = () => Math.floor(Date.now() / 60_000);
-function useNow() {
-  const minute = useSyncExternalStore(subscribeClock, minuteNow, () => null);
-  return minute === null ? null : new Date(minute * 60_000);
-}
-
-/** Aberto agora? Se não, quando abre (hoje, amanhã ou outro dia). */
-function openStatus(now: Date, s: Copy["status"]) {
-  const day = now.getDay();
-  const minutes = now.getHours() * 60 + now.getMinutes();
-  for (const [opens, closes] of SHIFTS[day]) {
-    if (minutes >= opens && minutes < closes) return { open: true, label: s.open(s.time(closes)) };
-  }
-  for (let ahead = 0; ahead < 8; ahead++) {
-    const d = (day + ahead) % 7;
-    const next = SHIFTS[d].find(([opens]) => ahead > 0 || opens > minutes);
-    if (!next) continue;
-    const at = s.time(next[0]);
-    const label = ahead === 0 ? s.today(at) : ahead === 1 ? s.tomorrow(at) : s.later(s.weekdays[d], at);
-    return { open: false, label };
-  }
-  return { open: false, label: "" };
-}
-
 export function RestaurantDemo() {
   const locale = useLocale();
   const t = COPY[locale];
@@ -434,7 +384,7 @@ export function RestaurantDemo() {
       <DemoBar kind="restaurante" />
       <Header t={t} />
       <main>
-        <Hero t={t} now={now} />
+        <Hero t={t} now={now} locale={locale} />
         <Intro t={t} />
         <Daily t={t} money={money} today={now?.getDay() ?? null} />
         <Menu t={t} money={money} />
@@ -443,7 +393,7 @@ export function RestaurantDemo() {
         <Instagram t={t} />
         <Booking t={t} locale={locale} />
         <Faq t={t} />
-        <Hours t={t} now={now} />
+        <Hours t={t} now={now} locale={locale} />
       </main>
       <Footer t={t} />
     </div>
@@ -483,21 +433,6 @@ function Header({ t }: { t: Copy }) {
   );
 }
 
-/** Selo "Aberto agora" / "Fechado · abre às...", com ponto pulsando quando aberto. */
-function StatusBadge({ t, now }: { t: Copy; now: Date | null }) {
-  if (!now) return <span className="inline-block h-8" />;
-  const status = openStatus(now, t.status);
-  return (
-    <span className="inline-flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-xs font-semibold backdrop-blur sm:text-sm">
-      <span className="relative flex h-2 w-2">
-        {status.open && <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-75" />}
-        <span className={`relative h-2 w-2 rounded-full ${status.open ? "bg-emerald-400" : "bg-white/50"}`} />
-      </span>
-      {status.label}
-    </span>
-  );
-}
-
 // Faíscas: posições fixas para não mudarem a cada render
 const EMBERS = Array.from({ length: 18 }, (_, i) => ({
   left: 8 + ((i * 37) % 84),
@@ -506,7 +441,7 @@ const EMBERS = Array.from({ length: 18 }, (_, i) => ({
   size: 2 + (i % 3) * 2,
 }));
 
-function Hero({ t, now }: { t: Copy; now: Date | null }) {
+function Hero({ t, now, locale }: { t: Copy; now: Date | null; locale: Locale }) {
   const hero = t.hero;
   return (
     <section id="inicio" className="relative flex min-h-[88svh] items-end overflow-hidden">
@@ -547,7 +482,7 @@ function Hero({ t, now }: { t: Copy; now: Date | null }) {
 
       <div className="relative mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 md:pb-24">
         <motion.div {...fadeUp} className="flex flex-wrap items-center gap-2">
-          <StatusBadge t={t} now={now} />
+          <OpenBadge now={now} shifts={SHIFTS} locale={locale} />
           <span className="inline-flex items-center gap-1.5 rounded-full bg-black/45 px-3 py-1.5 text-xs font-semibold backdrop-blur sm:text-sm">
             <Star className="h-3.5 w-3.5 fill-[#f5b301] text-[#f5b301]" />
             4,8 {hero.rating}
@@ -1065,7 +1000,7 @@ function Faq({ t }: { t: Copy }) {
   );
 }
 
-function Hours({ t, now }: { t: Copy; now: Date | null }) {
+function Hours({ t, now, locale }: { t: Copy; now: Date | null; locale: Locale }) {
   const h = t.hours;
   return (
     <section id="onde" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-20 sm:px-6 md:pb-28">
@@ -1073,7 +1008,7 @@ function Hours({ t, now }: { t: Copy; now: Date | null }) {
         <div className="p-7 sm:p-10">
           <SectionTitle kicker={h.kicker} title={h.title} />
           <div className="mt-6">
-            <StatusBadge t={t} now={now} />
+            <OpenBadge now={now} shifts={SHIFTS} locale={locale} />
           </div>
           <ul className="mt-6 divide-y divide-white/10">
             {h.list.map(([label, time]) => (
