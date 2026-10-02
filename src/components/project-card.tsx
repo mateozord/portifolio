@@ -28,12 +28,14 @@ export function ProjectCard({ ref, project, index, wide: wideProp = false, label
   const featured = Boolean(project.featured);
   const wide = featured || wideProp;
   const tilt = useTilt(featured ? 3 : 5);
+  // Parallax interno: a imagem desliza dentro da moldura enquanto a página rola
   const [hovering, setHovering] = useState(false);
   const visibleStack = project.stack.slice(0, wide ? 7 : 4);
   const hiddenCount = project.stack.length - visibleStack.length;
 
   return (
     <motion.article
+      data-cursor={labels.openCase}
       ref={ref}
       layout
       initial={{ opacity: 0, y: 48 }}
@@ -53,7 +55,7 @@ export function ProjectCard({ ref, project, index, wide: wideProp = false, label
       }}
       style={{ rotateX: tilt.rotateX, rotateY: tilt.rotateY, transformPerspective: 1200 }}
       className={cn(
-        "card spin-border group flex flex-col overflow-hidden rounded-[1.75rem] p-2.5 will-change-transform",
+        "card spin-border group flex flex-col overflow-clip rounded-[1.75rem] p-2.5 will-change-transform",
         featured && "is-on",
         wide && "md:col-span-2 lg:flex-row",
       )}
@@ -67,19 +69,39 @@ export function ProjectCard({ ref, project, index, wide: wideProp = false, label
       )}
       {featured && <SparkleField intense={hovering} />}
 
-      <div
+      {/* A moldura é observada (sem recorte); quem se revela é o miolo,
+          abrindo de dentro para fora como no lusion.co */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.25 }}
         className={cn(
-          "relative aspect-[16/10] shrink-0 overflow-hidden rounded-[1.3rem] bg-[#101015]",
+          "relative aspect-[16/10] shrink-0 rounded-[1.3rem]",
           wide && "lg:aspect-auto lg:min-h-[27rem] lg:w-[58%]",
         )}
       >
-        <Image
-          src={project.images[0]}
-          alt={project.captions[0] ?? project.title}
-          fill
-          sizes={wide ? "(min-width: 1024px) 640px, (min-width: 768px) 90vw, 100vw" : "(min-width: 768px) 560px, 100vw"}
-          className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.045]"
-        />
+      <motion.div
+        variants={{
+          hidden: { clipPath: "inset(14% 10% 14% 10% round 1.3rem)" },
+          visible: { clipPath: "inset(0% 0% 0% 0% round 1.3rem)", transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } },
+        }}
+        className="absolute inset-0 overflow-clip rounded-[1.3rem] bg-[#101015]"
+      >
+        {/* Paralaxe ligada à rolagem em CSS (.card-parallax): roda fora da thread principal */}
+        <div className="card-parallax absolute -inset-y-[9%] inset-x-0">
+        <motion.div
+          className="absolute inset-0"
+          variants={{ hidden: { scale: 1.25 }, visible: { scale: 1, transition: { duration: 1.6, ease: [0.16, 1, 0.3, 1] } } }}
+        >
+          <Image
+            src={project.images[0]}
+            alt={project.captions[0] ?? project.title}
+            fill
+            sizes={wide ? "(min-width: 1024px) 640px, (min-width: 768px) 90vw, 100vw" : "(min-width: 768px) 560px, 100vw"}
+            className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.045]"
+          />
+        </motion.div>
+        </div>
         {featured && <div className="shine" />}
         <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/10" />
 
@@ -109,7 +131,8 @@ export function ProjectCard({ ref, project, index, wide: wideProp = false, label
             </span>
           )}
         </div>
-      </div>
+      </motion.div>
+      </motion.div>
 
       <div className={cn("flex flex-1 flex-col p-4 sm:p-5", wide && "lg:p-8")}>
         <div className="flex items-start justify-between gap-4">

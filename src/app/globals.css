@@ -82,7 +82,7 @@
 @layer base {
   html {
     color-scheme: light;
-    scroll-behavior: smooth;
+    /* A rolagem suave fica por conta do Lenis (smooth-scroll.tsx) */
     scroll-padding-top: 6rem;
     /* Evita o "pulo" do layout quando o modal trava a rolagem. */
     scrollbar-gutter: stable;
@@ -325,19 +325,18 @@
   }
 }
 
-/* Faixa infinita de tecnologias. */
-.marquee-track {
-  animation: marquee 38s linear infinite;
+/* Slides do showreel: o ativo aparece e "assenta" devagar (Ken Burns). */
+.reel-slide {
+  opacity: 0;
+  transform: scale(1.12);
+  transition:
+    opacity 1s ease,
+    transform 3.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
+.reel-slide[data-active] {
+  opacity: 1;
+  transform: none;
 }
 
 /* Ponto "ao vivo" pulsando. */
@@ -365,6 +364,59 @@
   }
 }
 
+/* Título que sobe palavra por palavra (AnimatedHeading). O atraso de cada
+   palavra vem inline; [data-shown] no título dispara a transição. */
+.heading-word {
+  transform: translateY(115%) rotate(4deg);
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-shown] .heading-word {
+  transform: none;
+}
+
+/* Paralaxe da imagem dos projetos ligada à rolagem (scroll-driven animation,
+   roda no compositor). Sem suporte, a imagem só fica parada. Os ancestrais
+   usam overflow: clip (não hidden) para não virarem contêiner de rolagem. */
+@supports (animation-timeline: view()) {
+  .card-parallax {
+    animation: card-parallax linear both;
+    animation-timeline: view();
+  }
+}
+
+@keyframes card-parallax {
+  from {
+    transform: translateY(-7%);
+  }
+  to {
+    transform: translateY(7%);
+  }
+}
+
+/* Brilhos dos cards em destaque (SparkleField): aparecem, giram e somem.
+   A pausa entre ciclos fica embutida no fim do keyframe. */
+.sparkle {
+  opacity: 0;
+  animation: sparkle-twinkle 4s ease-in-out infinite backwards;
+}
+
+@keyframes sparkle-twinkle {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  32% {
+    opacity: var(--sparkle-peak, 0.75);
+    transform: scale(var(--sparkle-scale, 1)) rotate(45deg);
+  }
+  65%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(90deg);
+  }
+}
+
 /* =====================================================================
    Troca de tema com View Transitions (círculo que se expande a partir do
    botão). O ThemeToggle anima ::view-transition-new(root) via JS.
@@ -380,12 +432,47 @@
     scroll-behavior: auto;
   }
 
+  .heading-word {
+    transform: none;
+    transition: none;
+  }
+
   .text-brand,
+  .sparkle,
+  .card-parallax,
   .spin-border::before,
   .shine,
   .blob,
-  .marquee-track,
   .pulse-dot::after {
     animation: none;
+  }
+}
+
+/* =====================================================================
+   Lenis (rolagem suave) e cursor próprio
+   ===================================================================== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Com o cursor próprio ativo, o do sistema some (menos em campos de texto) */
+@media (pointer: fine) {
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+
+  html.has-cursor input,
+  html.has-cursor textarea {
+    cursor: text !important;
   }
 }

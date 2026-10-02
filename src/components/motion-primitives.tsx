@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type PointerEvent, type ReactNode } from "react";
-import { motion, useReducedMotion, useSpring, type Variants } from "framer-motion";
+import { motion, useInView, useReducedMotion, useSpring } from "framer-motion";
 import { cn, EASE_OUT } from "@/lib/cn";
 
 /** Aparece deslizando para cima quando entra na tela. */
@@ -29,22 +29,10 @@ export function Reveal({
   );
 }
 
-const headingContainer: Variants = {
-  hidden: {},
-  visible: (delay: number = 0) => ({
-    transition: { staggerChildren: 0.055, delayChildren: delay },
-  }),
-};
-
-const headingWord: Variants = {
-  hidden: { opacity: 0, y: "0.45em", filter: "blur(10px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.75, ease: EASE_OUT },
-  },
-};
+// Estilo lusion.co: cada palavra sobe de baixo de uma "linha" invisível
+// (máscara), com um leve giro que se endireita. É uma transição CSS (classe
+// .heading-word em globals.css), que roda no compositor: nada de JS por quadro.
+const WORD_STAGGER = 0.055;
 
 /**
  * Divide "texto *destaque* texto" em palavras. As destacadas recebem a
@@ -63,7 +51,7 @@ function splitWords(text: string) {
 }
 
 /**
- * Título que surge palavra por palavra, saindo do desfoque. Trechos entre
+ * Título que surge palavra por palavra, subindo de dentro de uma máscara. Trechos entre
  * *asteriscos* viram itálico serifado com o gradiente da marca.
  */
 export function AnimatedHeading({
@@ -80,27 +68,29 @@ export function AnimatedHeading({
   /** true: anima ao carregar a página (hero); false: ao entrar na tela. */
   onMount?: boolean;
 }) {
-  const Tag = as === "h1" ? motion.h1 : as === "h3" ? motion.h3 : motion.h2;
+  const Tag = as;
   const words = splitWords(text);
+  const ref = useRef<HTMLHeadingElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const shown = onMount || inView;
 
   return (
-    <Tag
-      className={className}
-      variants={headingContainer}
-      custom={delay}
-      initial="hidden"
-      {...(onMount ? { animate: "visible" } : { whileInView: "visible", viewport: { once: true, amount: 0.5 } })}
-    >
+    <Tag ref={ref} className={className} data-shown={shown || undefined}>
       {words.map(({ word, highlight, order }, i) => (
         <span key={i}>
-          <motion.span
-            variants={headingWord}
-            className={cn("inline-block", highlight && "font-serif-italic text-brand")}
-            // O brilho do gradiente "corre" de uma palavra para a outra.
-            style={highlight ? { animationDelay: `${-order * 0.7}s` } : undefined}
-          >
-            {word}
-          </motion.span>
+          {/* A máscara: folga embaixo e dos lados para descendentes e itálico */}
+          <span className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] pr-[0.06em] -mr-[0.06em] align-bottom">
+            <span
+              className={cn("heading-word inline-block origin-bottom-left", highlight && "font-serif-italic text-brand")}
+              style={{
+                transitionDelay: `${delay + i * WORD_STAGGER}s`,
+                // O brilho do gradiente "corre" de uma palavra para a outra.
+                ...(highlight ? { animationDelay: `${-order * 0.7}s` } : null),
+              }}
+            >
+              {word}
+            </span>
+          </span>
           {i < words.length - 1 ? " " : null}
         </span>
       ))}

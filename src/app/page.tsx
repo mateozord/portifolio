@@ -14,6 +14,10 @@ import { AboutSection } from "@/components/about-section";
 import { ProcessSection } from "@/components/process-section";
 import { ContactSection } from "@/components/contact-section";
 import { SiteFooter } from "@/components/site-footer";
+import { SmoothScroll } from "@/components/smooth-scroll";
+import { CustomCursor } from "@/components/custom-cursor";
+import { ShowReel } from "@/components/show-reel";
+import { ScrollRibbon } from "@/components/scroll-ribbon";
 
 export default function Home() {
   const locale = useLocale();
@@ -40,12 +44,16 @@ export default function Home() {
 
   return (
     <MotionConfig reducedMotion="user">
+      <SmoothScroll />
+      <CustomCursor />
       <ScrollProgress />
       <AmbientBackground />
       <SiteHeader dictionary={dictionary} locale={locale} />
 
-      <main className="overflow-x-clip">
+      <main className="relative isolate overflow-x-clip">
+        <ScrollRibbon />
         <Hero dictionary={dictionary} />
+        <ShowReel dictionary={dictionary} />
         <TechMarquee label={dictionary.marqueeLabel} />
         <ServicesSection dictionary={dictionary} />
         <ProjectsSection dictionary={dictionary} onSimilar={handleSimilar} />

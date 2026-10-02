@@ -16,6 +16,7 @@ import { AnimatedHeading, Magnetic } from "@/components/motion-primitives";
 import { RainbowStars } from "@/components/rainbow-stars";
 import { WhatsappIcon } from "@/components/brand-icons";
 import { cn, EASE_OUT } from "@/lib/cn";
+import { LiquidBlob } from "@/components/liquid-blob";
 
 const PARALLAX_SPRING = { stiffness: 70, damping: 20, mass: 0.8 };
 
@@ -53,6 +54,8 @@ export function Hero({ dictionary }: { dictionary: PortfolioDictionary }) {
       className="relative isolate overflow-hidden pt-32 pb-20 sm:pt-36 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-28 lg:pb-24"
     >
       <div aria-hidden className="bg-grid absolute inset-0 -z-10" />
+      {/* Líquido 3D (WebGL) atrás da pilha de telas, puxado pelo cursor */}
+      <LiquidBlob className="pointer-events-none absolute top-0 right-[-12%] -z-10 h-full w-[85%] opacity-90 [mask-image:linear-gradient(to_right,transparent,#000_22%)] lg:right-[-6%] lg:w-[64%]" />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
         <div>

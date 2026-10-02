@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Check, Copy, Mail, Send } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Fish, Mail, Send } from "lucide-react";
 import { profile, type PortfolioDictionary } from "@/content/portfolio-content";
 import { Reveal, SectionHeader } from "@/components/motion-primitives";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/brand-icons";
 import { cn } from "@/lib/cn";
+import { KoiPond } from "@/components/koi-pond";
 
 type ContactSectionProps = {
   dictionary: PortfolioDictionary;
@@ -51,6 +52,7 @@ export function ContactSection({ dictionary, subject, onSubjectChange, prefillKe
       <div className="card relative isolate overflow-hidden rounded-[2.25rem] p-5 sm:p-10 lg:p-14">
         <div aria-hidden className="bg-brand absolute -top-32 -right-24 -z-10 h-80 w-80 rounded-full opacity-20 blur-3xl" />
         <div aria-hidden className="bg-brand absolute -bottom-40 -left-24 -z-10 h-72 w-72 rounded-full opacity-10 blur-3xl" />
+        <KoiPond className="absolute inset-0 -z-10 h-full w-full" />
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
           <div className="min-w-0">
@@ -85,6 +87,13 @@ export function ContactSection({ dictionary, subject, onSubjectChange, prefillKe
                   {contact.githubLabel}
                 </SocialLink>
               </div>
+
+              <p className="text-muted flex items-center gap-2 pt-3 text-sm">
+                <span aria-hidden className="bg-accent-soft text-accent grid h-7 w-7 place-items-center rounded-full">
+                  <Fish className="h-4 w-4" />
+                </span>
+                {contact.pondHint}
+              </p>
             </Reveal>
           </div>
 
@@ -92,6 +101,7 @@ export function ContactSection({ dictionary, subject, onSubjectChange, prefillKe
             <form
               ref={formRef}
               onSubmit={sendByEmail}
+              data-pond-solid
               className="border-line bg-surface-strong/80 rounded-[1.75rem] border p-4 sm:p-7"
             >
               <h3 className="text-xl font-semibold tracking-tight">{form.title}</h3>

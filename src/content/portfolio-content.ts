@@ -52,6 +52,8 @@ export type PortfolioDictionary = {
     floatingStack: string;
   };
   marqueeLabel: string;
+  /** Showreel entre o hero e os serviços: duas palavras que se afastam. */
+  reel: { words: [string, string]; cta: string; caption: string };
   services: {
     eyebrow: string;
     title: string;
@@ -101,6 +103,8 @@ export type PortfolioDictionary = {
     steps: { title: string; description: string }[];
   };
   contact: {
+    /** Dica do lago de koi no fundo do card. */
+    pondHint: string;
     eyebrow: string;
     title: string;
     body: string;
@@ -468,6 +472,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       floatingStack: "Supabase · RLS",
     },
     marqueeLabel: "Ferramentas que uso no dia a dia",
+    reel: { words: ["Projetos", "reais"], cta: "Ver projetos", caption: "Sites e sistemas no ar, feitos do zero" },
     services: {
       eyebrow: "Serviços",
       title: "O que posso *fazer por você*",
@@ -588,6 +593,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       ],
     },
     contact: {
+      pondHint: "Clique na água para alimentar os peixes",
       eyebrow: "Contato",
       title: "Tem um projeto em mente? *Vamos tirar do papel.*",
       body: "Me conte sua ideia: um site, um sistema, uma automação ou uma identidade visual. Eu respondo com um caminho claro, sem compromisso.",
@@ -645,6 +651,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       floatingStack: "Supabase · RLS",
     },
     marqueeLabel: "Tools I use every day",
+    reel: { words: ["Real", "work"], cta: "See projects", caption: "Live sites and systems, built from scratch" },
     services: {
       eyebrow: "Services",
       title: "What I can *do for you*",
@@ -765,6 +772,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       ],
     },
     contact: {
+      pondHint: "Click the water to feed the fish",
       eyebrow: "Contact",
       title: "Have a project in mind? *Let's make it real.*",
       body: "Tell me your idea: a website, a system, an automation or a visual identity. I'll reply with a clear path forward, no strings attached.",
