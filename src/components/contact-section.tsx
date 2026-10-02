@@ -52,7 +52,7 @@ export function ContactSection({ dictionary, subject, onSubjectChange, prefillKe
       <div className="card relative isolate overflow-hidden rounded-[2.25rem] p-5 sm:p-10 lg:p-14">
         <div aria-hidden className="bg-brand absolute -top-32 -right-24 -z-10 h-80 w-80 rounded-full opacity-20 blur-3xl" />
         <div aria-hidden className="bg-brand absolute -bottom-40 -left-24 -z-10 h-72 w-72 rounded-full opacity-10 blur-3xl" />
-        <KoiPond className="absolute inset-0 -z-10 h-full w-full" />
+        <KoiPond className="absolute inset-0 -z-10 h-full w-full opacity-60 dark:opacity-70" />
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
           <div className="min-w-0">

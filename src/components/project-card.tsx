@@ -35,7 +35,6 @@ export function ProjectCard({ ref, project, index, wide: wideProp = false, label
 
   return (
     <motion.article
-      data-cursor={labels.openCase}
       ref={ref}
       layout
       initial={{ opacity: 0, y: 48 }}

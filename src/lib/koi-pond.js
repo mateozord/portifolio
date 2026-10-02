@@ -105,7 +105,7 @@ export function createKoiPond(canvas, { animated = true, night = false } = {}) {
     canvas.height = Math.max(1, Math.round(height * dpr));
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (first || koi.length === 0) {
-      const count = width < 640 ? 4 : 6;
+      const count = width < 640 ? 3 : 4;
       koi = Array.from({ length: count }, (_, i) => makeKoi(i, count));
     }
     if (!frame) draw(0);

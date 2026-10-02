@@ -31,6 +31,7 @@ export type PortfolioDictionary = {
   nav: {
     services: string;
     projects: string;
+    pricing: string;
     about: string;
     process: string;
     contact: string;
@@ -54,6 +55,23 @@ export type PortfolioDictionary = {
   marqueeLabel: string;
   /** Showreel entre o hero e os serviços: duas palavras que se afastam. */
   reel: { words: [string, string]; cta: string; caption: string };
+  /** Preços de referência ("a partir de") para negócios locais. */
+  pricing: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    from: string;
+    perMonth: string;
+    popular: string;
+    cta: string;
+    /** Mensagem pronta do WhatsApp; {plan} vira o nome do plano. */
+    whatsappMessage: string;
+    plans: { name: string; price: number; description: string; features: string[]; popular?: boolean }[];
+    maintenance: { name: string; price: number; description: string; features: string[] };
+    note: string;
+    /** Demonstrações de sites para negócios locais (rotas em /demos). */
+    examples: { label: string; links: { name: string; href: string }[] };
+  };
   services: {
     eyebrow: string;
     title: string;
@@ -451,6 +469,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     nav: {
       services: "Serviços",
       projects: "Projetos",
+      pricing: "Preços",
       about: "Sobre",
       process: "Processo",
       contact: "Contato",
@@ -472,6 +491,61 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       floatingStack: "Supabase · RLS",
     },
     marqueeLabel: "Ferramentas que uso no dia a dia",
+    pricing: {
+      eyebrow: "Investimento",
+      title: "Quanto custa um *site para o seu negócio*",
+      subtitle:
+        "Valores de referência para negócios locais como academias, restaurantes, mercados e clínicas. O orçamento é gratuito e sem compromisso: o preço final depende do que o seu negócio precisa.",
+      from: "a partir de",
+      perMonth: "/mês",
+      popular: "Mais procurado",
+      cta: "Pedir orçamento",
+      whatsappMessage: "Olá, Mateus! Vi seu portfólio e tenho interesse no plano {plan}.",
+      plans: [
+        {
+          name: "Landing page",
+          price: 1200,
+          description: "Uma página completa para o seu negócio ser encontrado e receber clientes direto no WhatsApp.",
+          features: [
+            "Horários, serviços e preços",
+            "Localização com Google Maps",
+            "Botão direto para o WhatsApp",
+            "Feita para funcionar bem no celular",
+          ],
+        },
+        {
+          name: "Site institucional",
+          price: 2500,
+          description: "Várias páginas para apresentar sua empresa por completo e aparecer no Google da sua região.",
+          features: [
+            "Tudo da landing page",
+            "Páginas de sobre, serviços, equipe e contato",
+            "Mural de novidades ou blog",
+            "SEO local para aparecer nas buscas da região",
+          ],
+          popular: true,
+        },
+        {
+          name: "Site com sistema",
+          price: 5000,
+          description: "Para quem quer automatizar o atendimento: cadastro, agendamento e integrações.",
+          features: [
+            "Tudo do site institucional",
+            "Pré-cadastro ou matrícula online",
+            "Agendamento de horários ou aulas",
+            "Integração com o sistema de gestão",
+          ],
+        },
+      ],
+      maintenance: {
+        name: "Manutenção mensal",
+        price: 150,
+        description: "Seu site sempre atualizado, rápido e seguro, sem você precisar se preocupar.",
+        features: ["Atualização de horários, preços e avisos", "Backups", "Velocidade e segurança em dia"],
+      },
+      note: "Valores de referência. Cada negócio é diferente: me conte o que você precisa e eu te passo um orçamento fechado.",
+      examples: { label: "Veja um exemplo pronto:", links: [{ name: "Site de academia", href: "/demos/academia" }] },
+    },
     reel: { words: ["Projetos", "reais"], cta: "Ver projetos", caption: "Sites e sistemas no ar, feitos do zero" },
     services: {
       eyebrow: "Serviços",
@@ -630,6 +704,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     nav: {
       services: "Services",
       projects: "Projects",
+      pricing: "Pricing",
       about: "About",
       process: "Process",
       contact: "Contact",
@@ -651,6 +726,56 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       floatingStack: "Supabase · RLS",
     },
     marqueeLabel: "Tools I use every day",
+    pricing: {
+      eyebrow: "Pricing",
+      title: "What a *website for your business* costs",
+      subtitle:
+        "Reference prices for local businesses like gyms, restaurants, markets and clinics. Quotes are free with no strings attached: the final price depends on what your business needs.",
+      from: "from",
+      perMonth: "/mo",
+      popular: "Most popular",
+      cta: "Get a quote",
+      whatsappMessage: "Hi Mateus! I saw your portfolio and I'm interested in the {plan} plan.",
+      plans: [
+        {
+          name: "Landing page",
+          price: 1200,
+          description: "One complete page so your business gets found and customers reach you on WhatsApp.",
+          features: ["Opening hours, services and prices", "Location with Google Maps", "Direct WhatsApp button", "Built to work great on phones"],
+        },
+        {
+          name: "Business website",
+          price: 2500,
+          description: "Multiple pages to fully present your business and show up on Google in your area.",
+          features: [
+            "Everything in the landing page",
+            "About, services, team and contact pages",
+            "News board or blog",
+            "Local SEO to show up in nearby searches",
+          ],
+          popular: true,
+        },
+        {
+          name: "Website + system",
+          price: 5000,
+          description: "For businesses that want to automate: sign-ups, bookings and integrations.",
+          features: [
+            "Everything in the business website",
+            "Online pre-registration or enrollment",
+            "Booking for appointments or classes",
+            "Integration with your management system",
+          ],
+        },
+      ],
+      maintenance: {
+        name: "Monthly maintenance",
+        price: 150,
+        description: "Your site always up to date, fast and secure, without you having to worry.",
+        features: ["Updates to hours, prices and notices", "Backups", "Speed and security kept in check"],
+      },
+      note: "Reference prices. Every business is different: tell me what you need and I'll send you a fixed quote.",
+      examples: { label: "See a live example:", links: [{ name: "Gym website", href: "/demos/academia" }] },
+    },
     reel: { words: ["Real", "work"], cta: "See projects", caption: "Live sites and systems, built from scratch" },
     services: {
       eyebrow: "Services",

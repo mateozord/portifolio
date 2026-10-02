@@ -449,7 +449,7 @@
 }
 
 /* =====================================================================
-   Lenis (rolagem suave) e cursor próprio
+   Lenis (rolagem suave)
    ===================================================================== */
 html.lenis,
 html.lenis body {
@@ -462,17 +462,4 @@ html.lenis body {
 
 .lenis.lenis-stopped {
   overflow: clip;
-}
-
-/* Com o cursor próprio ativo, o do sistema some (menos em campos de texto) */
-@media (pointer: fine) {
-  html.has-cursor,
-  html.has-cursor * {
-    cursor: none !important;
-  }
-
-  html.has-cursor input,
-  html.has-cursor textarea {
-    cursor: text !important;
-  }
 }

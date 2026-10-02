@@ -83,7 +83,7 @@ export function ShowReel({ dictionary }: { dictionary: PortfolioDictionary }) {
   }
 
   return (
-    <section ref={sectionRef} aria-label={`${words[0]} ${words[1]}`} className="relative h-[320svh]">
+    <section ref={sectionRef} aria-label={`${words[0]} ${words[1]}`} className="relative h-[200svh]">
       <div className="sticky top-0 flex h-svh items-center justify-center overflow-clip [perspective:1600px]">
         {/* Palavras gigantes (atrás do card) */}
         <div
@@ -105,7 +105,6 @@ export function ShowReel({ dictionary }: { dictionary: PortfolioDictionary }) {
         {/* O card: palco no degradê da marca com os projetos */}
         <motion.a
           href="#projects"
-          data-cursor={cta}
           aria-label={cta}
           className="focus-ring absolute inset-0 z-10 block overflow-clip will-change-transform"
           style={{ scale, borderRadius, rotateX, rotateY, rotateZ, skewY }}

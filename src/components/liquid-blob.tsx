@@ -116,7 +116,8 @@ export function LiquidBlob({ className = "" }: { className?: string }) {
 
   useEffect(() => {
     const canvas = ref.current;
-    if (!canvas) return undefined;
+    // Só em telas grandes: em celulares simples o raymarching pesa (lá fica um brilho parado)
+    if (!canvas || !window.matchMedia("(min-width: 1024px)").matches) return undefined;
     const gl = canvas.getContext("webgl", { premultipliedAlpha: true, alpha: true, antialias: false });
     if (!gl) return undefined;
 

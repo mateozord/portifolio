@@ -54,8 +54,10 @@ export function Hero({ dictionary }: { dictionary: PortfolioDictionary }) {
       className="relative isolate overflow-hidden pt-32 pb-20 sm:pt-36 lg:flex lg:min-h-[100svh] lg:items-center lg:pt-28 lg:pb-24"
     >
       <div aria-hidden className="bg-grid absolute inset-0 -z-10" />
-      {/* Líquido 3D (WebGL) atrás da pilha de telas, puxado pelo cursor */}
-      <LiquidBlob className="pointer-events-none absolute top-0 right-[-12%] -z-10 h-full w-[85%] opacity-90 [mask-image:linear-gradient(to_right,transparent,#000_22%)] lg:right-[-6%] lg:w-[64%]" />
+      {/* Líquido 3D (WebGL) atrás da pilha de telas, puxado pelo cursor. Só no desktop */}
+      <LiquidBlob className="pointer-events-none absolute top-0 right-[-6%] -z-10 hidden h-full w-[64%] opacity-90 [mask-image:linear-gradient(to_right,transparent,#000_22%)] lg:block" />
+      {/* No celular, um brilho parado nas cores da marca no lugar do líquido */}
+      <div aria-hidden className="bg-brand absolute top-[38%] -right-24 -z-10 h-72 w-72 rounded-full opacity-25 blur-3xl lg:hidden" />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
         <div>
