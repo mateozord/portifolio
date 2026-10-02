@@ -20,7 +20,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mateus-fantin-portfolio.vercel.app"),
+  metadataBase: new URL("https://portifolio-rouge-seven-44.vercel.app"),
   title: "Mateus Fantin | Sites, sistemas e automações",
   description:
     "Mateus Fantin, desenvolvedor em São Paulo: sites, sistemas web, dashboards, automações e design — do primeiro rascunho ao produto no ar.",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: "Mateus Fantin | Sites, sistemas e automações",
     description:
       "Sites, sistemas web, dashboards e automações com design próprio. Conheça os projetos de Mateus Fantin.",
-    url: "https://mateus-fantin-portfolio.vercel.app",
+    url: "https://portifolio-rouge-seven-44.vercel.app",
     siteName: "Mateus Fantin",
     locale: "pt_BR",
     type: "website",
