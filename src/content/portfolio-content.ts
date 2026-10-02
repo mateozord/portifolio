@@ -62,6 +62,8 @@ export type PortfolioDictionary = {
     from: string;
     perMonth: string;
     popular: string;
+    /** Prazo médio de produção, mostrado abaixo do título. */
+    deadline: string;
     cta: string;
     /** Mensagem pronta do WhatsApp; {plan} vira o nome do plano. */
     whatsappMessage: string;
@@ -496,6 +498,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       from: "a partir de",
       perMonth: "/mês",
       popular: "Mais procurado",
+      deadline: "Prazo médio de produção: 3 semanas",
       cta: "Pedir orçamento",
       whatsappMessage: "Olá, Mateus! Vi seu portfólio e tenho interesse no plano {plan}.",
       plans: [
@@ -730,6 +733,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       from: "from",
       perMonth: "/mo",
       popular: "Most popular",
+      deadline: "Average production time: 3 weeks",
       cta: "Get a quote",
       whatsappMessage: "Hi Mateus! I saw your portfolio and I'm interested in the {plan} plan.",
       plans: [

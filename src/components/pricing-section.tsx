@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUpRight, Check, Wrench } from "lucide-react";
+import { ArrowUpRight, Check, Clock, Wrench } from "lucide-react";
 import { profile, type Locale, type PortfolioDictionary } from "@/content/portfolio-content";
 import { Reveal, SectionHeader } from "@/components/motion-primitives";
 import { WhatsappIcon } from "@/components/brand-icons";
@@ -28,6 +28,12 @@ export function PricingSection({ dictionary, locale }: { dictionary: PortfolioDi
   return (
     <section id="pricing" className="mx-auto max-w-6xl px-5 py-24 sm:px-8 md:py-32">
       <SectionHeader eyebrow={pricing.eyebrow} title={pricing.title} subtitle={pricing.subtitle} />
+      <Reveal delay={0.1} className="mt-6">
+        <p className="chip px-3.5 py-1.5 text-sm">
+          <Clock className="text-accent h-4 w-4" />
+          {pricing.deadline}
+        </p>
+      </Reveal>
 
       <div className="mt-14 grid grid-cols-1 gap-5 lg:grid-cols-3">
         {pricing.plans.map((plan, i) => (

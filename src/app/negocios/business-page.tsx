@@ -72,7 +72,7 @@ const COPY = {
       eyebrow: "Dúvidas",
       title: "Perguntas *frequentes*",
       items: [
-        ["Quanto tempo leva para ficar pronto?", "Depende do plano e de quando eu recebo textos e fotos. O prazo combinado vai escrito no orçamento, antes de começar."],
+        ["Quanto tempo leva para ficar pronto?", "Em média, 3 semanas de produção, contadas a partir do recebimento de textos e fotos. O prazo exato vai escrito no orçamento, antes de começar."],
         ["O domínio e a hospedagem estão inclusos?", "O domínio (.com.br) fica registrado no nome do seu negócio. Os custos de domínio e hospedagem eu explico no orçamento, sem surpresa depois."],
         ["E se eu precisar mudar algo depois?", "Pequenos ajustes logo após a entrega estão inclusos. Para atualizar horários, preços e promoções todo mês, existe a manutenção mensal."],
         ["Não tenho fotos boas. E agora?", "Dá para começar com fotos profissionais de banco de imagens e trocar pelas suas depois. Também te oriento a fotografar bem com o celular."],
@@ -130,7 +130,7 @@ const COPY = {
       eyebrow: "Questions",
       title: "Frequently *asked*",
       items: [
-        ["How long does it take?", "It depends on the plan and on when I get your texts and photos. The agreed deadline is written in the quote, before we start."],
+        ["How long does it take?", "On average, 3 weeks of production, counted from when I receive your texts and photos. The exact deadline is written in the quote, before we start."],
         ["Are domain and hosting included?", "The domain (.com.br) is registered under your business name. I explain domain and hosting costs in the quote, with no surprises later."],
         ["What if I need changes later?", "Small tweaks right after delivery are included. To update hours, prices and promos every month, there's monthly maintenance."],
         ["I don't have good photos. Now what?", "We can start with professional stock photos and swap in yours later. I'll also help you take good photos with your phone."],
