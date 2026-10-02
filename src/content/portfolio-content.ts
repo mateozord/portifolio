@@ -199,6 +199,7 @@ const projectBase: ProjectBase[] = [
       "/projects/cozylog/responsive.webp",
     ],
     link: "https://cozylog.vercel.app",
+    repo: "https://github.com/mateozord/cozylog",
     featured: true,
   },
   {
