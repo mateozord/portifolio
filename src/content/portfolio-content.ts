@@ -613,9 +613,9 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     },
     about: {
       eyebrow: "Sobre mim",
-      title: "Do balcão do turismo *ao código*",
+      title: "Das operações do turismo *ao código*",
       paragraphs: [
-        "Comecei no turismo, na CVC Corp, negociando produtos aéreos e resolvendo problemas de clientes com prazo apertado. Foi ali que aprendi a lidar com sistemas, processos e pressão real de negócio, bem antes de escrever a primeira linha de código.",
+        "Comecei em operações na CVC Corp e hoje trabalho com grupos específicos, resolvendo problemas de clientes com prazo apertado. Foi no dia a dia do turismo que aprendi a lidar com sistemas, processos e pressão real de negócio, bem antes de escrever a primeira linha de código.",
         "Hoje sou formado em Análise e Desenvolvimento de Sistemas e uno quatro frentes em cada entrega: design, banco de dados, desenvolvimento web e automação. Por isso entendo o problema do seu negócio antes de propor a solução, e entrego o produto inteiro, não só uma parte dele.",
       ],
       photoAlt: "Foto de Mateus Fantin",
@@ -626,7 +626,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         { value: 15, suffix: "+", label: "tecnologias no dia a dia" },
       ],
       journey: [
-        { title: "Turismo e operações", detail: "CVC Corp · produtos aéreos" },
+        { title: "Operações no turismo", detail: "CVC Corp · operações e grupos" },
         { title: "Análise e Desenvolvimento de Sistemas", detail: "Impacta · 2024–2026" },
         { title: "Desenvolvimento web", detail: "Sites, sistemas e dashboards" },
         { title: "Automação e dados", detail: "Hoje" },
@@ -850,9 +850,9 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     },
     about: {
       eyebrow: "About me",
-      title: "From the travel desk *to code*",
+      title: "From travel operations *to code*",
       paragraphs: [
-        "I started out in tourism at CVC Corp, negotiating airline products and solving customer problems on tight deadlines. That's where I learned to deal with systems, processes and real business pressure, long before I wrote my first line of code.",
+        "I started in operations at CVC Corp, and today I work with specific groups, solving customer problems on tight deadlines. The day-to-day of the travel business taught me to deal with systems, processes and real business pressure, long before I wrote my first line of code.",
         "Today I hold a degree in Systems Analysis and Development and bring four areas together in every delivery: design, databases, web development and automation. That's why I understand your business problem before proposing a solution, and deliver the whole product, not just a piece of it.",
       ],
       photoAlt: "Photo of Mateus Fantin",
@@ -863,7 +863,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         { value: 15, suffix: "+", label: "tools used daily" },
       ],
       journey: [
-        { title: "Travel operations", detail: "CVC Corp · airline products" },
+        { title: "Travel operations", detail: "CVC Corp · operations and groups" },
         { title: "Systems Analysis and Development", detail: "Impacta · 2024–2026" },
         { title: "Web development", detail: "Sites, systems and dashboards" },
         { title: "Automation and data", detail: "Today" },
