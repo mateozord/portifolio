@@ -10,7 +10,6 @@ import { Hero } from "@/components/hero";
 import { TechMarquee } from "@/components/tech-marquee";
 import { ServicesSection } from "@/components/services-section";
 import { ProjectsSection } from "@/components/projects-section";
-import { PricingSection } from "@/components/pricing-section";
 import { AboutSection } from "@/components/about-section";
 import { ProcessSection } from "@/components/process-section";
 import { ContactSection } from "@/components/contact-section";
@@ -57,7 +56,6 @@ export default function Home() {
         <TechMarquee label={dictionary.marqueeLabel} />
         <ServicesSection dictionary={dictionary} />
         <ProjectsSection dictionary={dictionary} onSimilar={handleSimilar} />
-        <PricingSection dictionary={dictionary} locale={locale} />
         <AboutSection dictionary={dictionary} />
         <ProcessSection dictionary={dictionary} />
         <ContactSection

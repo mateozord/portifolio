@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowUp } from "lucide-react";
+import Link from "next/link";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { profile, type PortfolioDictionary } from "@/content/portfolio-content";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/brand-icons";
 import { EASE_OUT } from "@/lib/cn";
@@ -20,6 +21,10 @@ export function SiteFooter({ dictionary }: { dictionary: PortfolioDictionary }) 
         <div>
           <p className="font-semibold">{profile.name}</p>
           <p className="text-muted mt-1 text-sm">{footer.tagline}</p>
+          <Link href="/negocios" className="focus-ring text-ink-soft hover:text-ink mt-2 inline-flex items-center gap-1 rounded text-sm font-medium underline-offset-4 hover:underline">
+            {footer.business}
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
         <div className="flex items-center gap-2">
           {socials.map(({ href, label, icon: Icon }) => (

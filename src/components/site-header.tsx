@@ -8,7 +8,7 @@ import { LocaleToggle } from "@/components/locale-toggle";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn, EASE_OUT } from "@/lib/cn";
 
-const SECTIONS = ["services", "projects", "pricing", "about", "process", "contact"] as const;
+const SECTIONS = ["services", "projects", "about", "process", "contact"] as const;
 type SectionId = (typeof SECTIONS)[number];
 
 export function SiteHeader({ dictionary, locale }: { dictionary: PortfolioDictionary; locale: Locale }) {

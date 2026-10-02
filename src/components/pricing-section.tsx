@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Check, Wrench } from "lucide-react";
 import { profile, type Locale, type PortfolioDictionary } from "@/content/portfolio-content";
@@ -106,21 +105,6 @@ export function PricingSection({ dictionary, locale }: { dictionary: PortfolioDi
       </Reveal>
 
       <p className="text-muted mt-6 text-center text-sm">{pricing.note}</p>
-
-      {/* Demonstrações: o cliente vê na prática o que recebe em cada plano */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
-        <span className="text-ink-soft font-medium">{pricing.examples.label}</span>
-        {pricing.examples.links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="focus-ring chip group hover:border-line-strong font-semibold transition-colors"
-          >
-            {link.name}
-            <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-45" />
-          </Link>
-        ))}
-      </div>
     </section>
   );
 }

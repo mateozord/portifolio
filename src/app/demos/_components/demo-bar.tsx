@@ -16,15 +16,15 @@ export type DemoKind = keyof typeof KINDS;
 
 const BAR = {
   pt: {
-    back: "Voltar ao portfólio",
-    backShort: "Portfólio",
+    back: "Ver todos os exemplos",
+    backShort: "Exemplos",
     notice: "Demonstração · negócio fictício criado por Mateus Fantin",
     cta: "Quero um site assim",
     message: (kind: string) => `Olá, Mateus! Vi a demonstração de site de ${kind} e quero um site assim para o meu negócio.`,
   },
   en: {
-    back: "Back to portfolio",
-    backShort: "Portfolio",
+    back: "See all examples",
+    backShort: "Examples",
     notice: "Demo · fictional business created by Mateus Fantin",
     cta: "I want a site like this",
     message: (kind: string) => `Hi Mateus! I saw your ${kind} website demo and I want a site like this for my business.`,
@@ -39,8 +39,8 @@ export function demoWhatsapp(kind: DemoKind, locale: Locale) {
 
 /**
  * Faixa no topo de toda demonstração: deixa claro que o negócio é fictício,
- * volta ao portfólio, troca o idioma (o mesmo do portfólio) e leva direto ao
- * WhatsApp de quem quer um site igual.
+ * volta para os exemplos em /negocios, troca o idioma (o mesmo do portfólio)
+ * e leva direto ao WhatsApp de quem quer um site igual.
  */
 export function DemoBar({ kind }: { kind: DemoKind }) {
   const locale = useLocale();
@@ -53,7 +53,7 @@ export function DemoBar({ kind }: { kind: DemoKind }) {
   return (
     <div className="relative z-50 bg-[#111] font-sans text-xs text-white/80 sm:text-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5">
-        <Link href="/#pricing" className="inline-flex shrink-0 items-center gap-1.5 hover:text-white">
+        <Link href="/negocios#exemplos" className="inline-flex shrink-0 items-center gap-1.5 hover:text-white">
           <ArrowLeft className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">{t.back}</span>
           <span className="sm:hidden">{t.backShort}</span>

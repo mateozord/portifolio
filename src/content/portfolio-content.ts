@@ -31,7 +31,6 @@ export type PortfolioDictionary = {
   nav: {
     services: string;
     projects: string;
-    pricing: string;
     about: string;
     process: string;
     contact: string;
@@ -69,8 +68,6 @@ export type PortfolioDictionary = {
     plans: { name: string; price: number; description: string; features: string[]; popular?: boolean }[];
     maintenance: { name: string; price: number; description: string; features: string[] };
     note: string;
-    /** Demonstrações de sites para negócios locais (rotas em /demos). */
-    examples: { label: string; links: { name: string; href: string }[] };
   };
   services: {
     eyebrow: string;
@@ -150,7 +147,8 @@ export type PortfolioDictionary = {
       hint: string;
     };
   };
-  footer: { tagline: string; builtWith: string; backToTop: string };
+  /** business: link discreto para a página de sites para negócios locais (/negocios). */
+  footer: { tagline: string; builtWith: string; backToTop: string; business: string };
 };
 
 export const profile = {
@@ -469,7 +467,6 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     nav: {
       services: "Serviços",
       projects: "Projetos",
-      pricing: "Preços",
       about: "Sobre",
       process: "Processo",
       contact: "Contato",
@@ -544,14 +541,6 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         features: ["Atualização de horários, preços e avisos", "Backups", "Velocidade e segurança em dia"],
       },
       note: "Valores de referência. Cada negócio é diferente: me conte o que você precisa e eu te passo um orçamento fechado.",
-      examples: {
-        label: "Veja exemplos prontos:",
-        links: [
-          { name: "Academia", href: "/demos/academia" },
-          { name: "Mercado", href: "/demos/mercado" },
-          { name: "Restaurante", href: "/demos/restaurante" },
-        ],
-      },
     },
     reel: { words: ["Projetos", "reais"], cta: "Ver projetos", caption: "Sites e sistemas no ar, feitos do zero" },
     services: {
@@ -705,13 +694,13 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       tagline: "Sites, sistemas e automações com design próprio.",
       builtWith: "Feito com Next.js, Tailwind CSS e Framer Motion.",
       backToTop: "Voltar ao topo",
+      business: "Sites para negócios locais",
     },
   },
   en: {
     nav: {
       services: "Services",
       projects: "Projects",
-      pricing: "Pricing",
       about: "About",
       process: "Process",
       contact: "Contact",
@@ -781,14 +770,6 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         features: ["Updates to hours, prices and notices", "Backups", "Speed and security kept in check"],
       },
       note: "Reference prices. Every business is different: tell me what you need and I'll send you a fixed quote.",
-      examples: {
-        label: "See live examples:",
-        links: [
-          { name: "Gym", href: "/demos/academia" },
-          { name: "Grocery store", href: "/demos/mercado" },
-          { name: "Restaurant", href: "/demos/restaurante" },
-        ],
-      },
     },
     reel: { words: ["Real", "work"], cta: "See projects", caption: "Live sites and systems, built from scratch" },
     services: {
@@ -942,6 +923,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       tagline: "Websites, systems and automations with original design.",
       builtWith: "Built with Next.js, Tailwind CSS and Framer Motion.",
       backToTop: "Back to top",
+      business: "Websites for local businesses",
     },
   },
 };
