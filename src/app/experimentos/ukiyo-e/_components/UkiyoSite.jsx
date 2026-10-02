@@ -31,6 +31,18 @@ export default function UkiyoSite() {
     document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
   }, [locale]);
 
+  // Desempenho: seções fora da tela ganham data-offscreen e suas animações CSS pausam
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) entry.target.toggleAttribute("data-offscreen", !entry.isIntersecting);
+      },
+      { rootMargin: "200px 0px" },
+    );
+    document.querySelectorAll(".ukiyo main > *, .ukiyo > footer, .ukiyo > [data-tides]").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   // "Quero um projeto assim": preenche o assunto e desce até o lago.
   const handleSimilar = useCallback(
     (project) => {
@@ -61,7 +73,9 @@ export default function UkiyoSite() {
           <Process dictionary={dictionary} copy={copy} />
           <Contact dictionary={dictionary} copy={copy} subject={subject} onSubjectChange={setSubject} prefillKey={prefillKey} />
         </main>
-        <FooterTides />
+        <div data-tides>
+          <FooterTides />
+        </div>
         <Footer dictionary={dictionary} copy={copy} />
         <div aria-hidden className="u-grain" />
       </div>

@@ -170,7 +170,9 @@ export function SeigaihaBand({ className = "", height = 28, opacity = 1 }) {
   const id = `sg-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const arcs = [20, 15, 10, 5];
   return (
-    <svg aria-hidden className={className} width="100%" height={height} style={{ opacity }}>
+    // O padrão desliza movendo a camada inteira (CSS transform), sem redesenhar
+    <div aria-hidden className={`overflow-hidden ${className}`} style={{ height, opacity }}>
+    <svg className="u-slide block" width="calc(100% + 40px)" height={height} style={{ "--slide": "40px", animationDuration: "14s" }}>
       <defs>
         <pattern id={id} width="40" height="20" patternUnits="userSpaceOnUse">
           {[
@@ -189,11 +191,11 @@ export function SeigaihaBand({ className = "", height = 28, opacity = 1 }) {
               />
             )),
           )}
-          <animateTransform attributeName="patternTransform" type="translate" from="0 0" to="40 0" dur="14s" repeatCount="indefinite" />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill={`url(#${id})`} />
     </svg>
+    </div>
   );
 }
 

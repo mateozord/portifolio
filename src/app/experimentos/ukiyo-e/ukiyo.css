@@ -125,14 +125,11 @@ html:has(.ukiyo) body {
   position: fixed;
   inset: 0;
   z-index: 60;
-  opacity: var(--u-grain-opacity);
-  mix-blend-mode: multiply;
+  /* Sem mix-blend-mode: misturar uma camada de tela cheia custa caro em cada quadro */
+  opacity: calc(var(--u-grain-opacity) * 0.6);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.18 0 0 0 0.28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.dark .u-grain {
-  mix-blend-mode: screen;
-}
 
 /* Cartão de papel com moldura dupla, como a borda de uma gravura */
 .u-print {
@@ -306,73 +303,57 @@ html:has(.ukiyo) body {
   }
 }
 
-/* ---------- Mar vetorial animado do hero ---------- */
-.u-sea-drift {
-  animation: u-sea-drift linear infinite;
+/* ---------- Desempenho ---------- */
+/* Animações que só movem camadas (a placa de vídeo faz, sem redesenhar) */
+.u-slide {
+  animation: u-slide linear infinite;
   will-change: transform;
 }
 
-@keyframes u-sea-drift {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
+@keyframes u-slide {
   to {
-    transform: translate3d(calc(-1 * var(--period)), 0, 0);
+    transform: translate3d(var(--slide), 0, 0);
   }
 }
 
-.u-sea-bob {
-  animation: u-sea-bob ease-in-out infinite alternate;
+.u-float {
+  animation: u-float ease-in-out infinite;
 }
 
-@keyframes u-sea-bob {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(var(--bob));
-  }
-}
-
-.u-foam-bob {
-  animation: u-foam-bob 2.6s ease-in-out infinite alternate;
-}
-
-@keyframes u-foam-bob {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-5px);
-  }
-}
-
-.u-sea-drop {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: u-sea-drop ease-out infinite;
-}
-
-@keyframes u-sea-drop {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.6);
-  }
-  15% {
-    opacity: 1;
-  }
+@keyframes u-float {
+  0%,
   100% {
-    opacity: 0;
-    transform: translate(-14px, var(--rise)) scale(1);
+    transform: translateY(0);
   }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Seções fora da tela: todas as animações CSS congelam (UkiyoSite marca com data-offscreen) */
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .u-sea-drift,
-  .u-sea-bob,
-  .u-foam-bob,
-  .u-sea-drop {
+  .u-slide,
+  .u-float {
     animation: none;
+  }
+}
+
+/* Convite para rolar: um traço vermelho descendo */
+.u-scroll-cue {
+  animation: u-scroll-cue 1.6s ease-in-out infinite;
+}
+
+@keyframes u-scroll-cue {
+  from {
+    transform: translateY(-10px);
+  }
+  to {
+    transform: translateY(22px);
   }
 }

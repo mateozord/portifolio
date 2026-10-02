@@ -76,7 +76,6 @@ function Layer({ x, y, depth, rotate = 0, delay, float, className, children }) {
   // Camadas mais "perto" (depth maior) se movem mais: dá profundidade.
   const tx = useTransform(x, (v) => v * depth);
   const ty = useTransform(y, (v) => v * depth);
-  const reduceMotion = useReducedMotion();
 
   return (
     <motion.div style={{ x: tx, y: ty }} className={`absolute ${className}`}>
@@ -86,12 +85,9 @@ function Layer({ x, y, depth, rotate = 0, delay, float, className, children }) {
         viewport={{ once: true, amount: 0.3 }}
         transition={{ type: "spring", stiffness: 70, damping: 16, delay }}
       >
-        <motion.div
-          animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
-          transition={{ duration: float, repeat: Infinity, ease: "easeInOut", delay: delay + 1 }}
-        >
+        <div className="u-float" style={{ animationDuration: `${float}s`, animationDelay: `${delay + 1}s` }}>
           {children}
-        </motion.div>
+        </div>
       </motion.div>
     </motion.div>
   );

@@ -21,7 +21,7 @@ export const ukiyoCopy = {
       lead: "Sites, sistemas e automações que fluem como a maré.",
       body: "Uno design, banco de dados, código e automação com a paciência de uma gravura japonesa: cada camada no lugar certo, do primeiro traço ao site no ar.",
       cartouche: "波と共に",
-      scroll: "Role para mergulhar",
+      scroll: "Role para a onda quebrar",
     },
     tools: "Ferramentas do dia a dia",
     services: {
@@ -47,7 +47,7 @@ export const ukiyoCopy = {
     footer: {
       tagline: "Feito com calma, ondas e código.",
       classic: "Ver a versão clássica",
-      credits: "Ondas desenhadas em código, inspiradas nas estampas japonesas e em Hokusai.",
+      credits: "Gravura: A Grande Onda de Kanagawa, Katsushika Hokusai (c. 1831), domínio público.",
     },
   },
   en: {
@@ -57,7 +57,7 @@ export const ukiyoCopy = {
       lead: "Websites, systems and automations that flow like the tide.",
       body: "I bring design, databases, code and automation together with the patience of a Japanese woodblock print: every layer in its place, from the first stroke to a live site.",
       cartouche: "波と共に",
-      scroll: "Scroll to dive in",
+      scroll: "Scroll to break the wave",
     },
     tools: "Tools I use every day",
     services: {
@@ -83,7 +83,7 @@ export const ukiyoCopy = {
     footer: {
       tagline: "Made with patience, waves and code.",
       classic: "See the classic version",
-      credits: "Waves drawn in code, inspired by Japanese wave prints and Hokusai.",
+      credits: "Print: The Great Wave off Kanagawa, Katsushika Hokusai (c. 1831), public domain.",
     },
   },
 };
