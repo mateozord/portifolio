@@ -544,7 +544,14 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         features: ["Atualização de horários, preços e avisos", "Backups", "Velocidade e segurança em dia"],
       },
       note: "Valores de referência. Cada negócio é diferente: me conte o que você precisa e eu te passo um orçamento fechado.",
-      examples: { label: "Veja um exemplo pronto:", links: [{ name: "Site de academia", href: "/demos/academia" }] },
+      examples: {
+        label: "Veja exemplos prontos:",
+        links: [
+          { name: "Academia", href: "/demos/academia" },
+          { name: "Mercado", href: "/demos/mercado" },
+          { name: "Restaurante", href: "/demos/restaurante" },
+        ],
+      },
     },
     reel: { words: ["Projetos", "reais"], cta: "Ver projetos", caption: "Sites e sistemas no ar, feitos do zero" },
     services: {
@@ -774,7 +781,14 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         features: ["Updates to hours, prices and notices", "Backups", "Speed and security kept in check"],
       },
       note: "Reference prices. Every business is different: tell me what you need and I'll send you a fixed quote.",
-      examples: { label: "See a live example:", links: [{ name: "Gym website", href: "/demos/academia" }] },
+      examples: {
+        label: "See live examples:",
+        links: [
+          { name: "Gym", href: "/demos/academia" },
+          { name: "Grocery store", href: "/demos/mercado" },
+          { name: "Restaurant", href: "/demos/restaurante" },
+        ],
+      },
     },
     reel: { words: ["Real", "work"], cta: "See projects", caption: "Live sites and systems, built from scratch" },
     services: {

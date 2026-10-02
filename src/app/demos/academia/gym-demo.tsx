@@ -17,85 +17,189 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { WhatsappIcon } from "@/components/brand-icons";
+import { useLocale } from "@/lib/locale-store";
 import { DemoBar, demoWhatsapp } from "../_components/demo-bar";
 
 /*
- * Demonstração: landing page de uma academia fictícia (Vértice). Entrega o
- * plano "Landing page" do portfólio: modalidades, horários, planos, mapa e
- * WhatsApp. Sem fotos: a identidade vem da tipografia condensada, do preto
- * com verde-limão e de uma "anilha" geométrica girando no hero.
+ * Demonstração: landing page de uma academia fictícia (Vértice), em pt e en.
+ * Entrega o plano "Landing page" do portfólio: modalidades, horários, planos,
+ * mapa e WhatsApp. Sem fotos: a identidade vem da tipografia condensada, do
+ * preto com verde-limão e de uma "anilha" geométrica girando no hero.
  */
 
 const LIME = "#c8ff2e";
-const WHATSAPP = demoWhatsapp("academia");
 
-const MODALITIES: { icon: LucideIcon; name: string; text: string; when: string }[] = [
-  { icon: Dumbbell, name: "Musculação", text: "Área completa com equipamentos novos e professores no salão o dia todo.", when: "Todos os dias" },
-  { icon: Zap, name: "Funcional", text: "Treinos em grupo de 45 minutos para condicionamento e força.", when: "Seg a sáb" },
-  { icon: Bike, name: "Spinning", text: "Aulas com música e luz baixa, para queimar calorias sem impacto.", when: "Seg, qua e sex" },
-  { icon: Swords, name: "Muay Thai", text: "Técnica, condicionamento e defesa pessoal, do iniciante ao avançado.", when: "Ter, qui e sáb" },
-  { icon: HeartPulse, name: "Pilates", text: "Postura, mobilidade e fortalecimento em turmas pequenas.", when: "Seg a sex" },
-  { icon: Flame, name: "Cross", text: "Alta intensidade com levantamentos e circuitos cronometrados.", when: "Seg a sáb" },
+// Ícones na mesma ordem de COPY[locale].modalities.items
+const MODALITY_ICONS: LucideIcon[] = [Dumbbell, Zap, Bike, Swords, HeartPulse, Flame];
+const PLAN_PRICES = [99.9, 149.9, 249.9];
+const COACHES = { F: "Rafa", S: "Lia", P: "Bia", C: "Caio", M: "Duda" } as const;
+// Grade: horário + código da aula (F funcional, S spinning, P pilates, C cross, M muay thai)
+const SCHEDULE: [string, keyof typeof COACHES][][] = [
+  [["06:30", "F"], ["07:30", "S"], ["12:15", "P"], ["18:30", "C"], ["19:30", "F"]],
+  [["06:30", "C"], ["12:15", "P"], ["19:00", "M"], ["20:00", "F"]],
+  [["06:30", "F"], ["07:30", "S"], ["12:15", "P"], ["18:30", "C"], ["19:30", "S"]],
+  [["06:30", "C"], ["12:15", "P"], ["19:00", "M"], ["20:00", "F"]],
+  [["06:30", "F"], ["07:30", "S"], ["18:30", "C"]],
+  [["09:00", "F"], ["10:00", "M"], ["11:00", "C"]],
 ];
 
-const HOURS = [
-  { day: "Segunda a sexta", time: "5h às 23h" },
-  { day: "Sábado", time: "8h às 18h" },
-  { day: "Domingo e feriados", time: "8h às 13h" },
-];
-
-const DAYS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"] as const;
-const SCHEDULE: Record<(typeof DAYS)[number], { time: string; name: string; coach: string }[]> = {
-  Seg: [
-    { time: "06:30", name: "Funcional", coach: "Prof. Rafa" },
-    { time: "07:30", name: "Spinning", coach: "Prof. Lia" },
-    { time: "12:15", name: "Pilates", coach: "Prof. Bia" },
-    { time: "18:30", name: "Cross", coach: "Prof. Caio" },
-    { time: "19:30", name: "Funcional", coach: "Prof. Rafa" },
-  ],
-  Ter: [
-    { time: "06:30", name: "Cross", coach: "Prof. Caio" },
-    { time: "12:15", name: "Pilates", coach: "Prof. Bia" },
-    { time: "19:00", name: "Muay Thai", coach: "Prof. Duda" },
-    { time: "20:00", name: "Funcional", coach: "Prof. Rafa" },
-  ],
-  Qua: [
-    { time: "06:30", name: "Funcional", coach: "Prof. Rafa" },
-    { time: "07:30", name: "Spinning", coach: "Prof. Lia" },
-    { time: "12:15", name: "Pilates", coach: "Prof. Bia" },
-    { time: "18:30", name: "Cross", coach: "Prof. Caio" },
-    { time: "19:30", name: "Spinning", coach: "Prof. Lia" },
-  ],
-  Qui: [
-    { time: "06:30", name: "Cross", coach: "Prof. Caio" },
-    { time: "12:15", name: "Pilates", coach: "Prof. Bia" },
-    { time: "19:00", name: "Muay Thai", coach: "Prof. Duda" },
-    { time: "20:00", name: "Funcional", coach: "Prof. Rafa" },
-  ],
-  Sex: [
-    { time: "06:30", name: "Funcional", coach: "Prof. Rafa" },
-    { time: "07:30", name: "Spinning", coach: "Prof. Lia" },
-    { time: "18:30", name: "Cross", coach: "Prof. Caio" },
-  ],
-  Sáb: [
-    { time: "09:00", name: "Funcional", coach: "Prof. Rafa" },
-    { time: "10:00", name: "Muay Thai", coach: "Prof. Duda" },
-    { time: "11:00", name: "Cross", coach: "Prof. Caio" },
-  ],
-};
-
-const PLANS = [
-  { name: "Básico", monthly: 99.9, perks: ["Musculação livre", "Avaliação física", "App de treinos"] },
-  {
-    name: "Completo",
-    monthly: 149.9,
-    perks: ["Tudo do Básico", "Todas as aulas coletivas", "1 aula de Pilates por semana", "Leve um amigo 1x por mês"],
-    highlight: true,
+const COPY = {
+  pt: {
+    nav: [
+      ["Modalidades", "#modalidades"],
+      ["Horários", "#horarios"],
+      ["Planos", "#planos"],
+      ["Localização", "#localizacao"],
+    ],
+    freeClass: "Aula grátis",
+    hero: {
+      badge: "Primeira aula grátis · sem taxa de matrícula",
+      line1: "Treine no",
+      line2: "seu",
+      accent: "limite.",
+      text: "Musculação, funcional, lutas e aulas coletivas no centro da cidade. Aberto das 5h às 23h para caber na sua rotina.",
+      primary: "Agendar aula grátis",
+      secondary: "Ver planos",
+      stats: [
+        ["5h–23h", "aberto"],
+        ["6", "modalidades"],
+        ["1ª aula", "grátis"],
+      ],
+    },
+    classes: { F: "Funcional", S: "Spinning", P: "Pilates", C: "Cross", M: "Muay Thai" },
+    coach: "Prof.",
+    modalities: {
+      kicker: "Modalidades",
+      title: "Escolha seu treino",
+      text: "Todas incluídas no plano Completo. Professores no salão em todos os horários.",
+      items: [
+        ["Musculação", "Área completa com equipamentos novos e professores no salão o dia todo.", "Todos os dias"],
+        ["Funcional", "Treinos em grupo de 45 minutos para condicionamento e força.", "Seg a sáb"],
+        ["Spinning", "Aulas com música e luz baixa, para queimar calorias sem impacto.", "Seg, qua e sex"],
+        ["Muay Thai", "Técnica, condicionamento e defesa pessoal, do iniciante ao avançado.", "Ter, qui e sáb"],
+        ["Pilates", "Postura, mobilidade e fortalecimento em turmas pequenas.", "Seg a sex"],
+        ["Cross", "Alta intensidade com levantamentos e circuitos cronometrados.", "Seg a sáb"],
+      ],
+    },
+    hours: {
+      kicker: "Horários",
+      title: "Aberto quando você pode",
+      list: [
+        ["Segunda a sexta", "5h às 23h"],
+        ["Sábado", "8h às 18h"],
+        ["Domingo e feriados", "8h às 13h"],
+      ],
+      grid: "Grade de aulas",
+      dayLabel: "Dia da semana",
+      days: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+    },
+    plans: {
+      kicker: "Planos",
+      title: "Sem taxa de matrícula",
+      text: "Cancele quando quiser no plano mensal. No anual, você economiza 20%.",
+      monthly: "Mensal",
+      yearly: "Anual −20%",
+      perMonth: "/mês",
+      perYear: "por ano",
+      noLock: "Sem fidelidade",
+      popular: "Mais escolhido",
+      cta: "Quero esse plano",
+      items: [
+        ["Básico", ["Musculação livre", "Avaliação física", "App de treinos"]],
+        ["Completo", ["Tudo do Básico", "Todas as aulas coletivas", "1 aula de Pilates por semana", "Leve um amigo 1x por mês"]],
+        ["Duo", ["Plano Completo para 2 pessoas", "Mesma conta, dois acessos", "Ideal para casais e amigos"]],
+      ] as [string, string[]][],
+    },
+    location: {
+      kicker: "Localização",
+      title: "Fácil de chegar",
+      address: ["Rua Exemplo, 123 · Centro", "São Paulo · SP"],
+      note: "Estacionamento conveniado e a 5 minutos do metrô.",
+      cta: "Chamar no WhatsApp",
+      map: "Mapa da localização",
+    },
+    footer: { hours: "Seg a sex 5h–23h · Sáb 8h–18h · Dom 8h–13h", credit: "Site demonstrativo por" },
+    whatsapp: "Falar no WhatsApp",
   },
-  { name: "Duo", monthly: 249.9, perks: ["Plano Completo para 2 pessoas", "Mesma conta, dois acessos", "Ideal para casais e amigos"] },
-];
-
-const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+  en: {
+    nav: [
+      ["Classes", "#modalidades"],
+      ["Hours", "#horarios"],
+      ["Plans", "#planos"],
+      ["Location", "#localizacao"],
+    ],
+    freeClass: "Free class",
+    hero: {
+      badge: "First class free · no sign-up fee",
+      line1: "Train at",
+      line2: "your",
+      accent: "limit.",
+      text: "Strength training, functional, martial arts and group classes downtown. Open 5am to 11pm to fit your routine.",
+      primary: "Book a free class",
+      secondary: "See plans",
+      stats: [
+        ["5am–11pm", "open"],
+        ["6", "class types"],
+        ["1st class", "free"],
+      ],
+    },
+    classes: { F: "Functional", S: "Spinning", P: "Pilates", C: "Cross", M: "Muay Thai" },
+    coach: "Coach",
+    modalities: {
+      kicker: "Classes",
+      title: "Pick your workout",
+      text: "All included in the Complete plan. Coaches on the floor at all hours.",
+      items: [
+        ["Strength", "A full weights area with new equipment and coaches on the floor all day.", "Every day"],
+        ["Functional", "45-minute group workouts for conditioning and strength.", "Mon to Sat"],
+        ["Spinning", "Classes with music and low lights to burn calories without impact.", "Mon, Wed and Fri"],
+        ["Muay Thai", "Technique, conditioning and self-defense, from beginner to advanced.", "Tue, Thu and Sat"],
+        ["Pilates", "Posture, mobility and strength in small groups.", "Mon to Fri"],
+        ["Cross", "High intensity with lifts and timed circuits.", "Mon to Sat"],
+      ],
+    },
+    hours: {
+      kicker: "Hours",
+      title: "Open when you can",
+      list: [
+        ["Monday to Friday", "5am to 11pm"],
+        ["Saturday", "8am to 6pm"],
+        ["Sundays and holidays", "8am to 1pm"],
+      ],
+      grid: "Class schedule",
+      dayLabel: "Day of the week",
+      days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    },
+    plans: {
+      kicker: "Plans",
+      title: "No sign-up fee",
+      text: "Cancel anytime on the monthly plan. Save 20% with the yearly plan.",
+      monthly: "Monthly",
+      yearly: "Yearly −20%",
+      perMonth: "/mo",
+      perYear: "per year",
+      noLock: "No commitment",
+      popular: "Most popular",
+      cta: "I want this plan",
+      items: [
+        ["Basic", ["Open strength training", "Fitness assessment", "Workout app"]],
+        ["Complete", ["Everything in Basic", "All group classes", "1 Pilates class per week", "Bring a friend once a month"]],
+        ["Duo", ["Complete plan for 2 people", "One account, two passes", "Great for couples and friends"]],
+      ] as [string, string[]][],
+    },
+    location: {
+      kicker: "Location",
+      title: "Easy to get to",
+      address: ["123 Example Street · Downtown", "São Paulo · SP"],
+      note: "Partner parking and 5 minutes from the subway.",
+      cta: "Message us on WhatsApp",
+      map: "Location map",
+    },
+    footer: { hours: "Mon–Fri 5am–11pm · Sat 8am–6pm · Sun 8am–1pm", credit: "Demo website by" },
+    whatsapp: "Chat on WhatsApp",
+  },
+};
+type Copy = (typeof COPY)["pt"];
 
 const fadeUp = {
   initial: { opacity: 0, y: 32 },
@@ -105,24 +209,29 @@ const fadeUp = {
 };
 
 export function GymDemo() {
+  const locale = useLocale();
+  const t = COPY[locale];
+  const whatsapp = demoWhatsapp("academia", locale);
+  const money = new Intl.NumberFormat(locale === "pt" ? "pt-BR" : "en-US", { style: "currency", currency: "BRL" });
+
   return (
     <div className="min-h-screen bg-[#0b0b0c] font-sans text-white antialiased selection:bg-[#c8ff2e] selection:text-black">
       <DemoBar kind="academia" />
-      <Header />
+      <Header t={t} whatsapp={whatsapp} />
       <main>
-        <Hero />
-        <Ticker />
-        <Modalities />
-        <Schedule />
-        <Plans />
-        <Location />
+        <Hero t={t} whatsapp={whatsapp} />
+        <Ticker t={t} />
+        <Modalities t={t} />
+        <Schedule t={t} />
+        <Plans t={t} whatsapp={whatsapp} money={money} />
+        <Location t={t} whatsapp={whatsapp} />
       </main>
-      <Footer />
+      <Footer t={t} />
       <a
-        href={WHATSAPP}
+        href={whatsapp}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Falar no WhatsApp"
+        aria-label={t.whatsapp}
         className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 grid h-14 w-14 place-items-center rounded-full text-black shadow-[0_12px_30px_-8px_rgb(200_255_46/0.6)] transition-transform hover:scale-105"
         style={{ background: LIME }}
       >
@@ -148,39 +257,34 @@ function Logo() {
   );
 }
 
-function Header() {
-  const links = [
-    ["Modalidades", "#modalidades"],
-    ["Horários", "#horarios"],
-    ["Planos", "#planos"],
-    ["Localização", "#localizacao"],
-  ];
+function Header({ t, whatsapp }: { t: Copy; whatsapp: string }) {
   return (
     <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0b0b0c]/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
         <Logo />
         <nav className="hidden gap-7 text-sm text-white/70 md:flex">
-          {links.map(([label, href]) => (
+          {t.nav.map(([label, href]) => (
             <a key={href} href={href} className="hover:text-white">
               {label}
             </a>
           ))}
         </nav>
         <a
-          href={WHATSAPP}
+          href={whatsapp}
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-full px-4 py-2 text-sm font-bold text-black"
           style={{ background: LIME }}
         >
-          Aula grátis
+          {t.freeClass}
         </a>
       </div>
     </header>
   );
 }
 
-function Hero() {
+function Hero({ t, whatsapp }: { t: Copy; whatsapp: string }) {
+  const hero = t.hero;
   return (
     <section id="inicio" className="relative overflow-hidden">
       {/* Nome gigante vazado ao fundo */}
@@ -191,39 +295,35 @@ function Hero() {
         <div>
           <motion.p {...fadeUp} className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 text-xs text-white/75">
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: LIME }} />
-            Primeira aula grátis · sem taxa de matrícula
+            {hero.badge}
           </motion.p>
           <motion.h1 {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.05 }} className="mt-6 leading-[0.92]">
-            <Display className="block text-[17vw] sm:text-7xl lg:text-[6.5rem]">Treine no</Display>
+            <Display className="block text-[17vw] sm:text-7xl lg:text-[6.5rem]">{hero.line1}</Display>
             <Display className="block text-[17vw] sm:text-7xl lg:text-[6.5rem]">
-              seu <span style={{ color: LIME }}>limite.</span>
+              {hero.line2} <span style={{ color: LIME }}>{hero.accent}</span>
             </Display>
           </motion.h1>
           <motion.p {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="mt-6 max-w-md text-lg text-white/70">
-            Musculação, funcional, lutas e aulas coletivas no centro da cidade. Aberto das 5h às 23h para caber na sua rotina.
+            {hero.text}
           </motion.p>
           <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.15 }} className="mt-9 flex flex-wrap gap-3">
             <a
-              href={WHATSAPP}
+              href={whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold text-black"
               style={{ background: LIME }}
             >
               <WhatsappIcon className="h-5 w-5" />
-              Agendar aula grátis
+              {hero.primary}
             </a>
             <a href="#planos" className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3.5 font-semibold hover:bg-white/5">
-              Ver planos
+              {hero.secondary}
               <ArrowRight className="h-4 w-4" />
             </a>
           </motion.div>
           <dl className="mt-12 grid max-w-md grid-cols-3 gap-4 border-t border-white/10 pt-6">
-            {[
-              ["5h–23h", "aberto"],
-              ["6", "modalidades"],
-              ["1ª aula", "grátis"],
-            ].map(([value, label]) => (
+            {hero.stats.map(([value, label]) => (
               <div key={label}>
                 <dt className="sr-only">{label}</dt>
                 <dd>
@@ -267,8 +367,8 @@ function Plate() {
   );
 }
 
-function Ticker() {
-  const items = ["Musculação", "Funcional", "Spinning", "Muay Thai", "Pilates", "Cross"];
+function Ticker({ t }: { t: Copy }) {
+  const items = t.modalities.items.map(([name]) => name);
   const row = [...items, ...items];
   return (
     <div className="overflow-hidden py-3 text-black" style={{ background: LIME }}>
@@ -302,42 +402,47 @@ function SectionTitle({ kicker, title, text }: { kicker: string; title: string; 
   );
 }
 
-function Modalities() {
+function Modalities({ t }: { t: Copy }) {
+  const section = t.modalities;
   return (
     <section id="modalidades" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-24 sm:px-6">
-      <SectionTitle kicker="Modalidades" title="Escolha seu treino" text="Todas incluídas no plano Completo. Professores no salão em todos os horários." />
+      <SectionTitle kicker={section.kicker} title={section.title} text={section.text} />
       <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {MODALITIES.map(({ icon: Icon, name, text, when }, i) => (
-          <motion.article
-            key={name}
-            {...fadeUp}
-            transition={{ ...fadeUp.transition, delay: (i % 3) * 0.08 }}
-            className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-[#c8ff2e]/60"
-          >
-            <span className="grid h-12 w-12 place-items-center rounded-xl bg-white/5 transition-colors group-hover:bg-[#c8ff2e] group-hover:text-black">
-              <Icon className="h-6 w-6" />
-            </span>
-            <h3 className="mt-5 text-xl font-bold">{name}</h3>
-            <p className="mt-2 text-[0.95rem] leading-relaxed text-white/65">{text}</p>
-            <p className="mt-4 text-sm font-semibold" style={{ color: LIME }}>
-              {when}
-            </p>
-          </motion.article>
-        ))}
+        {section.items.map(([name, text, when], i) => {
+          const Icon = MODALITY_ICONS[i];
+          return (
+            <motion.article
+              key={i}
+              {...fadeUp}
+              transition={{ ...fadeUp.transition, delay: (i % 3) * 0.08 }}
+              className="group rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition-colors hover:border-[#c8ff2e]/60"
+            >
+              <span className="grid h-12 w-12 place-items-center rounded-xl bg-white/5 transition-colors group-hover:bg-[#c8ff2e] group-hover:text-black">
+                <Icon className="h-6 w-6" />
+              </span>
+              <h3 className="mt-5 text-xl font-bold">{name}</h3>
+              <p className="mt-2 text-[0.95rem] leading-relaxed text-white/65">{text}</p>
+              <p className="mt-4 text-sm font-semibold" style={{ color: LIME }}>
+                {when}
+              </p>
+            </motion.article>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-function Schedule() {
-  const [day, setDay] = useState<(typeof DAYS)[number]>("Seg");
+function Schedule({ t }: { t: Copy }) {
+  const [day, setDay] = useState(0);
+  const hours = t.hours;
   return (
     <section id="horarios" className="scroll-mt-20 border-y border-white/10 bg-white/[0.02]">
       <div className="mx-auto grid max-w-6xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <SectionTitle kicker="Horários" title="Aberto quando você pode" />
+          <SectionTitle kicker={hours.kicker} title={hours.title} />
           <ul className="mt-10 space-y-3">
-            {HOURS.map(({ day: label, time }) => (
+            {hours.list.map(([label, time]) => (
               <li key={label} className="flex items-center justify-between rounded-xl border border-white/10 px-5 py-4">
                 <span className="flex items-center gap-3 text-white/80">
                   <Clock className="h-4 w-4" style={{ color: LIME }} />
@@ -350,33 +455,35 @@ function Schedule() {
         </div>
 
         <motion.div {...fadeUp} className="rounded-2xl border border-white/10 bg-[#111113] p-5 sm:p-7">
-          <h3 className="text-lg font-bold">Grade de aulas</h3>
-          <div role="tablist" aria-label="Dia da semana" className="mt-5 grid grid-cols-6 gap-1.5 rounded-xl bg-white/5 p-1.5">
-            {DAYS.map((d) => (
+          <h3 className="text-lg font-bold">{hours.grid}</h3>
+          <div role="tablist" aria-label={hours.dayLabel} className="mt-5 grid grid-cols-6 gap-1.5 rounded-xl bg-white/5 p-1.5">
+            {hours.days.map((label, i) => (
               <button
-                key={d}
+                key={label}
                 role="tab"
-                aria-selected={day === d}
-                onClick={() => setDay(d)}
-                className={`rounded-lg py-2 text-sm font-semibold transition-colors ${day === d ? "text-black" : "text-white/60 hover:text-white"}`}
-                style={day === d ? { background: LIME } : undefined}
+                aria-selected={day === i}
+                onClick={() => setDay(i)}
+                className={`rounded-lg py-2 text-sm font-semibold transition-colors ${day === i ? "text-black" : "text-white/60 hover:text-white"}`}
+                style={day === i ? { background: LIME } : undefined}
               >
-                {d}
+                {label}
               </button>
             ))}
           </div>
           <ul key={day} className="mt-5 divide-y divide-white/10">
-            {SCHEDULE[day].map((item, i) => (
+            {SCHEDULE[day].map(([time, code], i) => (
               <motion.li
-                key={item.time + item.name}
+                key={time + code}
                 initial={{ opacity: 0, x: 12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
                 className="flex items-center gap-4 py-3.5"
               >
-                <span className="w-14 font-[family-name:var(--font-anton)] text-xl">{item.time}</span>
-                <span className="flex-1 font-semibold">{item.name}</span>
-                <span className="text-sm text-white/55">{item.coach}</span>
+                <span className="w-14 font-[family-name:var(--font-anton)] text-xl">{time}</span>
+                <span className="flex-1 font-semibold">{t.classes[code]}</span>
+                <span className="text-sm text-white/55">
+                  {t.coach} {COACHES[code]}
+                </span>
               </motion.li>
             ))}
           </ul>
@@ -386,67 +493,66 @@ function Schedule() {
   );
 }
 
-function Plans() {
+function Plans({ t, whatsapp, money }: { t: Copy; whatsapp: string; money: Intl.NumberFormat }) {
   const [yearly, setYearly] = useState(false);
+  const plans = t.plans;
   return (
     <section id="planos" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-24 sm:px-6">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-        <SectionTitle kicker="Planos" title="Sem taxa de matrícula" text="Cancele quando quiser no plano mensal. No anual, você economiza 20%." />
+        <SectionTitle kicker={plans.kicker} title={plans.title} text={plans.text} />
         <div className="inline-flex self-start rounded-full border border-white/15 p-1 text-sm font-semibold md:self-auto">
-          {[
-            [false, "Mensal"],
-            [true, "Anual −20%"],
-          ].map(([value, label]) => (
+          {[false, true].map((value) => (
             <button
               key={String(value)}
-              onClick={() => setYearly(value as boolean)}
+              onClick={() => setYearly(value)}
               aria-pressed={yearly === value}
               className={`rounded-full px-4 py-2 transition-colors ${yearly === value ? "text-black" : "text-white/65"}`}
               style={yearly === value ? { background: LIME } : undefined}
             >
-              {label as string}
+              {value ? plans.yearly : plans.monthly}
             </button>
           ))}
         </div>
       </div>
 
       <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {PLANS.map((plan, i) => {
-          const price = yearly ? plan.monthly * 0.8 : plan.monthly;
+        {plans.items.map(([name, perks], i) => {
+          const highlight = i === 1;
+          const price = yearly ? PLAN_PRICES[i] * 0.8 : PLAN_PRICES[i];
           return (
             <motion.article
-              key={plan.name}
+              key={i}
               {...fadeUp}
               transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-              className={`relative flex flex-col rounded-2xl border p-7 ${plan.highlight ? "border-transparent text-black" : "border-white/10 bg-white/[0.03]"}`}
-              style={plan.highlight ? { background: LIME } : undefined}
+              className={`relative flex flex-col rounded-2xl border p-7 ${highlight ? "border-transparent text-black" : "border-white/10 bg-white/[0.03]"}`}
+              style={highlight ? { background: LIME } : undefined}
             >
-              {plan.highlight && (
-                <span className="absolute -top-3 left-7 rounded-full bg-black px-3 py-1 text-xs font-bold text-white">Mais escolhido</span>
+              {highlight && (
+                <span className="absolute -top-3 left-7 rounded-full bg-black px-3 py-1 text-xs font-bold text-white">{plans.popular}</span>
               )}
-              <Display className="text-3xl">{plan.name}</Display>
+              <Display className="text-3xl">{name}</Display>
               <p className="mt-5">
-                <span className="text-4xl font-black tracking-tight">{brl.format(price)}</span>
-                <span className={plan.highlight ? "text-black/60" : "text-white/55"}>/mês</span>
+                <span className="text-4xl font-black tracking-tight">{money.format(price)}</span>
+                <span className={highlight ? "text-black/60" : "text-white/55"}>{plans.perMonth}</span>
               </p>
-              <p className={`mt-1 text-sm ${plan.highlight ? "text-black/60" : "text-white/45"}`}>
-                {yearly ? `${brl.format(price * 12)} por ano` : "Sem fidelidade"}
+              <p className={`mt-1 text-sm ${highlight ? "text-black/60" : "text-white/45"}`}>
+                {yearly ? `${money.format(price * 12)} ${plans.perYear}` : plans.noLock}
               </p>
               <ul className="mt-6 space-y-2.5">
-                {plan.perks.map((perk) => (
+                {perks.map((perk) => (
                   <li key={perk} className="flex items-start gap-2.5">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0" style={plan.highlight ? undefined : { color: LIME }} />
+                    <Check className="mt-0.5 h-4 w-4 shrink-0" style={highlight ? undefined : { color: LIME }} />
                     {perk}
                   </li>
                 ))}
               </ul>
               <a
-                href={WHATSAPP}
+                href={whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full py-3 font-bold md:mt-auto ${plan.highlight ? "bg-black text-white" : "border border-white/20 hover:bg-white/5"}`}
+                className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full py-3 font-bold md:mt-auto ${highlight ? "bg-black text-white" : "border border-white/20 hover:bg-white/5"}`}
               >
-                Quero esse plano
+                {plans.cta}
                 <ArrowRight className="h-4 w-4" />
               </a>
             </motion.article>
@@ -457,32 +563,35 @@ function Plans() {
   );
 }
 
-function Location() {
+function Location({ t, whatsapp }: { t: Copy; whatsapp: string }) {
+  const location = t.location;
   return (
     <section id="localizacao" className="mx-auto max-w-6xl scroll-mt-20 px-4 pb-24 sm:px-6">
       <div className="grid overflow-hidden rounded-2xl border border-white/10 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="bg-[#111113] p-7 sm:p-10">
-          <SectionTitle kicker="Localização" title="Fácil de chegar" />
+          <SectionTitle kicker={location.kicker} title={location.title} />
           <p className="mt-8 flex items-start gap-3 text-white/80">
             <MapPin className="mt-0.5 h-5 w-5 shrink-0" style={{ color: LIME }} />
-            Rua Exemplo, 123 · Centro
-            <br />
-            São Paulo · SP
+            <span>
+              {location.address[0]}
+              <br />
+              {location.address[1]}
+            </span>
           </p>
-          <p className="mt-4 text-sm text-white/55">Estacionamento conveniado e a 5 minutos do metrô.</p>
+          <p className="mt-4 text-sm text-white/55">{location.note}</p>
           <a
-            href={WHATSAPP}
+            href={whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3.5 font-bold text-black"
             style={{ background: LIME }}
           >
             <WhatsappIcon className="h-5 w-5" />
-            Chamar no WhatsApp
+            {location.cta}
           </a>
         </div>
         <iframe
-          title="Mapa da localização"
+          title={location.map}
           src="https://www.google.com/maps?q=Pra%C3%A7a+da+S%C3%A9,+S%C3%A3o+Paulo&output=embed"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
@@ -493,14 +602,14 @@ function Location() {
   );
 }
 
-function Footer() {
+function Footer({ t }: { t: Copy }) {
   return (
     <footer className="border-t border-white/10">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-10 text-sm text-white/55 sm:px-6 md:flex-row md:items-center md:justify-between">
         <Logo />
-        <p>Seg a sex 5h–23h · Sáb 8h–18h · Dom 8h–13h</p>
+        <p>{t.footer.hours}</p>
         <p>
-          Site demonstrativo por{" "}
+          {t.footer.credit}{" "}
           <Link href="/" className="font-semibold text-white hover:underline">
             Mateus Fantin
           </Link>
