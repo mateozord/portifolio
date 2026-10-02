@@ -728,7 +728,7 @@ function Band({ t }: { t: Copy }) {
   return (
     <section ref={ref} className="relative flex min-h-[60svh] items-end overflow-hidden">
       <motion.div className="absolute -inset-y-[14%] inset-x-0" style={{ y }}>
-        <Image src={photo("entrega")} alt="" fill sizes="100vw" className="object-cover" />
+        <Image src={photo("entrega-sacola")} alt="" fill sizes="100vw" className="object-cover" />
       </motion.div>
       <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(30_77_43/0.92),rgb(30_77_43/0.35)_55%,transparent)]" />
       <motion.div {...fadeUp} className="relative mx-auto w-full max-w-6xl px-4 pt-32 pb-14 text-white sm:px-6">
