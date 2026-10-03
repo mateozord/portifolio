@@ -49,14 +49,15 @@ export function SiteFooter({ dictionary }: { dictionary: PortfolioDictionary }) 
         </div>
       </div>
 
-      {/* Assinatura grande, com a base das letras cortada pela linha do rodapé. */}
-      <div aria-hidden className="pointer-events-none mt-8 overflow-hidden select-none">
+      {/* Assinatura grande. Menor que a largura da tela e com folga embaixo e nas
+          laterais, para o itálico não ser cortado em nenhum tamanho de tela. */}
+      <div aria-hidden className="pointer-events-none mt-8 overflow-hidden px-[2vw] pb-[1.5vw] select-none">
         <motion.p
           initial={{ opacity: 0, y: "40%" }}
           whileInView={{ opacity: 1, y: "0%" }}
           viewport={{ once: true }}
           transition={{ duration: 1, ease: EASE_OUT }}
-          className="font-serif-italic text-brand translate-y-[0.14em] text-center text-[16.5vw] leading-[0.82] whitespace-nowrap md:text-[15vw]"
+          className="font-serif-italic text-brand text-center text-[14.5vw] leading-[1.05] whitespace-nowrap md:text-[13.5vw]"
         >
           Mateus Fantin
         </motion.p>
