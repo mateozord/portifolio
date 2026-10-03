@@ -246,7 +246,8 @@ function ModalContent({
               {project.tagline}
             </motion.p>
             <motion.p variants={itemVariants} className="text-ink-soft mt-5 leading-relaxed text-pretty">
-              {project.description}
+              {/* Com estudo de caso, o resumo curto basta: a descrição longa repetiria o problema */}
+              {project.caseStudy ? project.summary : project.description}
             </motion.p>
             {project.note && (
               <motion.p
@@ -257,6 +258,7 @@ function ModalContent({
                 {project.note}
               </motion.p>
             )}
+            {project.caseStudy && <CaseStudy study={project.caseStudy} labels={labels.caseLabels} />}
           </div>
 
           <div>
@@ -342,5 +344,40 @@ function GalleryButton({ side, label, onClick }: { side: "left" | "right"; label
     >
       <Icon className="h-5 w-5" />
     </motion.button>
+  );
+}
+
+/** Estudo de caso: o problema, as decisões numeradas, o resultado e um desafio real. */
+function CaseStudy({ study, labels }: { study: NonNullable<Project["caseStudy"]>; labels: Labels["caseLabels"] }) {
+  return (
+    <div className="mt-8 space-y-7">
+      <motion.div variants={itemVariants}>
+        <h3 className="eyebrow">{labels.problem}</h3>
+        <p className="text-ink-soft mt-2.5 leading-relaxed text-pretty">{study.problem}</p>
+      </motion.div>
+      <motion.div variants={itemVariants}>
+        <h3 className="eyebrow">{labels.decisions}</h3>
+        <ol className="mt-3 space-y-3">
+          {study.decisions.map((decision, i) => (
+            <li key={decision} className="flex gap-3 text-[0.95rem] leading-snug">
+              <span className="text-accent w-5 shrink-0 pt-px font-mono text-xs font-semibold">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="text-ink-soft">{decision}</span>
+            </li>
+          ))}
+        </ol>
+      </motion.div>
+      <motion.div variants={itemVariants} className="grid gap-4 sm:grid-cols-2">
+        <div className="border-line rounded-2xl border p-4">
+          <h3 className="eyebrow">{labels.result}</h3>
+          <p className="text-ink-soft mt-2 text-[0.95rem] leading-relaxed">{study.result}</p>
+        </div>
+        <div className="border-line rounded-2xl border p-4">
+          <h3 className="eyebrow">{labels.challenge}</h3>
+          <p className="text-ink-soft mt-2 text-[0.95rem] leading-relaxed">{study.challenge}</p>
+        </div>
+      </motion.div>
+    </div>
   );
 }

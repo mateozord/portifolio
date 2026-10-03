@@ -13,6 +13,8 @@ type ProjectBase = {
   link?: string;
   repo?: string;
   featured?: boolean;
+  /** "case": estudo de caso em destaque; "other": faixa "Outros trabalhos". */
+  group: "case" | "other";
 };
 
 /** Textos de um projeto, por idioma. `captions` segue a ordem de `images`. */
@@ -23,6 +25,8 @@ type ProjectCopy = {
   highlights: string[];
   captions: string[];
   note?: string;
+  /** Estudo de caso: o problema, as decisões, o resultado e um desafio real. */
+  caseStudy?: { problem: string; decisions: string[]; result: string; challenge: string };
 };
 
 export type Project = ProjectBase & ProjectCopy;
@@ -82,6 +86,9 @@ export type PortfolioDictionary = {
     title: string;
     subtitle: string;
     filters: Record<"all" | ProjectCategory, string>;
+    otherTitle: string;
+    otherSubtitle: string;
+    caseLabels: { problem: string; decisions: string; result: string; challenge: string };
     featuredBadge: string;
     liveBadge: string;
     openCase: string;
@@ -187,6 +194,7 @@ export const techStack = [
 const projectBase: ProjectBase[] = [
   {
     slug: "cozylog",
+    group: "case",
     title: "CozyLog",
     categories: ["web", "database", "design"],
     stack: ["React", "Vite", "Tailwind CSS v4", "Framer Motion", "Supabase", "RAWG API", "Steam Web API"],
@@ -204,6 +212,7 @@ const projectBase: ProjectBase[] = [
   },
   {
     slug: "aeropulse",
+    group: "case",
     title: "AeroPulse",
     categories: ["web", "database", "automation"],
     stack: ["React", "TypeScript", "Vite", "Tailwind CSS", "MapLibre GL", "Recharts", "Supabase", "GitHub Actions"],
@@ -218,6 +227,7 @@ const projectBase: ProjectBase[] = [
   },
   {
     slug: "pulso",
+    group: "case",
     title: "PULSO",
     categories: ["web", "database", "design"],
     stack: ["React", "Vite", "React Router", "Supabase", "Ticketmaster API", "Netlify Functions"],
@@ -226,6 +236,7 @@ const projectBase: ProjectBase[] = [
   },
   {
     slug: "porao-grafico",
+    group: "other",
     title: "Porão Gráfico",
     categories: ["design", "web"],
     stack: ["React", "Vite", "Tailwind CSS", "Context API", "Netlify Forms"],
@@ -247,6 +258,7 @@ const projectBase: ProjectBase[] = [
   },
   {
     slug: "vistamed",
+    group: "other",
     title: "Vistamed",
     categories: ["web", "design"],
     stack: ["HTML", "CSS", "JavaScript", "WhatsApp"],
@@ -279,6 +291,17 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         "Feed da comunidade",
         "Versão mobile, clara e escura",
       ],
+      caseStudy: {
+        problem: "Apps de jogos ou são catálogos frios ou planilhas pessoais. Eu queria um diário com cara de casa que também fosse social, sem virar mais uma rede barulhenta.",
+        decisions: [
+          "Supabase com Row Level Security: quem pode editar um jogo ou comentar é regra do banco, não só do front-end.",
+          "A chave da Steam não pode ir para o navegador: uma Edge Function faz de proxy seguro e o app recebe só o status já tratado.",
+          "Curtidas e reações otimistas: a interface responde na hora e volta atrás se o servidor recusar.",
+          "Tradução no estilo gettext, com o texto em português como chave e aviso no console para frases sem tradução.",
+        ],
+        result: "Produto no ar com perfis públicos, feed, listas, página de cada jogo, conquistas automáticas, termos e privacidade (LGPD) e versão em inglês.",
+        challenge: "Virar social sem perder o que já existia: os jogos criados antes do login ficaram sem dono, e a migração do banco atribui cada um à conta certa.",
+      },
     },
     aeropulse: {
       tagline: "Inteligência experimental em aviação.",
@@ -299,6 +322,17 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         "Detalhe de um aeroporto com score e tendência",
         "Lista de aeroportos monitorados",
       ],
+      caseStudy: {
+        problem: "Painéis de aviação mostram números que ninguém entende ou previsões confiantes sem raciocínio visível. Os dois quebram a confiança.",
+        decisions: [
+          "Um score de 0 a 100 que sempre mostra os fatores que o formaram, com peso limitado para nenhum fator dominar.",
+          "O tráfego aéreo fica fora do score de propósito: sem histórico de base por aeroporto, contar aviões não significa nada.",
+          "A OpenSky bloqueia o navegador e trava em funções serverless: uma rotina no GitHub Actions captura os dados a cada 30 minutos e o site lê esse retrato.",
+          "A IA (Gemini) só explica números já calculados e é instruída a nunca inventar causa nem prever voos.",
+        ],
+        result: "10 aeroportos monitorados, histórico real crescendo a cada 30 minutos, página de metodologia e uma sala de operações em tela cheia, tudo em planos gratuitos.",
+        challenge: "Ser honesto com o dado: uma leitura indisponível aparece como “N/D”, nunca como zero, e o site diz o que é ao vivo e o que é um retrato de 30 minutos.",
+      },
     },
     pulso: {
       tagline: "A cidade toca aqui.",
@@ -314,6 +348,17 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         "Favoritos por usuário com Supabase Auth e Row Level Security",
       ],
       captions: ["Página inicial", "Explorar com filtros", "Página de um evento"],
+      caseStudy: {
+        problem: "“O que toca na minha cidade essa semana?” é difícil de responder: sites de ingresso são feitos para vender e redes sociais são ruído.",
+        decisions: [
+          "Dados reais da Ticketmaster, sem nada inventado, com um proxy no servidor que guarda a chave e resolve o bloqueio de CORS.",
+          "Filtros na URL: qualquer busca vira um link compartilhável.",
+          "Sem bibliotecas de UI, estado ou animação: um dropdown próprio (o select nativo não deixa estilizar o menu) e animações em CSS que respeitam “reduzir movimento”.",
+          "Favoritos por usuário com Row Level Security: a regra de quem vê o quê fica no banco.",
+        ],
+        result: "Home, explorar, evento, artista, login e favoritos, com estados de carregando, erro, vazio e imagem quebrada tratados em todas as telas.",
+        challenge: "A API devolve a cidade vazia para a maioria dos locais brasileiros, então o filtro por cidade não achava nada. Só apareceu testando com dados reais; a solução foi buscar por coordenadas e raio.",
+      },
     },
     "porao-grafico": {
       tagline: "Arte para banda, evento ou lançamento.",
@@ -380,6 +425,17 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         "Community feed",
         "Mobile version, light and dark",
       ],
+      caseStudy: {
+        problem: "Game apps are either cold catalogs or personal spreadsheets. I wanted a diary that feels like home and is also social, without becoming another noisy network.",
+        decisions: [
+          "Supabase with Row Level Security: who can edit a game or comment is a database rule, not just a front-end check.",
+          "The Steam key can't reach the browser: an Edge Function acts as a secure proxy and the app only gets the processed status.",
+          "Optimistic likes and reactions: the UI responds instantly and rolls back if the server refuses.",
+          "Gettext-style translation, with the Portuguese text as the key and a console warning for missing translations.",
+        ],
+        result: "A live product with public profiles, feed, lists, a page for every game, automatic achievements, terms and privacy (LGPD) and an English version.",
+        challenge: "Going social without losing what existed: games created before login had no owner, and the database migration assigns each one to the right account.",
+      },
     },
     aeropulse: {
       tagline: "Experimental intelligence for aviation.",
@@ -400,6 +456,17 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         "Airport detail with score and trend",
         "Monitored airports",
       ],
+      caseStudy: {
+        problem: "Aviation dashboards show numbers nobody understands, or confident predictions with no visible reasoning. Both break trust.",
+        decisions: [
+          "A 0–100 score that always shows the factors behind it, with capped weights so no single factor dominates.",
+          "Air traffic is left out of the score on purpose: without a per-airport baseline, counting planes means nothing.",
+          "OpenSky blocks browsers and stalls in serverless functions: a GitHub Actions job captures data every 30 minutes and the site reads that snapshot.",
+          "The AI (Gemini) only explains numbers already computed and is told never to invent causes or predict flights.",
+        ],
+        result: "10 monitored airports, real history growing every 30 minutes, a methodology page and a fullscreen war room, all on free tiers.",
+        challenge: "Being honest about data: a missing reading shows as “N/A”, never as zero, and the site says what is live and what is a 30-minute snapshot.",
+      },
     },
     pulso: {
       tagline: "The city plays here.",
@@ -415,6 +482,17 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         "Per-user favorites with Supabase Auth and Row Level Security",
       ],
       captions: ["Home page", "Explore with filters", "Event page"],
+      caseStudy: {
+        problem: "“What's playing in my city this week?” is hard to answer: ticket sites are built to sell, social media is noise.",
+        decisions: [
+          "Real Ticketmaster data, nothing made up, with a server-side proxy that keeps the key and solves the CORS block.",
+          "Filters live in the URL: any search becomes a shareable link.",
+          "No UI, state or animation libraries: a custom dropdown (native selects can't style the open menu) and CSS animations that respect reduced motion.",
+          "Per-user favorites with Row Level Security: who sees what is enforced in the database.",
+        ],
+        result: "Home, explore, event, artist, login and favorites, with loading, error, empty and broken-image states handled on every screen.",
+        challenge: "The API returns an empty city for most Brazilian venues, so the city filter found nothing. It only showed up with real data; the fix was searching by coordinates and radius.",
+      },
     },
     "porao-grafico": {
       tagline: "Art for bands, events and releases.",
@@ -581,9 +659,9 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     },
     projects: {
       eyebrow: "Portfólio",
-      title: "Projetos que *falam por mim*",
+      title: "Interfaces que deixam *o complexo simples*",
       subtitle:
-        "Produtos reais, com problema real por trás. Clique em qualquer projeto para ver os detalhes, as telas e o que tem por baixo do capô.",
+        "Três produtos completos, do problema ao código no ar: dados confusos viram uma experiência clara. Abra cada um para ver as decisões por trás.",
       filters: {
         all: "Todos",
         web: "Web",
@@ -591,6 +669,9 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         automation: "Automação",
         design: "Design",
       },
+      otherTitle: "Outros trabalhos",
+      otherSubtitle: "Sites e propostas para negócios.",
+      caseLabels: { problem: "O problema", decisions: "Minhas decisões", result: "O resultado", challenge: "Um desafio real" },
       featuredBadge: "Mais recente",
       liveBadge: "No ar",
       openCase: "Ver detalhes",
@@ -811,9 +892,9 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
     },
     projects: {
       eyebrow: "Portfolio",
-      title: "Projects that *speak for me*",
+      title: "Interfaces that make *the complex simple*",
       subtitle:
-        "Real products with a real problem behind them. Click any project to see the details, the screens and what's under the hood.",
+        "Three complete products, from problem to shipped code: messy data becomes a clear experience. Open each one to see the decisions behind it.",
       filters: {
         all: "All",
         web: "Web",
@@ -821,6 +902,9 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         automation: "Automation",
         design: "Design",
       },
+      otherTitle: "Other work",
+      otherSubtitle: "Websites and proposals for businesses.",
+      caseLabels: { problem: "The problem", decisions: "My decisions", result: "The result", challenge: "A real challenge" },
       featuredBadge: "Latest",
       liveBadge: "Live",
       openCase: "See details",
