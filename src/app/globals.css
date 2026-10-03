@@ -437,6 +437,10 @@
     transition: none;
   }
 
+  .hero-float {
+    animation: none;
+  }
+
   .text-brand,
   .sparkle,
   .card-parallax,
@@ -445,6 +449,36 @@
   .blob,
   .pulse-dot::after {
     animation: none;
+  }
+}
+
+/* Flutuação suave das telas do hero (duração e atraso vêm inline). */
+.hero-float {
+  animation: hero-float var(--float-d, 8s) ease-in-out var(--float-delay, 0s) infinite;
+}
+
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Telas de toque (celular, tablet): as animações infinitas que redesenham a
+   tela a cada quadro ficam paradas — juntas, derrubavam a rolagem para ~27 fps.
+   O visual se mantém (degradê e borda coloridos), só sem movimento. */
+@media (hover: none) and (pointer: coarse) {
+  .text-brand,
+  .spin-border::before,
+  .sparkle {
+    animation: none;
+  }
+
+  .shine {
+    display: none;
   }
 }
 

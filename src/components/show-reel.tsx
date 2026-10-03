@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useSyncExternalStore, type CSSProperties } from "react";
+import { useEffect, useRef, useSyncExternalStore, type CSSProperties } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -9,6 +9,8 @@ import {
   useSpring,
   useTransform,
   useVelocity,
+  useInView,
+  useMotionValue,
   type MotionValue,
 } from "framer-motion";
 import type { PortfolioDictionary, Project } from "@/content/portfolio-content";
@@ -44,7 +46,12 @@ export function ShowReel({ dictionary }: { dictionary: PortfolioDictionary }) {
   // Gelatina: a velocidade da rolagem entorta o card
   const { scrollY } = useScroll();
   const velocity = useSpring(useVelocity(scrollY), { stiffness: 180, damping: 22 });
-  const bend = useTransform(velocity, [-3000, 0, 3000], [-1, 0, 1], { clamp: true });
+  // Fora da tela a gelatina fica em 0: assim o card não recebe estilo novo a
+  // cada quadro de rolagem no resto da página (pesava no celular).
+  const active = useMotionValue(0);
+  const inView = useInView(sectionRef, { margin: "20% 0px" });
+  useEffect(() => active.set(inView ? 1 : 0), [inView, active]);
+  const bend = useTransform([velocity, active], ([v, a]: number[]) => (a ? Math.max(-1, Math.min(1, v / 3000)) : 0));
 
   // 0 → 0.4: o card se abre até tomar a tela
   const open = useTransform(progress, [0, 0.4], [0, 1], { clamp: true });

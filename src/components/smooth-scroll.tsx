@@ -10,7 +10,9 @@ import Lenis from "lenis";
  */
 export function SmoothScroll() {
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+    // No toque a rolagem já é nativa (o Lenis não suaviza o dedo): ligá-lo só
+    // custaria leituras de layout a cada evento, o que trava celulares.
+    if (window.matchMedia("(prefers-reduced-motion: reduce), (pointer: coarse)").matches) return undefined;
 
     const lenis = new Lenis({
       autoRaf: true,

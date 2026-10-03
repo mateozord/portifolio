@@ -1,6 +1,6 @@
 "use client";
 
-import type { PointerEvent, ReactNode } from "react";
+import type { CSSProperties, PointerEvent, ReactNode } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -199,8 +199,6 @@ function Layer({
   // Camadas "mais perto" (depth maior) se movem mais: dá a sensação de profundidade.
   const translateX = useTransform(x, (v) => v * depth);
   const translateY = useTransform(y, (v) => v * depth);
-  const reduceMotion = useReducedMotion();
-
   return (
     <motion.div style={{ x: translateX, y: translateY }} className={cn("absolute", className)}>
       <motion.div
@@ -208,12 +206,11 @@ function Layer({
         animate={{ opacity: 1, y: 0, rotate, scale: 1 }}
         transition={{ type: "spring", stiffness: 70, damping: 16, delay }}
       >
-        <motion.div
-          animate={reduceMotion ? undefined : { y: [0, -10, 0] }}
-          transition={{ duration: float, repeat: Infinity, ease: "easeInOut", delay: delay + 1 }}
-        >
+        {/* Flutuação em CSS (só transform, roda no compositor): em JS ela
+            escrevia estilo a cada quadro, para sempre, e travava o celular. */}
+        <div className="hero-float" style={{ "--float-d": `${float}s`, "--float-delay": `${delay + 1}s` } as CSSProperties}>
           {children}
-        </motion.div>
+        </div>
       </motion.div>
     </motion.div>
   );

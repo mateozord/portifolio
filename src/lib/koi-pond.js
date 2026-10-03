@@ -97,7 +97,8 @@ export function createKoiPond(canvas, { animated = true, night = false } = {}) {
 
   function resize() {
     const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // No celular 1.5x basta (a diferença não aparece) e o canvas pesa bem menos
+    const dpr = Math.min(window.devicePixelRatio || 1, rect.width < 640 ? 1.5 : 2);
     const first = width === 0;
     width = rect.width;
     height = rect.height;
