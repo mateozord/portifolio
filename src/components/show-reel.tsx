@@ -14,6 +14,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import type { PortfolioDictionary, Project } from "@/content/portfolio-content";
+import { useIsTouch } from "@/lib/use-touch";
 
 const DESKTOP = "(min-width: 768px)";
 function subscribe(onChange: () => void) {
@@ -35,8 +36,9 @@ const FILM = { desktop: { item: 34, gap: 5 }, mobile: { item: 74, gap: 7 } };
  */
 export function ShowReel({ dictionary }: { dictionary: PortfolioDictionary }) {
   const { words, cta, caption } = dictionary.reel;
-  const projects = dictionary.projects.items;
+  const projects = dictionary.projects.items.filter((p) => p.group !== "business");
   const reduceMotion = useReducedMotion();
+  const touch = useIsTouch();
   const desktop = useSyncExternalStore(subscribe, () => window.matchMedia(DESKTOP).matches, () => true);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -77,12 +79,17 @@ export function ShowReel({ dictionary }: { dictionary: PortfolioDictionary }) {
   const filmX = useTransform(progress, [0.15, 1], [`${start}vw`, `${end}vw`]);
   const captionOpacity = useTransform(open, [0.75, 1], [0, 1]);
 
-  if (reduceMotion) {
+  // No toque (e com "reduzir movimento"): carrossel simples de arrastar, sem a
+  // seção presa na tela nem o 3D, que travavam o celular
+  if (reduceMotion || touch) {
     return (
-      <section className="bg-brand py-16">
-        <div className="no-scrollbar flex gap-6 overflow-x-auto px-5">
+      <section aria-label={`${words[0]} ${words[1]}`} className="bg-brand py-14">
+        <p className="px-5 text-4xl font-semibold tracking-tight text-white">
+          {words[0]} <span className="font-serif-italic">{words[1]}</span>
+        </p>
+        <div className="no-scrollbar mt-8 flex snap-x snap-mandatory gap-6 overflow-x-auto px-5 pb-2">
           {projects.map((project) => (
-            <ReelWindow key={project.slug} project={project} className="w-[80vw] shrink-0 md:w-[34vw]" />
+            <ReelWindow key={project.slug} project={project} className="w-[80vw] shrink-0 snap-center md:w-[34vw]" />
           ))}
         </div>
       </section>

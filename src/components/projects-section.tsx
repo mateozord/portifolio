@@ -58,12 +58,13 @@ export function ProjectsSection({
             <h3 className="text-2xl font-semibold tracking-tight">{labels.otherTitle}</h3>
             <p className="text-muted">{labels.otherSubtitle}</p>
           </Reveal>
-          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className={others.length > 1 ? "mt-6 grid grid-cols-1 gap-6 md:grid-cols-2" : "mt-6 grid grid-cols-1 gap-6"}>
             {others.map((project, i) => (
               <ProjectCard
                 key={project.slug}
                 project={project}
                 index={i}
+                wide={others.length === 1}
                 labels={labels}
                 onOpen={() => setOpenSlug(project.slug)}
               />

@@ -8,6 +8,7 @@ import { Reveal, SectionHeader } from "@/components/motion-primitives";
 import { GithubIcon, LinkedinIcon, WhatsappIcon } from "@/components/brand-icons";
 import { cn } from "@/lib/cn";
 import { KoiPond } from "@/components/koi-pond";
+import { useIsTouch } from "@/lib/use-touch";
 
 type ContactSectionProps = {
   dictionary: PortfolioDictionary;
@@ -19,6 +20,7 @@ type ContactSectionProps = {
 
 export function ContactSection({ dictionary, subject, onSubjectChange, prefillKey }: ContactSectionProps) {
   const contact = dictionary.contact;
+  const touch = useIsTouch();
   const form = contact.form;
   const formRef = useRef<HTMLFormElement>(null);
   const messageRef = useRef<HTMLTextAreaElement>(null);
@@ -52,7 +54,8 @@ export function ContactSection({ dictionary, subject, onSubjectChange, prefillKe
       <div className="card relative isolate overflow-hidden rounded-[2.25rem] p-5 sm:p-10 lg:p-14">
         <div aria-hidden className="bg-brand absolute -top-32 -right-24 -z-10 h-80 w-80 rounded-full opacity-20 blur-3xl" />
         <div aria-hidden className="bg-brand absolute -bottom-40 -left-24 -z-10 h-72 w-72 rounded-full opacity-10 blur-3xl" />
-        <KoiPond className="absolute inset-0 -z-10 h-full w-full opacity-60 dark:opacity-70" />
+        {/* Lago dos koi só com mouse: no celular o canvas animado pesava demais */}
+        {!touch && <KoiPond className="absolute inset-0 -z-10 h-full w-full opacity-60 dark:opacity-70" />}
 
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
           <div className="min-w-0">
@@ -88,12 +91,14 @@ export function ContactSection({ dictionary, subject, onSubjectChange, prefillKe
                 </SocialLink>
               </div>
 
-              <p className="text-muted flex items-center gap-2 pt-3 text-sm">
-                <span aria-hidden className="bg-accent-soft text-accent grid h-7 w-7 place-items-center rounded-full">
-                  <Fish className="h-4 w-4" />
-                </span>
-                {contact.pondHint}
-              </p>
+              {!touch && (
+                <p className="text-muted flex items-center gap-2 pt-3 text-sm">
+                  <span aria-hidden className="bg-accent-soft text-accent grid h-7 w-7 place-items-center rounded-full">
+                    <Fish className="h-4 w-4" />
+                  </span>
+                  {contact.pondHint}
+                </p>
+              )}
             </Reveal>
           </div>
 

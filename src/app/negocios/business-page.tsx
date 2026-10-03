@@ -62,6 +62,13 @@ const COPY = {
       title: "Veja como pode ficar *o seu*",
       subtitle: "Três sites de demonstração, com negócios fictícios, para você ver tudo funcionando: abra no celular e teste.",
       open: "Abrir demonstração",
+      real: {
+        kicker: "Proposta real",
+        title: "Vistamed · hospital de olhos",
+        text: "Redesign proposto para um hospital de olhos com 33 anos de história: mais de 30 procedimentos organizados por categoria, convênios e unidades detalhados e agendamento direto pelo WhatsApp.",
+        note: "Proposta conceitual feita para uma apresentação interna, não é o site oficial.",
+        open: "Ver proposta",
+      },
       items: {
         restaurante: ["Restaurante", "Cardápio com foto de cada prato, prato do dia e reserva de mesa pelo WhatsApp.", ["Cardápio com fotos", "Reserva de mesa", "Prato do dia"]],
         academia: ["Academia", "Modalidades, grade de aulas e um quiz que indica o plano ideal para o aluno.", ["Grade de aulas", "Quiz de planos", "Aula grátis"]],
@@ -120,6 +127,13 @@ const COPY = {
       title: "See what *yours* could look like",
       subtitle: "Three demo websites, with fictional businesses, so you can see everything working: open them on your phone and try.",
       open: "Open demo",
+      real: {
+        kicker: "Real proposal",
+        title: "Vistamed · eye hospital",
+        text: "A redesign proposed for an eye hospital with 33 years of history: 30+ procedures organized by category, insurance and locations in detail, and booking straight through WhatsApp.",
+        note: "A concept proposal made for an internal pitch, not the official website.",
+        open: "See proposal",
+      },
       items: {
         restaurante: ["Restaurant", "Menu with a photo of every dish, daily special and table booking via WhatsApp.", ["Menu with photos", "Table booking", "Daily special"]],
         academia: ["Gym", "Classes, schedule and a quiz that recommends the right plan for each member.", ["Class schedule", "Plan quiz", "Free trial class"]],
@@ -404,6 +418,37 @@ function Examples({ t }: { t: Copy }) {
           );
         })}
       </div>
+      {/* Proposta para um negócio real (o Vistamed saiu do portfólio de dev e veio para cá) */}
+      <motion.a
+        href="https://vistamednovo.netlify.app"
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.7, ease: EASE_OUT }}
+        className="card group mt-6 grid items-center gap-6 overflow-hidden rounded-[2rem] p-5 sm:grid-cols-[0.8fr_1.2fr] sm:p-6"
+      >
+        <div className="border-line relative aspect-[16/10] overflow-hidden rounded-xl border">
+          <Image
+            src="/projects/vistamed/home.webp"
+            alt={e.real.title}
+            fill
+            sizes="(min-width: 640px) 22rem, 90vw"
+            className="object-cover object-top transition-transform duration-700 group-hover:scale-[1.03]"
+          />
+        </div>
+        <div>
+          <p className="eyebrow">{e.real.kicker}</p>
+          <h3 className="mt-2 text-2xl font-semibold tracking-tight">{e.real.title}</h3>
+          <p className="text-muted mt-2 leading-relaxed">{e.real.text}</p>
+          <p className="text-muted mt-3 text-sm italic">{e.real.note}</p>
+          <span className="text-ink mt-4 inline-flex items-center gap-1.5 font-semibold">
+            {e.real.open}
+            <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
+          </span>
+        </div>
+      </motion.a>
     </section>
   );
 }

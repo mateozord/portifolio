@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { useIsTouch } from "@/lib/use-touch";
 
 type Point = [number, number];
 type Box = { x: number; y: number; w: number; h: number };
@@ -67,6 +68,7 @@ function buildPath(width: number, height: number, vh: number) {
  * sempre com a "ponta" um pouco abaixo do meio da tela. Fica atrás das seções.
  */
 export function ScrollRibbon() {
+  const touch = useIsTouch();
   const reduceMotion = useReducedMotion();
   const svgRef = useRef<SVGSVGElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
@@ -146,7 +148,8 @@ export function ScrollRibbon() {
 
   useMotionValueEvent(scrollY, "change", update);
 
-  if (reduceMotion) return null;
+  // No toque a fita sai: um SVG da altura da página com máscara pesa na GPU do celular
+  if (reduceMotion || touch) return null;
 
   const d = size.width ? buildPath(size.width, size.height, size.vh) : "";
   const stroke = Math.round(Math.min(26, Math.max(9, size.width * 0.016)));

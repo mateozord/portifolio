@@ -13,8 +13,11 @@ type ProjectBase = {
   link?: string;
   repo?: string;
   featured?: boolean;
-  /** "case": estudo de caso em destaque; "other": faixa "Outros trabalhos". */
-  group: "case" | "other";
+  /**
+   * "case": estudo de caso em destaque; "other": faixa "Outros trabalhos";
+   * "business": só na página /negocios (fora do portfólio de desenvolvedor).
+   */
+  group: "case" | "other" | "business";
 };
 
 /** Textos de um projeto, por idioma. `captions` segue a ordem de `images`. */
@@ -258,7 +261,7 @@ const projectBase: ProjectBase[] = [
   },
   {
     slug: "vistamed",
-    group: "other",
+    group: "business",
     title: "Vistamed",
     categories: ["web", "design"],
     stack: ["HTML", "CSS", "JavaScript", "WhatsApp"],
@@ -563,7 +566,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "Sou Mateus Fantin, desenvolvedor em São Paulo. Uno design, banco de dados, código e automação para entregar produtos completos: do primeiro rascunho ao site no ar.",
       ctaPrimary: "Ver projetos",
       ctaSecondary: "Falar no WhatsApp",
-      proof: ["5 projetos construídos", "Design + código + dados", "São Paulo, BR"],
+      proof: ["4 projetos construídos", "Design + código + dados", "São Paulo, BR"],
       floatingLive: "Dados ao vivo",
       floatingMasterpiece: "Rainbow Masterpiece",
       floatingStack: "Supabase · RLS",
@@ -670,7 +673,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         design: "Design",
       },
       otherTitle: "Outros trabalhos",
-      otherSubtitle: "Sites e propostas para negócios.",
+      otherSubtitle: "Site e loja para quem vive de arte.",
       caseLabels: { problem: "O problema", decisions: "Minhas decisões", result: "O resultado", challenge: "Um desafio real" },
       featuredBadge: "Mais recente",
       liveBadge: "No ar",
@@ -695,7 +698,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       photoAlt: "Foto de Mateus Fantin",
       location: "São Paulo, BR",
       stats: [
-        { value: 5, label: "projetos construídos" },
+        { value: 4, label: "projetos construídos" },
         { value: 4, label: "frentes em cada entrega" },
         { value: 15, suffix: "+", label: "tecnologias no dia a dia" },
       ],
@@ -801,7 +804,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "I'm Mateus Fantin, a developer based in São Paulo. I bring design, databases, code and automation together to ship complete products: from the first sketch to a live site.",
       ctaPrimary: "See projects",
       ctaSecondary: "Message me on WhatsApp",
-      proof: ["5 projects built", "Design + code + data", "São Paulo, Brazil"],
+      proof: ["4 projects built", "Design + code + data", "São Paulo, Brazil"],
       floatingLive: "Live data",
       floatingMasterpiece: "Rainbow Masterpiece",
       floatingStack: "Supabase · RLS",
@@ -903,7 +906,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         design: "Design",
       },
       otherTitle: "Other work",
-      otherSubtitle: "Websites and proposals for businesses.",
+      otherSubtitle: "A website and store for people who make art.",
       caseLabels: { problem: "The problem", decisions: "My decisions", result: "The result", challenge: "A real challenge" },
       featuredBadge: "Latest",
       liveBadge: "Live",
@@ -928,7 +931,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       photoAlt: "Photo of Mateus Fantin",
       location: "São Paulo, Brazil",
       stats: [
-        { value: 5, label: "projects built" },
+        { value: 4, label: "projects built" },
         { value: 4, label: "areas in every delivery" },
         { value: 15, suffix: "+", label: "tools used daily" },
       ],

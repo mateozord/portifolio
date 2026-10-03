@@ -480,6 +480,23 @@
   .shine {
     display: none;
   }
+
+  /* Desfoque de vidro e manchas de luz desfocadas custam muito na GPU do
+     celular a cada quadro de rolagem: cards ficam sólidos e as manchas saem */
+  *,
+  ::before,
+  ::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .card {
+    background: var(--surface-strong);
+  }
+
+  .blob {
+    display: none;
+  }
 }
 
 /* =====================================================================
