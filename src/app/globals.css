@@ -467,6 +467,13 @@
   }
 }
 
+/* Animações infinitas pausadas enquanto estão fora da tela (PauseOffscreen) */
+.anim-off,
+.anim-off::before,
+.anim-off::after {
+  animation-play-state: paused !important;
+}
+
 /* Telas de toque (celular, tablet): as animações infinitas que redesenham a
    tela a cada quadro ficam paradas — juntas, derrubavam a rolagem para ~27 fps.
    O visual se mantém (degradê e borda coloridos), só sem movimento. */

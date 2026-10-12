@@ -15,6 +15,7 @@ import { ProcessSection } from "@/components/process-section";
 import { ContactSection } from "@/components/contact-section";
 import { SiteFooter } from "@/components/site-footer";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { PauseOffscreen } from "@/components/pause-offscreen";
 import { ShowReel } from "@/components/show-reel";
 import { ScrollRibbon } from "@/components/scroll-ribbon";
 import { WhatsappFab } from "@/components/whatsapp-fab";
@@ -45,6 +46,7 @@ export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
       <SmoothScroll />
+      <PauseOffscreen />
       <ScrollProgress />
       <AmbientBackground />
       <SiteHeader dictionary={dictionary} locale={locale} />

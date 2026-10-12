@@ -10,6 +10,8 @@ type ProjectBase = {
   stack: string[];
   /** A primeira imagem é a capa do card. */
   images: string[];
+  /** Vídeo (mp4) no lugar da capa: roda mudo no card e com som no primeiro slide da galeria. */
+  video?: string;
   link?: string;
   repo?: string;
   featured?: boolean;
@@ -238,6 +240,15 @@ const projectBase: ProjectBase[] = [
     repo: "https://github.com/mateozord/pulso",
   },
   {
+    slug: "shinnoi-kohi",
+    group: "other",
+    title: "Shinnoi Kohi",
+    categories: ["design"],
+    stack: ["Remotion", "React", "TypeScript", "Motion design"],
+    images: ["/projects/shinnoi-kohi/cover.webp", "/projects/shinnoi-kohi/menu.webp"],
+    video: "/projects/shinnoi-kohi/reel.mp4",
+  },
+  {
     slug: "porao-grafico",
     group: "other",
     title: "Porão Gráfico",
@@ -362,6 +373,19 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         result: "Home, explorar, evento, artista, login e favoritos, com estados de carregando, erro, vazio e imagem quebrada tratados em todas as telas.",
         challenge: "A API devolve a cidade vazia para a maioria dos locais brasileiros, então o filtro por cidade não achava nada. Só apareceu testando com dados reais; a solução foi buscar por coordenadas e raio.",
       },
+    },
+    "shinnoi-kohi": {
+      tagline: "Motion design para uma cafeteria com alma de oni.",
+      summary: "Vídeo de 30 segundos para uma marca de café fictícia, animado em código: logo, cardápio, endereço e avaliações.",
+      description:
+        "Um filme curto de marca para a Shinnoi Kohi, uma cafeteria fictícia com mascote oni. Feito inteiro em código com Remotion: cada movimento é uma animação em React, renderizada em vídeo 1080p a 60 quadros, com versões horizontal e vertical para redes sociais.",
+      highlights: [
+        "Animado em código com Remotion e React, sem After Effects",
+        "Ritmo pensado para redes sociais: 30 segundos, com versão vertical",
+        "Identidade em preto e branco com mascote, cardápio e endereço",
+      ],
+      captions: ["Vídeo de marca", "Cardápio animado"],
+      note: "Marca fictícia criada para estudo de motion design.",
     },
     "porao-grafico": {
       tagline: "Arte para banda, evento ou lançamento.",
@@ -497,6 +521,19 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
         challenge: "The API returns an empty city for most Brazilian venues, so the city filter found nothing. It only showed up with real data; the fix was searching by coordinates and radius.",
       },
     },
+    "shinnoi-kohi": {
+      tagline: "Motion design for a café with an oni soul.",
+      summary: "A 30-second video for a fictional coffee brand, animated in code: logo, menu, address and reviews.",
+      description:
+        "A short brand film for Shinnoi Kohi, a fictional café with an oni mascot. Built entirely in code with Remotion: every movement is a React animation, rendered to 1080p video at 60 fps, with horizontal and vertical cuts for social media.",
+      highlights: [
+        "Animated in code with Remotion and React, no After Effects",
+        "Paced for social media: 30 seconds, with a vertical cut",
+        "Black-and-white identity with mascot, menu and address",
+      ],
+      captions: ["Brand video", "Animated menu"],
+      note: "A fictional brand made as a motion design study.",
+    },
     "porao-grafico": {
       tagline: "Art for bands, events and releases.",
       summary:
@@ -566,7 +603,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "Sou Mateus Fantin, desenvolvedor em São Paulo. Uno design, banco de dados, código e automação para entregar produtos completos: do primeiro rascunho ao site no ar.",
       ctaPrimary: "Ver projetos",
       ctaSecondary: "Falar no WhatsApp",
-      proof: ["4 projetos construídos", "Design + código + dados", "São Paulo, BR"],
+      proof: ["5 projetos construídos", "Design + código + dados", "São Paulo, BR"],
       floatingLive: "Dados ao vivo",
       floatingMasterpiece: "Rainbow Masterpiece",
       floatingStack: "Supabase · RLS",
@@ -673,7 +710,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         design: "Design",
       },
       otherTitle: "Outros trabalhos",
-      otherSubtitle: "Site e loja para quem vive de arte.",
+      otherSubtitle: "Motion design e uma loja para artistas.",
       caseLabels: { problem: "O problema", decisions: "Minhas decisões", result: "O resultado", challenge: "Um desafio real" },
       featuredBadge: "Mais recente",
       liveBadge: "No ar",
@@ -698,7 +735,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       photoAlt: "Foto de Mateus Fantin",
       location: "São Paulo, BR",
       stats: [
-        { value: 4, label: "projetos construídos" },
+        { value: 5, label: "projetos construídos" },
         { value: 4, label: "frentes em cada entrega" },
         { value: 15, suffix: "+", label: "tecnologias no dia a dia" },
       ],
@@ -804,7 +841,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "I'm Mateus Fantin, a developer based in São Paulo. I bring design, databases, code and automation together to ship complete products: from the first sketch to a live site.",
       ctaPrimary: "See projects",
       ctaSecondary: "Message me on WhatsApp",
-      proof: ["4 projects built", "Design + code + data", "São Paulo, Brazil"],
+      proof: ["5 projects built", "Design + code + data", "São Paulo, Brazil"],
       floatingLive: "Live data",
       floatingMasterpiece: "Rainbow Masterpiece",
       floatingStack: "Supabase · RLS",
@@ -906,7 +943,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         design: "Design",
       },
       otherTitle: "Other work",
-      otherSubtitle: "A website and store for people who make art.",
+      otherSubtitle: "Motion design and a store for artists.",
       caseLabels: { problem: "The problem", decisions: "My decisions", result: "The result", challenge: "A real challenge" },
       featuredBadge: "Latest",
       liveBadge: "Live",
@@ -931,7 +968,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       photoAlt: "Photo of Mateus Fantin",
       location: "São Paulo, Brazil",
       stats: [
-        { value: 4, label: "projects built" },
+        { value: 5, label: "projects built" },
         { value: 4, label: "areas in every delivery" },
         { value: 15, suffix: "+", label: "tools used daily" },
       ],

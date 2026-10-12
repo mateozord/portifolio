@@ -14,6 +14,7 @@ import { Reveal, SectionHeader } from "@/components/motion-primitives";
 import { PricingSection } from "@/components/pricing-section";
 import { ProcessSection } from "@/components/process-section";
 import { WhatsappFab } from "@/components/whatsapp-fab";
+import { PauseOffscreen } from "@/components/pause-offscreen";
 import { WhatsappIcon } from "@/components/brand-icons";
 import { cn, EASE_OUT } from "@/lib/cn";
 
@@ -174,6 +175,7 @@ export function BusinessPage() {
   return (
     <MotionConfig reducedMotion="user">
       <AmbientBackground />
+      <PauseOffscreen />
       <Header t={t} locale={locale} whatsapp={whatsapp} labels={dictionary.theme} />
       <main className="overflow-x-clip">
         <Hero t={t} whatsapp={whatsapp} />

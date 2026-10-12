@@ -163,14 +163,25 @@ function ModalContent({
                 else if (info.offset.x > 60) go(-1);
               }}
             >
-              <Image
-                src={project.images[index]}
-                alt={project.captions[index] ?? project.title}
-                fill
-                sizes="(min-width: 1024px) 1024px, 100vw"
-                draggable={false}
-                className="object-contain select-none"
-              />
+              {project.video && index === 0 ? (
+                <video
+                  src={project.video}
+                  poster={project.images[0]}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="absolute inset-0 h-full w-full bg-black object-contain"
+                />
+              ) : (
+                <Image
+                  src={project.images[index]}
+                  alt={project.captions[index] ?? project.title}
+                  fill
+                  sizes="(min-width: 1024px) 1024px, 100vw"
+                  draggable={false}
+                  className="object-contain select-none"
+                />
+              )}
             </motion.div>
           </AnimatePresence>
 
@@ -181,7 +192,7 @@ function ModalContent({
             </>
           )}
 
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-linear-to-t from-black/60 to-transparent p-4 pt-10">
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-linear-to-t from-black/60 to-transparent p-4 pt-10">
             <AnimatePresence mode="wait" initial={false}>
               <motion.p
                 key={index}
@@ -195,7 +206,7 @@ function ModalContent({
               </motion.p>
             </AnimatePresence>
             {count > 1 && (
-              <div className="flex shrink-0 items-center gap-1.5">
+              <div className="pointer-events-auto flex shrink-0 items-center gap-1.5">
                 {project.images.map((src, i) => (
                   <button
                     key={src}

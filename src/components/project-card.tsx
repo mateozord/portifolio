@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type Ref } from "react";
+import { useEffect, useRef, useState, type Ref } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Sparkles } from "lucide-react";
@@ -92,13 +92,17 @@ export function ProjectCard({ ref, project, index, wide: wideProp = false, label
           className="absolute inset-0"
           variants={{ hidden: { scale: 1.25 }, visible: { scale: 1, transition: { duration: 1.6, ease: [0.16, 1, 0.3, 1] } } }}
         >
-          <Image
-            src={project.images[0]}
-            alt={project.captions[0] ?? project.title}
-            fill
-            sizes={wide ? "(min-width: 1024px) 640px, (min-width: 768px) 90vw, 100vw" : "(min-width: 768px) 560px, 100vw"}
-            className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.045]"
-          />
+          {project.video ? (
+            <LazyVideo src={project.video} poster={project.images[0]} />
+          ) : (
+            <Image
+              src={project.images[0]}
+              alt={project.captions[0] ?? project.title}
+              fill
+              sizes={wide ? "(min-width: 1024px) 640px, (min-width: 768px) 90vw, 100vw" : "(min-width: 768px) 560px, 100vw"}
+              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.045]"
+            />
+          )}
         </motion.div>
         </div>
         {featured && <div className="shine" />}
@@ -190,5 +194,37 @@ export function ProjectCard({ ref, project, index, wide: wideProp = false, label
         </div>
       </div>
     </motion.article>
+  );
+}
+
+/** Vídeo mudo em loop que só baixa e toca perto da tela (o card fica no fim da página). */
+function LazyVideo({ src, poster }: { src: string; poster: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!video.src) video.src = src;
+          video.play().catch(() => {});
+        } else video.pause();
+      },
+      { rootMargin: "200px" },
+    );
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [src]);
+  return (
+    <video
+      ref={ref}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-hidden
+      className="absolute inset-0 h-full w-full object-cover"
+    />
   );
 }
