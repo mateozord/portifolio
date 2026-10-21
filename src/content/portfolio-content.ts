@@ -198,6 +198,26 @@ export const techStack = [
 
 const projectBase: ProjectBase[] = [
   {
+    slug: "deskbuddy",
+    group: "case",
+    title: "DeskBuddy",
+    categories: ["web", "database", "design"],
+    stack: ["Tauri", "Rust", "React 19", "TypeScript", "Tailwind CSS v4", "Dexie (IndexedDB)", "Vitest"],
+    images: [
+      "/projects/deskbuddy/cover.webp",
+      "/projects/deskbuddy/inicio.webp",
+      "/projects/deskbuddy/missoes.webp",
+      "/projects/deskbuddy/foco.webp",
+      "/projects/deskbuddy/habitos.webp",
+      "/projects/deskbuddy/lembretes.webp",
+      "/projects/deskbuddy/calendario.webp",
+      "/projects/deskbuddy/notas.webp",
+    ],
+    video: "/projects/deskbuddy/reel.mp4",
+    link: "https://mateozord.github.io/DeskBuddy/",
+    featured: true,
+  },
+  {
     slug: "cozylog",
     group: "case",
     title: "CozyLog",
@@ -213,7 +233,6 @@ const projectBase: ProjectBase[] = [
     ],
     link: "https://cozylog.vercel.app",
     repo: "https://github.com/mateozord/cozylog",
-    featured: true,
   },
   {
     slug: "aeropulse",
@@ -284,6 +303,32 @@ const projectBase: ProjectBase[] = [
 
 const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
   pt: {
+    deskbuddy: {
+      tagline: "Seu dia organizado, com o Mochi do lado.",
+      summary:
+        "App gratuito para Windows com missões, hábitos, foco, lembretes e notas, acompanhado por um mascote em pixel art. Sem conta e sem nuvem.",
+      description:
+        "O DeskBuddy é um app de produtividade para Windows que deixa o dia mais leve: missões no lugar de tarefas, hábitos, timer de foco, lembretes com notificação, calendário e notas que viram bloquinhos flutuantes na tela. O Mochi, um bolinho de arroz em pixel art, reage ao seu dia. Tudo fica no seu computador.",
+      highlights: [
+        "App de desktop de verdade: instalador, bandeja do sistema e início com o Windows",
+        "Bloquinhos flutuantes em janelas nativas, fixáveis por cima de tudo",
+        "Lembretes com notificação do Windows e frases naturais (\"toda segunda 9h…\")",
+        "Atualização automática assinada e backup semanal automático",
+        "312 testes automatizados",
+      ],
+      captions: ["Vídeo de apresentação", "Início", "Missões", "Foco", "Hábitos", "Lembretes", "Calendário", "Notas"],
+      caseStudy: {
+        problem: "Apps de produtividade costumam exigir conta e nuvem, cobrar assinatura e transformar a lista de tarefas em culpa. Eu queria um app leve para o Windows, que funcionasse sem internet e deixasse o dia mais gentil.",
+        decisions: [
+          "Tauri em vez de Electron: a interface é React, mas o app usa o navegador que já vem no Windows, fica leve e não precisa de servidor nem de conta.",
+          "Dados locais com Dexie (IndexedDB), backup em arquivo validado campo a campo e cópia automática toda semana: nada se perde e nada sai do computador.",
+          "Notas viram bloquinhos em janelas nativas do Windows, sincronizados com o editor nos dois sentidos e com aviso de conflito em vez de sobrescrever.",
+          "Todos os sons (lofi, teclado mecânico, chuva) são sintetizados no próprio app: nenhum arquivo de áudio e nada de direitos autorais.",
+        ],
+        result: "Versão 0.3 publicada com instalador e atualização automática assinada: missões, hábitos, foco, lembretes, calendário, notas e o Mochi, cobertos por 312 testes automatizados.",
+        challenge: "Lembretes precisavam funcionar com a janela fechada: o app vai para a bandeja, dispara notificações do Windows e, ao ser reaberto depois de um tempo, mostra um resumo do que passou sem repetir avisos.",
+      },
+    },
     cozylog: {
       tagline: "Um diário de jogos aconchegante — e social.",
       summary:
@@ -431,6 +476,32 @@ const projectCopy: Record<Locale, Record<string, ProjectCopy>> = {
     },
   },
   en: {
+    deskbuddy: {
+      tagline: "Your day organized, with Mochi by your side.",
+      summary:
+        "A free Windows app with quests, habits, focus, reminders and notes, kept company by a pixel-art mascot. No account, no cloud.",
+      description:
+        "DeskBuddy is a productivity app for Windows that makes the day lighter: quests instead of tasks, habits, a focus timer, reminders with notifications, a calendar and notes that become floating sticky notes on your screen. Mochi, a pixel-art rice cake, reacts to your day. Everything stays on your computer.",
+      highlights: [
+        "A real desktop app: installer, system tray and launch with Windows",
+        "Floating sticky notes in native windows, pinnable on top of everything",
+        "Reminders with Windows notifications and natural phrases (\"every Monday 9am…\")",
+        "Signed auto-updates and automatic weekly backups",
+        "312 automated tests",
+      ],
+      captions: ["Intro video", "Home", "Quests", "Focus", "Habits", "Reminders", "Calendar", "Notes"],
+      caseStudy: {
+        problem: "Productivity apps usually demand an account and the cloud, charge a subscription and turn the to-do list into guilt. I wanted a light Windows app that works offline and makes the day gentler.",
+        decisions: [
+          "Tauri instead of Electron: the UI is React, but the app uses the browser that ships with Windows, stays light and needs no server or account.",
+          "Local data with Dexie (IndexedDB), backups validated field by field and an automatic weekly copy: nothing gets lost and nothing leaves the computer.",
+          "Notes become sticky notes in native Windows windows, synced with the editor both ways, with a conflict warning instead of overwriting.",
+          "Every sound (lofi, mechanical keyboard, rain) is synthesized by the app: no audio files and no licensing.",
+        ],
+        result: "Version 0.3 shipped with an installer and signed auto-updates: quests, habits, focus, reminders, calendar, notes and Mochi, covered by 312 automated tests.",
+        challenge: "Reminders had to work with the window closed: the app goes to the tray, fires Windows notifications and, when reopened later, shows a summary of what was missed without repeating alerts.",
+      },
+    },
     cozylog: {
       tagline: "A cozy game diary, and a social one.",
       summary:
@@ -603,7 +674,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "Sou Mateus Fantin, desenvolvedor em São Paulo. Uno design, banco de dados, código e automação para entregar produtos completos: do primeiro rascunho ao site no ar.",
       ctaPrimary: "Ver projetos",
       ctaSecondary: "Falar no WhatsApp",
-      proof: ["5 projetos construídos", "Design + código + dados", "São Paulo, BR"],
+      proof: ["6 projetos construídos", "Design + código + dados", "São Paulo, BR"],
       floatingLive: "Dados ao vivo",
       floatingMasterpiece: "Rainbow Masterpiece",
       floatingStack: "Supabase · RLS",
@@ -701,7 +772,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       eyebrow: "Portfólio",
       title: "Interfaces que deixam *o complexo simples*",
       subtitle:
-        "Três produtos completos, do problema ao código no ar: dados confusos viram uma experiência clara. Abra cada um para ver as decisões por trás.",
+        "Quatro produtos completos, do problema ao código no ar: dados confusos viram uma experiência clara. Abra cada um para ver as decisões por trás.",
       filters: {
         all: "Todos",
         web: "Web",
@@ -735,7 +806,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       photoAlt: "Foto de Mateus Fantin",
       location: "São Paulo, BR",
       stats: [
-        { value: 5, label: "projetos construídos" },
+        { value: 6, label: "projetos construídos" },
         { value: 4, label: "frentes em cada entrega" },
         { value: 15, suffix: "+", label: "tecnologias no dia a dia" },
       ],
@@ -841,7 +912,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
         "I'm Mateus Fantin, a developer based in São Paulo. I bring design, databases, code and automation together to ship complete products: from the first sketch to a live site.",
       ctaPrimary: "See projects",
       ctaSecondary: "Message me on WhatsApp",
-      proof: ["5 projects built", "Design + code + data", "São Paulo, Brazil"],
+      proof: ["6 projects built", "Design + code + data", "São Paulo, Brazil"],
       floatingLive: "Live data",
       floatingMasterpiece: "Rainbow Masterpiece",
       floatingStack: "Supabase · RLS",
@@ -934,7 +1005,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       eyebrow: "Portfolio",
       title: "Interfaces that make *the complex simple*",
       subtitle:
-        "Three complete products, from problem to shipped code: messy data becomes a clear experience. Open each one to see the decisions behind it.",
+        "Four complete products, from problem to shipped code: messy data becomes a clear experience. Open each one to see the decisions behind it.",
       filters: {
         all: "All",
         web: "Web",
@@ -968,7 +1039,7 @@ export const portfolioContent: Record<Locale, PortfolioDictionary> = {
       photoAlt: "Photo of Mateus Fantin",
       location: "São Paulo, Brazil",
       stats: [
-        { value: 5, label: "projects built" },
+        { value: 6, label: "projects built" },
         { value: 4, label: "areas in every delivery" },
         { value: 15, suffix: "+", label: "tools used daily" },
       ],
